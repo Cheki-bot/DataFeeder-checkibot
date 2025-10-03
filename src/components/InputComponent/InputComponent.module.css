@@ -1,0 +1,32 @@
+.inputContainer {
+    display: flex;
+    background-color: var(--white-color);
+    padding: 10px 20px;
+    border-radius: 10px;
+    gap: 5px;
+    align-items: center;
+    color: var(--black-color);
+}
+
+.label {
+    margin: 0;
+    font-size: 0.6em;
+    color: var(--gray-color);
+}
+
+.input {
+    border: none;
+    background-color: transparent;
+    border-radius: 4px;
+    color: var(--black-color);
+}
+
+.input:focus {
+    outline: none;
+}
+
+.backgroundLayer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
