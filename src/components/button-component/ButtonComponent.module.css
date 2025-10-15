@@ -1,5 +1,5 @@
 .button {
-    background-color: #646cff;
+    background: linear-gradient(90deg, var(--primary-color) 20%, var(--auxiliary-color) 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -11,12 +11,12 @@
 }
 
 .button:hover:not(:disabled) {
-    background-color: #5a5cda;
+    background-color: var(--button);
     transform: translateY(-2px);
 }
 
 .button:active:not(:disabled) {
-    background-color: #4b4db8;
+    background-color: var(--button);
     transform: translateY(0);
 }
 
@@ -28,5 +28,5 @@
 
 .button:focus {
     outline: none;
-    border:none;
+    border: none;
 }
