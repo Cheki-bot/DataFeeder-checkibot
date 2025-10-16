@@ -1,4 +1,4 @@
-import { ButtonComponent, InputComponent } from '@components';
+import { ButtonComponent, InputComponent } from '@components/index';
 
 import style from './SignUpView.module.css';
 

@@ -29,7 +29,7 @@
         "paths": {
             "@/*": ["*"],
             "@components/*": ["components/*"],
-            "@components": ["components/index.ts"],
+            // "@components": ["components/index.ts"],
             "@pages/*": ["pages/*"],
             "@assets/*": ["assets/*"],
             "@hooks/*": ["hooks/*"],
