@@ -4,8 +4,8 @@ import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import App from './App.tsx'
-import { LoginView } from './pages/auth/login-view/LoginView.tsx'
 import { ProtectedRoute } from './ProtectedRoute.tsx'
+import { LoginView, SignUpView } from '@pages'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
         path: '/',
         Component: App,
       },
+      {
+        path: '/sign-up',
+        Component: SignUpView
+      }
     ]
   },
 ])

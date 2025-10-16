@@ -1,5 +1,4 @@
-import { ButtonComponent } from '../../../components/button-component/ButtonComponent';
-import { InputComponent } from '../../../components/input-component/InputComponent';
+import { ButtonComponent, InputComponent } from '@components';
 import style from './LoginView.module.css';
 
 export const LoginView = () => {
@@ -12,7 +11,11 @@ export const LoginView = () => {
                     alt="Chequea Bolivia Image"
                 />
                 <span className={style.imageOverlay}>
-                    <img className={style.imageLogo} src="/Logo_ChequeaBolivia.png" alt="Logo Chequea Bolivia" />
+                    <img
+                        className={style.imageLogo}
+                        src="/Logo_ChequeaBolivia.png"
+                        alt="Logo Chequea Bolivia"
+                    />
                 </span>
             </section>
             <section className={style.loginSection}>
