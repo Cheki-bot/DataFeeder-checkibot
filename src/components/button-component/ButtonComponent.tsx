@@ -1,16 +1,27 @@
-import style from "./ButtonComponent.module.css"
+import style from "./ButtonComponent.module.css";
 
 interface ButtonComponentProps {
-    label: string;
-    onClick?: () => void;
-    children?: React.ReactNode;
-    type?: "button" | "submit" | "reset";
+  label?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  onlyIcon?: boolean;
 }
 
-export const ButtonComponent = (props: ButtonComponentProps) => {
-    return (
-        <button className={style.button} onClick={props.onClick} type={props.type}>
-            {props.children ? props.children : props.label}
-        </button>
-    );
-}
+export const ButtonComponent = ({
+  label,
+  onClick,
+  children,
+  type = "button",
+  onlyIcon = false,
+}: ButtonComponentProps) => {
+  return (
+    <button
+      className={onlyIcon ? style.onlyIcon : style.button}
+      onClick={onClick}
+      type={type}
+    >
+      {children ? children : label}
+    </button>
+  );
+};

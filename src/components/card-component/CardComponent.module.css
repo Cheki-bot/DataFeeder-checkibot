@@ -1,4 +1,6 @@
 .card {
+    display: flex;
+    flex-direction: column; /* Para que los hijos se apilen verticalmente */
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -19,10 +21,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    height: 15%;
 }
 
-.image {
+.headerImage {
     background-color: black;
     width: 3em;
     height: 3em;
@@ -33,4 +35,33 @@
 
 .titles {
     font-size: small;
+}
+
+.image {
+    width: 100%;
+    height: 35%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-top: 12px;
+}
+
+.description {
+    font-size: small;
+    color: var(--text-color-secondary);
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

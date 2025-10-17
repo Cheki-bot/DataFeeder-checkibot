@@ -1,19 +1,32 @@
 import { ButtonComponent } from '../button-component/ButtonComponent';
 import style from './CardComponent.module.css';
 
-export const CardComponent = () => {
+type CardComponentProps = {
+    title: string;
+    subtitle: string;
+    description: string;
+    headerImageUrl: string;
+    mainImageUrl: string;
+};
+
+export const CardComponent = (props: CardComponentProps) => {
+
+    const description = props.description.length > 130
+        ? props.description.slice(0, 130) + '...'
+        : props.description;
+
     return (
         <article className={style.card}>
             <div className={style.header}>
                 <div className={style.info}>
                     <img
-                        className={style.image}
-                        src="https://picsum.photos/300/300"
+                        className={style.headerImage}
+                        src={props.headerImageUrl}
                         alt="Card Image"
                     />
                     <span className={style.titles}>
-                        <h3 className={style.title}>Card Title</h3>
-                        <h4 className={style.subtitle}>Subtitle</h4>
+                        <h3 className={style.title}>{props.title}</h3>
+                        <h4 className={style.subtitle}>{props.subtitle}</h4>
                     </span>
                 </div>
                 <ButtonComponent onlyIcon>
@@ -30,6 +43,13 @@ export const CardComponent = () => {
                         />
                     </svg>
                 </ButtonComponent>
+            </div>
+            <img className={style.image} src={props.mainImageUrl} alt="Political Party Logo" />
+            <div className={style.content}>
+                <p className={style.description}>
+                    {description}
+                </p>
+                <ButtonComponent>Ver más</ButtonComponent>
             </div>
         </article>
     );
