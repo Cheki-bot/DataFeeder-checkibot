@@ -1,6 +1,6 @@
 .card {
     display: flex;
-    flex-direction: column; /* Para que los hijos se apilen verticalmente */
+    flex-direction: column;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -19,9 +19,35 @@
 
 .header {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: center;
     height: 15%;
+}
+
+.menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    right: 16px;
+    top: 50px;
+    z-index: 1000;
+}
+
+.menuItem {
+    padding: 8px 16px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-dark);
+}
+
+.menuItem:hover {
+    background-color: var(--light-gray-color);
 }
 
 .headerImage {

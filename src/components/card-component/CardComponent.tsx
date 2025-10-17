@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ButtonComponent } from '../button-component/ButtonComponent';
 import style from './CardComponent.module.css';
 
@@ -10,10 +11,16 @@ type CardComponentProps = {
 };
 
 export const CardComponent = (props: CardComponentProps) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const description = props.description.length > 130
-        ? props.description.slice(0, 130) + '...'
-        : props.description;
+    const description =
+        props.description.length > 130
+            ? props.description.slice(0, 130) + '...'
+            : props.description;
+
+    const handleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
 
     return (
         <article className={style.card}>
@@ -29,11 +36,11 @@ export const CardComponent = (props: CardComponentProps) => {
                         <h4 className={style.subtitle}>{props.subtitle}</h4>
                     </span>
                 </div>
-                <ButtonComponent onlyIcon>
+                <ButtonComponent onlyIcon onClick={handleMenu}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="4"
-                        height="12"
+                        width="5"
+                        height="18"
                         fill="none"
                         viewBox="0 0 4 12"
                     >
@@ -43,12 +50,20 @@ export const CardComponent = (props: CardComponentProps) => {
                         />
                     </svg>
                 </ButtonComponent>
+                {isMenuOpen && (
+                    <div className={style.menu}>
+                        <button className={style.menuItem}>Editar</button>
+                        <button className={style.menuItem}>Eliminar</button>
+                    </div>
+                )}
             </div>
-            <img className={style.image} src={props.mainImageUrl} alt="Political Party Logo" />
+            <img
+                className={style.image}
+                src={props.mainImageUrl}
+                alt="Political Party Logo"
+            />
             <div className={style.content}>
-                <p className={style.description}>
-                    {description}
-                </p>
+                <p className={style.description}>{description}</p>
                 <ButtonComponent>Ver más</ButtonComponent>
             </div>
         </article>
