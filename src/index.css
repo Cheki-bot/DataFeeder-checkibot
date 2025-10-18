@@ -14,11 +14,14 @@
     --white-color: #fff;
     --black-color: #131313;
     --background-color: #242424;
-    --primary-color: #646cff;
-    --primary-color-hover: #535bf2;
+    --primary-color: #00cfaf;
+    --primary-color-hover: #00b39f;
+    --auxiliary-color: #059669;
+    --auxiliary-color-hover: #047857;
     --gray-color: #3d3d3d;
     --light-gray-color: #eee;
     --red-color: #ff4d6d;
+
 }
 
 * {
@@ -40,6 +43,7 @@ body {
     margin: 0;
     display: flex;
     place-items: center;
+    /* justify-content: center; */
     min-width: 320px;
     min-height: 100vh;
 }
