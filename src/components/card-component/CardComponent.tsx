@@ -63,9 +63,15 @@ export const CardComponent = (props: CardComponentProps) => {
                         {isMenuOpen && (
                             <div className={style.menu}>
                                 <button className={style.menuItem}>
-                                    Editar
+                                    Detalles
                                 </button>
                                 <button className={style.menuItem}>
+                                    Candidatos
+                                </button>
+                                <button className={style.menuItem}>
+                                    Programa de Gobierno
+                                </button>
+                                <button className={[style.menuItem, style.delete].join(' ')}>
                                     Eliminar
                                 </button>
                             </div>
