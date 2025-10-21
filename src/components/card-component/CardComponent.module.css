@@ -91,3 +91,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.foraddCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    opacity: 0.1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    width: 250px;
+    height: 350px;
+}
+
+.foraddCard:hover {
+    opacity: 0.2;
+}
+
+.foraddCard:active {
+    opacity: 0.3;
+}

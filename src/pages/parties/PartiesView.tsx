@@ -32,6 +32,7 @@ export const PartiesView = () => {
                 mainImageUrl="https://picsum.photos/2000/3000"
                 subtitle="Sample Subtitle"
                 title="Sample Title"
+                forAddCard
             />
         </div>
     );
