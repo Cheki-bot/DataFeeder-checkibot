@@ -6,6 +6,7 @@ import './index.css'
 import App from './App.tsx'
 import { ProtectedRoute } from './ProtectedRoute.tsx'
 import { PartiesView, LoginView, SignUpView } from '@pages/index'
+import CandidatesView from './pages/candidates/CandidatesView.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,15 +23,20 @@ const router = createBrowserRouter([
       },
       {
         path: '/sign-up',
-        Component: SignUpView
+        Component: SignUpView,
       },
       {
         path: '/parties',
-        Component: PartiesView
-      }
-    ]
+        Component: PartiesView,
+      },
+      {
+        path: '/parties/candidates',
+        Component: CandidatesView,
+      },
+    ],
   },
-])
+]);
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
