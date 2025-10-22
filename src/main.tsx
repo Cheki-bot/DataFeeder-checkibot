@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import App from './App.tsx'
 import { ProtectedRoute } from './ProtectedRoute.tsx'
-import { LoginView, SignUpView } from '@pages'
+import { LoginView, SignUpView, VerificationCreateView } from '@pages'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: '/sign-up',
         Component: SignUpView
+      },
+      {
+        path: '/verifications/create',
+        Component: VerificationCreateView
       }
     ]
   },
