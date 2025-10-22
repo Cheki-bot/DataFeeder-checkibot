@@ -32,3 +32,17 @@
     flex-direction: column;
     justify-content: center;
 }
+
+.backgroundLayer {
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: stretch;
+}
+
+.label {
+    margin: 0;
+    font-size: 0.6em;
+    color: var(--gray-color);
+    white-space: normal;
+    word-break: break-word;
+}
