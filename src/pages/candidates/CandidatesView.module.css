@@ -30,3 +30,11 @@
     width: 100%;
     padding: 1em;
 }
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding-inline: 5em;
+}

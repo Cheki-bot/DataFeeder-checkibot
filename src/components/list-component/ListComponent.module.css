@@ -3,7 +3,6 @@
     flex-direction: column;
     gap: 1em;
     width: 100%;
-    padding: 1em;
     box-sizing: border-box;
 }
 
@@ -19,5 +18,5 @@
     background-color: var(--light-gray-color);
     color: var(--text-color-dark);
     gap: 1px;
-    width: 80%;
+    width: 100%;
 }

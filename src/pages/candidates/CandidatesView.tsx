@@ -1,8 +1,10 @@
 import { InputComponent } from '@/components';
 import { ListComponent } from '@/components/list-component/ListComponent';
+import { SearchComponent } from '@/components/search-component/SearchComponent';
+
+import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import style from './CandidatesView.module.css';
-import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 const CandidatesView = () => {
     const candidates = ['Alice', 'Bob', 'Charlie'];
@@ -18,7 +20,10 @@ const CandidatesView = () => {
                     <InputComponent label="Nombre Completo" type="text" />
                     <InputComponent label="Posición" type="text" />
                 </form>
-                <ListComponent items={candidates} />
+                <div className={style.listContainer}>
+                    <SearchComponent />
+                    <ListComponent items={candidates} />
+                </div>
             </div>
         </div>
     );
