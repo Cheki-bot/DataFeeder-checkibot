@@ -12,8 +12,10 @@ interface TagsInputProps {
 
 export const TagsInputComponent = (props: TagsInputProps) => {
     const { nameLabel = 'Name', urlLabel = 'URL Tag', onAdd } = props;
-    const [name, setName] = useState('');
-    const [url, setUrl] = useState('');
+    const [data, setData] = useState<{ name: string; url: string }>({
+        name: '',
+        url: '',
+    });
     const [tags, setTags] = useState<Array<{ name: string; url: string }>>([]);
 
     const displayNameToId = (s: string) =>
@@ -22,15 +24,14 @@ export const TagsInputComponent = (props: TagsInputProps) => {
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-|-$)/g, '');
 
-    const canAdd = name.trim() !== '' && url.trim() !== '';
+    const canAdd = data.name.trim() !== '' && data.url.trim() !== '';
 
     const handleAdd = () => {
         if (!canAdd) return;
-        const newTag = { name: name.trim(), url: url.trim() };
+        const newTag = { name: data.name.trim(), url: data.url.trim() };
         setTags((s) => [...s, newTag]);
         onAdd?.(newTag);
-        setName('');
-        setUrl('');
+        setData({ name: '', url: '' });
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -51,9 +52,9 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         type="text"
                         label={nameLabel}
                         placeholder={nameLabel}
-                        value={name}
+                        value={data.name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setName(e.target.value)
+                            setData((prev) => ({ ...prev, name: e.target.value }))
                         }
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(nameLabel)}-name`}
@@ -64,9 +65,9 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         type="text"
                         label={urlLabel}
                         placeholder={urlLabel}
-                        value={url}
+                        value={data.url}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setUrl(e.target.value)
+                            setData((prev) => ({ ...prev, url: e.target.value }))
                         }
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(urlLabel)}-url`}
