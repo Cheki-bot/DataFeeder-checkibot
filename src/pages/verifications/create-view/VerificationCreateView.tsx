@@ -46,7 +46,7 @@ export const VerificationCreateView = () => {
                     <TagsInputComponent placeholder="Agrega etiquetas relacionadas" />
                     <ButtonComponent
                         label="Crear Verificación"
-                        onClick={() => { }}
+                        onClick={() => {}}
                     />
                 </section>
             </div>

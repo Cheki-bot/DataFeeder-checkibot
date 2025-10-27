@@ -54,7 +54,10 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         placeholder={nameLabel}
                         value={data.name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setData((prev) => ({ ...prev, name: e.target.value }))
+                            setData((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                            }))
                         }
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(nameLabel)}-name`}
@@ -67,7 +70,10 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         placeholder={urlLabel}
                         value={data.url}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setData((prev) => ({ ...prev, url: e.target.value }))
+                            setData((prev) => ({
+                                ...prev,
+                                url: e.target.value,
+                            }))
                         }
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(urlLabel)}-url`}
