@@ -10,11 +10,13 @@ export interface Tag {
 interface TagsComponentProps {
     tags: Tag[];
     onRemove?: (index: number) => void;
+    removable?: boolean; // Nueva prop global
 }
 
 export const TagsComponent: React.FC<TagsComponentProps> = ({
     tags,
     onRemove,
+    removable = true,
 }) => {
     return (
         <div className={styles.pillsRow}>
@@ -22,13 +24,15 @@ export const TagsComponent: React.FC<TagsComponentProps> = ({
                 {tags.map((t, idx) => (
                     <div key={`${t.name}-${idx}`} className={styles.pill}>
                         <span className={styles.pillText}>{t.name}</span>
-                        <button
-                            className={styles.pillClose}
-                            onClick={() => onRemove?.(idx)}
-                            aria-label={`Remove ${t.name}`}
-                        >
-                            <StateLayer />
-                        </button>
+                        {removable && (
+                            <button
+                                className={styles.pillClose}
+                                onClick={() => onRemove?.(idx)}
+                                aria-label={`Remove ${t.name}`}
+                            >
+                                <StateLayer />
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>
