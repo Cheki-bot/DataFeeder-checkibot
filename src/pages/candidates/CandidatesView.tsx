@@ -17,6 +17,7 @@ const CandidatesView = () => {
                         <p>Esta activo</p>
                         <CustomCheckbox />
                     </div>
+                    <InputComponent label='texto' type='select'/>
                     <InputComponent label="Nombre Completo" type="text" />
                     <InputComponent label="Posición" type="text" />
                 </form>
