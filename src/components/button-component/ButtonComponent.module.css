@@ -47,3 +47,7 @@
     background-color: transparent;
     color: black;
 }
+
+.danger {
+    background: var(--red-color);
+}

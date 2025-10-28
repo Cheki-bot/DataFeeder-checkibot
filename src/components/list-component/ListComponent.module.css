@@ -19,4 +19,8 @@
     color: var(--text-color-dark);
     gap: 1px;
     width: 100%;
+    overflow-y: auto;
+    max-height: 300px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--black-color) var(--transparent-color);
 }
