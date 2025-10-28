@@ -92,6 +92,11 @@
     background-color: var(--white-color);
     color: var(--text-color-dark);
 }
+
+.selected {
+    transform: translateY(20%);
+}
+
 .select option:hover {
     background-color: #f2f2f2;
 }

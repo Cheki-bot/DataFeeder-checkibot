@@ -39,7 +39,11 @@ export const InputComponent = (props: InputComponentProps) => {
                             onBlur={() => setFocused(false)}
                         />
                     </div>
-                    <StateLayer />
+                    {value && (
+                        <span className={styles.clearIcon} onClick={() => setValue("")}>
+                            <StateLayer />
+                        </span>
+                    )}
                 </div>
             )}
         </>
