@@ -11,15 +11,28 @@
 }
 
 .label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
     margin: 0;
-    font-size: 0.6em;
     color: var(--gray-color);
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.backgroundLayer.active .label {
+    top: 0.2rem;
+    font-size: 0.6rem;
+    transform: translateY(-90%);
 }
 
 .input {
     border: none;
     width: 100%;
     border-radius: 4px;
+    transform: translateY(20%);
+    font-size: 1rem;
     color: var(--black-color);
     background-color: transparent;
 }
@@ -33,4 +46,5 @@
     width: 100%;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
