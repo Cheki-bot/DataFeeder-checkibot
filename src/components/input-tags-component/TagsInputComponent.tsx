@@ -2,21 +2,26 @@ import { useState } from 'react';
 import styles from './TagsInputComponent.module.css';
 import { InputComponent, TagsComponent } from '@components';
 
+export type Tag = {
+    name: string;
+    url: string;
+};
+
 interface TagsInputProps {
     nameLabel?: string;
     urlLabel?: string;
-    onAdd?: (tag: { name: string; url: string }) => void;
+    onAdd?: (tag: Tag) => void;
     label?: string;
     placeholder?: string;
 }
 
 export const TagsInputComponent = (props: TagsInputProps) => {
     const { nameLabel = 'Name', urlLabel = 'URL Tag', onAdd } = props;
-    const [data, setData] = useState<{ name: string; url: string }>({
+    const [data, setData] = useState<Tag>({
         name: '',
         url: '',
     });
-    const [tags, setTags] = useState<Array<{ name: string; url: string }>>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
 
     const displayNameToId = (s: string) =>
         s
