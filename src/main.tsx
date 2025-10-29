@@ -5,7 +5,12 @@ import { RouterProvider } from 'react-router/dom';
 import './index.css';
 import App from './App.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
-import { PartiesView, LoginView, SignUpView, VerificationCreateView } from '@pages/index';
+import {
+    PartiesView,
+    LoginView,
+    SignUpView,
+    VerificationCreateView,
+} from '@pages/index';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
 
 const router = createBrowserRouter([
@@ -15,24 +20,30 @@ const router = createBrowserRouter([
     },
     {
         path: '/',
-        Component: App,
+        Component: ProtectedRoute,
+        children: [
+            {
+                path: '/',
+                Component: App,
+            },
+            {
+                path: '/sign-up',
+                Component: SignUpView,
+            },
+            {
+                path: '/parties',
+                Component: PartiesView,
+            },
+            {
+                path: '/parties/candidates',
+                Component: CandidatesView,
+            },
+            {
+                path: '/verifications/create',
+                Component: VerificationCreateView,
+            },
+        ],
     },
-    {
-        path: '/sign-up',
-        Component: SignUpView,
-    },
-    {
-        path: '/parties',
-        Component: PartiesView,
-    },
-    {
-        path: '/parties/candidates',
-        Component: CandidatesView,
-    },
-    {
-        path: '/verifications/create',
-        Component: VerificationCreateView,
-    }
 ]);
 
 createRoot(document.getElementById('root')!).render(
