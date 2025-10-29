@@ -2,7 +2,7 @@ import {
     ButtonComponent,
     InputComponent,
     TagsInputComponent,
-} from '@components';
+} from '@components/index';
 import styles from './VerificationCreateView.module.css';
 
 export const VerificationCreateView = () => {
@@ -40,7 +40,7 @@ export const VerificationCreateView = () => {
                     />
                     <InputComponent
                         label="Fecha de Publicación"
-                        type="text"
+                        type="date"
                         placeholder="mm/dd/aaaa"
                     />
                     <TagsInputComponent placeholder="Agrega etiquetas relacionadas" />

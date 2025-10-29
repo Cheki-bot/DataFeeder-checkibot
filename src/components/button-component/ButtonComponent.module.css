@@ -1,5 +1,9 @@
 .button {
-    background: linear-gradient(90deg, var(--primary-color) 20%, var(--auxiliary-color) 100%);
+    background: linear-gradient(
+        90deg,
+        var(--primary-color) 20%,
+        var(--auxiliary-color) 100%
+    );
     color: white;
     border: none;
     border-radius: 8px;
@@ -29,4 +33,20 @@
 .button:focus {
     outline: none;
     border: none;
+}
+
+.onlyIcon {
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.danger {
+    background: var(--red-color);
 }

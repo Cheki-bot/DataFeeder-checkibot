@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: 1px solid #ccc;
+    background-color: var(--light-gray-color);
+    color: var(--text-color-dark);
+    gap: 1px;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 300px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--black-color) var(--transparent-color);
+}
+
+@media screen and (max-width: 768px) {
+    .list {
+        max-height: 400px;
+    }
+}

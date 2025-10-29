@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './TagsInputComponent.module.css';
-import { InputComponent, TagsComponent } from '@components';
+import { InputComponent, TagsComponent } from '@components/index';
 
 export type Tag = {
     name: string;
