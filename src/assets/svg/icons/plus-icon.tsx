@@ -9,7 +9,7 @@ const PlusIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     {...props}
   >
     <path
-      stroke={props.stroke || 'currentColor'}
+      stroke={props.stroke || '#242424'}
       strokeLinecap="round"
       strokeWidth={2}
       d="M12 6v12m6-6H6"
