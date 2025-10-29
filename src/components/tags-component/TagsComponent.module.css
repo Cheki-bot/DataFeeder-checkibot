@@ -1,0 +1,81 @@
+.pillsRow {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pillsInner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+    .pillsInner {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 980px) {
+    .pillsInner {
+        justify-content: center;
+    }
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    background-color: #75d2d2;
+    color: #082727;
+    border-radius: 8px;
+    padding: 4px 8px;
+    gap: 6px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.pillText {
+    margin-right: 0;
+    font-size: 0.8rem;
+    color: inherit;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pillClose {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    line-height: 0;
+}
+
+.pillClose:focus {
+    outline: 2px solid rgba(8, 39, 39, 0.2);
+    border-radius: 6px;
+}
+
+.pillClose svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+}
