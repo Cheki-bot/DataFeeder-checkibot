@@ -8,7 +8,21 @@ import style from './CandidatesView.module.css';
 const CandidatesView = () => {
     const [showForm, setShowForm] = useState(false);
 
-    const candidates = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Bob', 'Charlie', 'David', 'Eve', 'Bob', 'Charlie', 'David', 'Eve'];
+    const candidates = [
+        'Alice',
+        'Bob',
+        'Charlie',
+        'David',
+        'Eve',
+        'Bob',
+        'Charlie',
+        'David',
+        'Eve',
+        'Bob',
+        'Charlie',
+        'David',
+        'Eve',
+    ];
 
     const handleAddCandidate = (candidate: string) => {
         console.log(`Adding candidate: ${candidate}`);
