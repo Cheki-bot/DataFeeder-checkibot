@@ -1,14 +1,10 @@
 import './App.css';
-import { InputComponent } from './components/input-component/InputComponent';
+import { LoginView } from './pages';
 
 function App() {
     return (
         <>
-            <InputComponent
-                type="text"
-                label="Input"
-                placeholder="Enter text here"
-            />
+            <LoginView />
         </>
     );
 }
