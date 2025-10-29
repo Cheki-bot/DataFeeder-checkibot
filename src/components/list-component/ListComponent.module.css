@@ -24,3 +24,9 @@
     scrollbar-width: thin;
     scrollbar-color: var(--black-color) var(--transparent-color);
 }
+
+@media screen and (max-width: 768px) {
+    .list {
+        max-height: 400px;
+    }
+}
