@@ -1,0 +1,35 @@
+.overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    max-width: 64rem;
+    width: fit-content;
+}
+
+.closeButton {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    color: black;
+    font-weight: bold;
+    font-size: 1.25rem;
+    background-color: transparent;
+    border: none;
+}
