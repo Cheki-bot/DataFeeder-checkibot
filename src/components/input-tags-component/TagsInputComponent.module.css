@@ -1,0 +1,138 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 32em;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.inputLeft {
+    flex: 1 1 50%;
+}
+
+.inputRight {
+    flex: 1 1 50%;
+}
+
+.label {
+    margin: 0 0 4px 0;
+    font-size: 0.6em;
+    color: var(--gray-color);
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addButton {
+    background: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.addButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pillsRow {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.pillsInner {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    background: #75d2d2;
+    color: #082727;
+    padding: 6px 10px;
+    border-radius: 999px;
+    gap: 8px;
+}
+
+.pillText {
+    font-size: 0.9em;
+}
+
+.pillClose {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-weight: 600;
+}
+
+.tagsArea {
+    width: 100%;
+    box-sizing: border-box;
+    max-height: 140px;
+    overflow: auto;
+    padding-right: 6px;
+    overflow-x: hidden;
+}
+
+@media (max-width: 640px) {
+    .row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .inputLeft,
+    .inputRight {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .pillsInner {
+        gap: 6px;
+        justify-content: center;
+    }
+
+    .pill {
+        padding: 4px 8px;
+        gap: 6px;
+    }
+
+    .pillText {
+        font-size: 0.85em;
+        max-width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tagsArea {
+        max-height: 120px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+    .row {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .tagsArea {
+        max-height: 130px;
+    }
+}

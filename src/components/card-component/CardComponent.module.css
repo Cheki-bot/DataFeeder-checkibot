@@ -1,0 +1,118 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin: 16px;
+    width: 250px;
+    height: 350px;
+    color: var(--text-color-dark);
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+}
+
+.menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    right: 16px;
+    top: 50px;
+    z-index: 1000;
+}
+
+.menuItem {
+    padding: 8px 16px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-dark);
+}
+
+.menuItem:hover {
+    background-color: var(--light-gray-color);
+}
+
+.headerImage {
+    background-color: black;
+    width: 3em;
+    height: 3em;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.titles {
+    font-size: small;
+}
+
+.image {
+    width: 100%;
+    height: 35%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-top: 12px;
+}
+
+.description {
+    font-size: small;
+    color: var(--text-color-secondary);
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.foraddCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    opacity: 0.1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    width: 250px;
+    height: 350px;
+}
+
+.foraddCard:hover {
+    opacity: 0.2;
+}
+
+.foraddCard:active {
+    opacity: 0.3;
+}
+
+.delete {
+    color: var(--red-color);
+}
