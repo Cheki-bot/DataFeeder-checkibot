@@ -1,12 +1,28 @@
-import { InputComponent } from '../input-component/InputComponent';
+import InputComponent from '../input-component/InputComponent';
 import style from './HeaderComponent.module.css';
-export const HeaderComponent = () => {
+
+interface HeaderComponentProps {
+    type: string;
+}
+
+export const HeaderComponent = (props: HeaderComponentProps) => {
     return (
-        <header className={style.header}>
-            <h1>Checkibot</h1>
-            <nav>
-                <InputComponent type='text' label='Busqueda' placeholder='Buscar'/>
-            </nav>
-        </header>
+        <>
+            {props.type === 'simple' ? (
+                <header className={style.simpleHeader}>
+                    <h1 className={style.title}>Chequea Bolivia</h1>
+                    <nav>
+                        {/* <InputComponent type='text' label='Busqueda' placeholder='Buscar'/> */}
+                    </nav>
+                </header>
+            ) : (
+                <header className={style.header}>
+                    <h1 className={style.title}>Chequea Bolivia</h1>
+                    <nav>
+                        <InputComponent type='text' label='Busqueda' placeholder='Buscar'/>
+                    </nav>
+                </header>
+            )}
+        </>
     );
 };

@@ -103,6 +103,7 @@
     margin: 16px;
     width: 250px;
     height: 350px;
+    cursor: pointer;
 }
 
 .foraddCard:hover {

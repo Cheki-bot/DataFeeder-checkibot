@@ -10,6 +10,7 @@ type CardComponentProps = {
     headerImageUrl?: string;
     mainImageUrl?: string;
     forAddCard?: boolean;
+    detailsModal?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -62,7 +63,15 @@ export const CardComponent = (props: CardComponentProps) => {
                         </ButtonComponent>
                         {isMenuOpen && (
                             <div className={style.menu}>
-                                <button className={style.menuItem}>
+                                <button
+                                    className={style.menuItem}
+                                    onClick={() => {
+                                        if (props.detailsModal) {
+                                            props.detailsModal();
+                                        }
+                                        setIsMenuOpen(false);
+                                    }}
+                                >
                                     Detalles
                                 </button>
                                 <button className={style.menuItem}>
@@ -71,7 +80,12 @@ export const CardComponent = (props: CardComponentProps) => {
                                 <button className={style.menuItem}>
                                     Programa de Gobierno
                                 </button>
-                                <button className={[style.menuItem, style.delete].join(' ')}>
+                                <button
+                                    className={[
+                                        style.menuItem,
+                                        style.delete,
+                                    ].join(' ')}
+                                >
                                     Eliminar
                                 </button>
                             </div>
@@ -84,7 +98,9 @@ export const CardComponent = (props: CardComponentProps) => {
                     />
                     <div className={style.content}>
                         <p className={style.description}>{description}</p>
-                        <ButtonComponent>Ver más</ButtonComponent>
+                        <ButtonComponent onClick={props.detailsModal}>
+                            Ver más
+                        </ButtonComponent>
                     </div>
                 </>
             )}

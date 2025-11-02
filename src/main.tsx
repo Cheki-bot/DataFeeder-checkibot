@@ -1,17 +1,17 @@
+import {
+  LoginView,
+  PartiesView,
+  SignUpView,
+  VerificationCreateView,
+} from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
-import './index.css';
 import App from './App.tsx';
-import { ProtectedRoute } from './ProtectedRoute.tsx';
-import {
-    PartiesView,
-    LoginView,
-    SignUpView,
-    VerificationCreateView,
-} from '@pages/index';
+import './index.css';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
+import { ProtectedRoute } from './ProtectedRoute.tsx';
 
 const router = createBrowserRouter([
     {
