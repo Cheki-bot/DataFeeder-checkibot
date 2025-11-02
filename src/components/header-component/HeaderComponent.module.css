@@ -1,8 +1,44 @@
 .header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
     background-color: #1e1e1e;
-    padding: 12px 0px;
+    padding: 15px 20px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     font-size: small;
+}
+
+.simpleHeader {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: transparent;
+    border-bottom: solid 1px var(--light-gray-color);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    font-size: small;
+}
+
+.title {
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 1.2em;
+    }
+
+    .simpleHeader {
+        padding: 10px 15px;
+    }
+
+    .header {
+        padding: 10px 15px;
+    }
 }
