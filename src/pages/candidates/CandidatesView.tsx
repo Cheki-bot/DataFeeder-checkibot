@@ -4,6 +4,7 @@ import { ListComponent } from '@/components/list-component/ListComponent';
 import { SearchComponent } from '@/components/search-component/SearchComponent';
 import { AddButton } from '@/components/add-button-component/AddButton';
 import style from './CandidatesView.module.css';
+import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 const CandidatesView = () => {
     const [showForm, setShowForm] = useState(false);
@@ -77,13 +78,12 @@ const CandidatesView = () => {
                     }}
                 >
                     <h3>Información del Candidato</h3>
+                    <div className={style.checkboxField}>
+                        <p>Esta activo</p>
+                        <CustomCheckbox />
+                    </div>
                     <InputComponent label="Nombre Completo" type="text" />
                     <InputComponent label="Posición" type="text" />
-                    <InputComponent
-                        label="Estado del candidato"
-                        type="select"
-                        options={['option1', 'option2']}
-                    />
                     <span className={style.buttonContainer}>
                         <ButtonComponent
                             label="Agregar Candidato"
