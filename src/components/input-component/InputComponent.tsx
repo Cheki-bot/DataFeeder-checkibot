@@ -59,9 +59,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
     if (type === 'select') {
         return <SelectComponent label={label} options={options} />;
     }
-
-    console.log(value);
-
+    
     return (
         <div className={styles.inputWrapper}>
             <div className={styles.inputContainer}>
