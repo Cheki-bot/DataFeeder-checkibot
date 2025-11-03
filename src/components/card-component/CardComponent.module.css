@@ -117,3 +117,53 @@
 .delete {
     color: var(--red-color);
 }
+
+.horizontalCard {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 12px;
+    gap: 16px;
+    color: var(--text-color-dark);
+    min-width: 350px;
+}
+
+.horizontalCard:hover {
+    background-color: #66b2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.horizontalCard:active {
+    background-color: #3399ff;
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.horizontalImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.horizontalContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.horizontalContent .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.horizontalContent .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}

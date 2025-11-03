@@ -12,6 +12,7 @@ import App from './App.tsx';
 import './index.css';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
+import { HomeView } from './pages/home/HomeView.tsx';
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/sign-up',
                 Component: SignUpView,
+            },
+            {
+                path: '/home',
+                Component: HomeView,
             },
             {
                 path: '/parties',
