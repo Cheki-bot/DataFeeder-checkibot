@@ -54,7 +54,6 @@ const CandidatesView = () => {
 
     const handleAddCandidate = (candidate: Candidate) => {
         console.log(`Adding candidate: ${candidate}`);
-        console.log('sdsadssssssss ', candidate);
         reset();
     };
 
