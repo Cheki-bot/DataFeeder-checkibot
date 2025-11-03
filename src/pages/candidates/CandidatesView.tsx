@@ -64,10 +64,6 @@ const CandidatesView = () => {
         console.log(`Removing candidates: ${names.join(', ')}`);
     };
 
-    console.log(watch('isActive'));
-    console.log(watch('fullName'));
-    console.log(watch('position'));
-
     return (
         <div className={style.container}>
             {showForm && (
