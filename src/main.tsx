@@ -1,8 +1,8 @@
 import {
-  LoginView,
-  PartiesView,
-  SignUpView,
-  VerificationCreateView,
+    LoginView,
+    PartiesView,
+    SignUpView,
+    VerificationCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -13,6 +13,8 @@ import './index.css';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { HomeView } from './pages/home/HomeView.tsx';
+import { Provider } from 'react-redux';
+import { store } from './lib/state/store.ts';
 
 const router = createBrowserRouter([
     {
@@ -53,6 +55,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
     </StrictMode>
 );

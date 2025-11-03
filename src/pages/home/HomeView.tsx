@@ -1,9 +1,12 @@
-import { CardComponent } from '@/components/card-component/CardComponent';
+import { useEffect, useState } from 'react';
 
+import { setActiveTab } from '@/lib/state/homeSlice';
+import { useDispatch } from 'react-redux';
+
+import { CardComponent } from '@/components/card-component/CardComponent';
 import { getCategories } from '@/services/categories.service';
 
 import style from './HomeView.module.css';
-import { useEffect, useState } from 'react';
 
 interface Category {
     name: string;
@@ -12,9 +15,9 @@ interface Category {
 }
 
 export const HomeView = () => {
-
     const [categories, setCategories] = useState<Category[]>([]);
-    
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const fetchCategories = async () => {
             const data = await getCategories();
@@ -34,7 +37,7 @@ export const HomeView = () => {
                         title={category.name}
                         subtitle={category.description}
                         onClick={() => {
-                            console.log(`Categoría seleccionada: ${category.destination}`);
+                            dispatch(setActiveTab(category.destination));
                         }}
                     />
                 ))}
