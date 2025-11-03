@@ -19,7 +19,7 @@ export const HeaderComponent = (props: HeaderComponentProps) => {
                 <header className={style.header}>
                     <h1 className={style.title}>Chequea Bolivia</h1>
                     <nav>
-                        <InputComponent type='text' label='Busqueda' placeholder='Buscar'/>
+                        <InputComponent type='text' label='Busqueda'/>
                     </nav>
                 </header>
             )}

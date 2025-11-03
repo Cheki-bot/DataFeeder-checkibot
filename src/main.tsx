@@ -44,7 +44,7 @@ const router = createBrowserRouter([
                 Component: CandidatesView,
             },
             {
-                path: '/verifications/create',
+                path: '/verifications',
                 Component: VerificationCreateView,
             },
         ],
