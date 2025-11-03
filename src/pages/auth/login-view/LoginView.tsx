@@ -44,12 +44,12 @@ export const LoginView = () => {
                 <div className={style.form}>
                     <h2>Iniciar sesión</h2>
                     <InputComponent
-                        label="Usuario"
+                        label="Correo electrónico"
                         type="text"
-                        value={watch('username') || ''}
-                        validationProps={register('username')}
-                        errors={errors.username}
-                        onClear={() => {resetField('username')}}
+                        value={watch('email') || ''}
+                        validationProps={register('email')}
+                        errors={errors.email}
+                        onClear={() => {resetField('email')}}
                     />
                     <InputComponent
                         label="Contraseña"
