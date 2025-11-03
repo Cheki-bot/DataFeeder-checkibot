@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { StateLayer } from '../../assets/svg/icons/state-layer';
 import SelectComponent from '../select-component/SelectComponent';
 import styles from './InputComponent.module.css';
+import type { FieldError } from 'react-hook-form';
 
 interface InputComponentProps {
     type: 'text' | 'email' | 'password' | 'select' | 'number' | 'date';
     label: string;
+    options?: string[];
     placeholder?: string;
     value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     id?: string;
     name?: string;
     required?: boolean;
-    options?: string[];
+    validationProps?: React.InputHTMLAttributes<HTMLInputElement>;
+    errors?: FieldError;
+    onClear?: () => void;
 }
 
 export const InputComponent: React.FC<InputComponentProps> = (props) => {
@@ -21,89 +24,81 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         type,
         label,
         placeholder,
-        value: controlledValue,
-        onChange,
+        value,
         onKeyDown,
         id,
         name,
         required,
         options,
+        errors,
+        onClear,
     } = props;
 
     const inputId = id ?? label;
 
     const [focused, setFocused] = useState(false);
-    const [internalValue, setInternalValue] = useState<string>(
-        controlledValue ?? ''
-    );
+    const [internalValue, setInternalValue] = useState<string>(value ?? '');
 
     useEffect(() => {
-        if (controlledValue !== undefined) {
-            setInternalValue(controlledValue);
+        if (value !== undefined) {
+            setInternalValue(value);
         }
-    }, [controlledValue]);
+    }, [value]);
 
-    const currentValue =
-        controlledValue !== undefined ? controlledValue : internalValue;
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (controlledValue === undefined) {
-            setInternalValue(e.target.value);
-        }
-        onChange?.(e);
-    };
+    const currentValue = value !== undefined ? value : internalValue;
 
     const clearValue = () => {
-        if (controlledValue !== undefined) {
-            onChange?.({
-                target: { value: '' },
-            } as unknown as React.ChangeEvent<HTMLInputElement>);
-        } else {
-            setInternalValue('');
+        setInternalValue('');
+        if (onClear) {
+            console.log('limpiando... ');
+            onClear();
+            console.log('limpiado ');
         }
     };
 
     if (type === 'select') {
         return <SelectComponent label={label} options={options} />;
     }
-
+    
     return (
-        <div className={styles.inputContainer}>
-            <div
-                className={`${styles.backgroundLayer} ${
-                    focused || currentValue ? styles.active : ''
-                }`}
-            >
-                <label htmlFor={inputId} className={styles.label}>
-                    {label}
-                </label>
-                <input
-                    type={type}
-                    id={inputId}
-                    name={name}
-                    className={styles.input}
-                    placeholder={placeholder}
-                    value={currentValue}
-                    onChange={handleChange}
-                    onKeyDown={onKeyDown}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(false)}
-                    required={required}
-                />
-            </div>
-
-            {currentValue ? (
-                <span
-                    className={styles.clearIcon}
-                    onClick={clearValue}
-                    role="button"
-                    aria-label={`Clear ${label}`}
+        <div className={styles.inputWrapper}>
+            <div className={styles.inputContainer}>
+                <div
+                    className={`${styles.backgroundLayer} ${
+                        focused || currentValue ? styles.active : ''
+                    }`}
                 >
-                    <StateLayer />
-                </span>
-            ) : (
-                <StateLayer />
-            )}
+                    <label htmlFor={inputId} className={styles.label}>
+                        {label}
+                    </label>
+                    <input
+                        type={type}
+                        id={inputId}
+                        name={name}
+                        className={styles.input}
+                        placeholder={placeholder}
+                        onKeyDown={onKeyDown}
+                        onFocus={() => setFocused(true)}
+                        onBlur={() => setFocused(false)}
+                        required={required}
+                        {...props.validationProps}
+                    />
+                </div>
+
+                {value !== '' || value == undefined ? (
+                    <span
+                        className={styles.clearIcon}
+                        onClick={clearValue}
+                        role="button"
+                        aria-label={`Clear ${label}`}
+                    >
+                        <StateLayer />
+                    </span>
+                ) : (
+                    <></>
+                )}
+            </div>
+            {errors && <span className={styles.error}>{errors.message}</span>}
         </div>
     );
 };

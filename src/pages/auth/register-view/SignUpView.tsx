@@ -25,22 +25,18 @@ export const SignUpView = () => {
                     <InputComponent
                         label="Nombre de usuario"
                         type="text"
-                        placeholder="Agrega tu nombre de usuario"
                     />
                     <InputComponent
                         label="Correo electrónico"
                         type="text"
-                        placeholder="Agrega tu correo electrónico"
                     />
                     <InputComponent
                         label="Contraseña"
                         type="password"
-                        placeholder="Agrega tu contraseña"
                     />
                     <InputComponent
                         label="Confirmar contraseña"
                         type="password"
-                        placeholder="Agrega tu contraseña"
                     />
                     <ButtonComponent label="Ingresar" onClick={() => {}} />
                 </div>

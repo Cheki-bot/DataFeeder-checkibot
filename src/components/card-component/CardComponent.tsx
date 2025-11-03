@@ -3,6 +3,8 @@ import { ButtonComponent } from '../button-component/ButtonComponent';
 import style from './CardComponent.module.css';
 import PlusIcon from '@/assets/svg/icons/plus-icon';
 
+type CardType = 'vertical' | 'horizontal';
+
 type CardComponentProps = {
     title?: string;
     subtitle?: string;
@@ -11,23 +13,51 @@ type CardComponentProps = {
     mainImageUrl?: string;
     forAddCard?: boolean;
     detailsModal?: () => void;
+    type?: CardType; // nueva prop
 };
 
 export const CardComponent = (props: CardComponentProps) => {
+    const {
+        title,
+        subtitle,
+        description: rawDescription,
+        headerImageUrl,
+        mainImageUrl,
+        forAddCard,
+        detailsModal,
+        type = 'vertical',
+    } = props;
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const description =
-        props.description && props.description.length > 130
-            ? props.description.slice(0, 130) + '...'
-            : props.description;
+        rawDescription && rawDescription.length > 130
+            ? rawDescription.slice(0, 130) + '...'
+            : rawDescription;
 
-    const handleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+    const handleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    if (type === 'horizontal') {
+        return (
+            <article className={style.horizontalCard}>
+                {mainImageUrl && (
+                    <img
+                        className={style.horizontalImage}
+                        src={mainImageUrl}
+                        alt="Card Image"
+                    />
+                )}
+                <div className={style.horizontalContent}>
+                    <h3 className={style.title}>{title}</h3>
+                    <p className={style.subtitle}>{subtitle}</p>
+                </div>
+            </article>
+        );
+    }
 
     return (
-        <article className={props.forAddCard ? style.foraddCard : style.card}>
-            {props.forAddCard ? (
+        <article className={forAddCard ? style.foraddCard : style.card}>
+            {forAddCard ? (
                 <div className={style.addCard}>
                     <PlusIcon width={100} height={100} />
                 </div>
@@ -37,14 +67,12 @@ export const CardComponent = (props: CardComponentProps) => {
                         <div className={style.info}>
                             <img
                                 className={style.headerImage}
-                                src={props.headerImageUrl}
+                                src={headerImageUrl}
                                 alt="Card Image"
                             />
                             <span className={style.titles}>
-                                <h3 className={style.title}>{props.title}</h3>
-                                <h4 className={style.subtitle}>
-                                    {props.subtitle}
-                                </h4>
+                                <h3 className={style.title}>{title}</h3>
+                                <h4 className={style.subtitle}>{subtitle}</h4>
                             </span>
                         </div>
                         <ButtonComponent onlyIcon onClick={handleMenu}>
@@ -66,9 +94,7 @@ export const CardComponent = (props: CardComponentProps) => {
                                 <button
                                     className={style.menuItem}
                                     onClick={() => {
-                                        if (props.detailsModal) {
-                                            props.detailsModal();
-                                        }
+                                        if (detailsModal) detailsModal();
                                         setIsMenuOpen(false);
                                     }}
                                 >
@@ -93,12 +119,12 @@ export const CardComponent = (props: CardComponentProps) => {
                     </div>
                     <img
                         className={style.image}
-                        src={props.mainImageUrl}
+                        src={mainImageUrl}
                         alt="Political Party Logo"
                     />
                     <div className={style.content}>
                         <p className={style.description}>{description}</p>
-                        <ButtonComponent onClick={props.detailsModal}>
+                        <ButtonComponent onClick={detailsModal}>
                             Ver más
                         </ButtonComponent>
                     </div>

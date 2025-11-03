@@ -56,7 +56,6 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                     <InputComponent
                         type="text"
                         label={nameLabel}
-                        placeholder={nameLabel}
                         value={data.name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setData((prev) => ({
@@ -72,7 +71,6 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                     <InputComponent
                         type="text"
                         label={urlLabel}
-                        placeholder={urlLabel}
                         value={data.url}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setData((prev) => ({
