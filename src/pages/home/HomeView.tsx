@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 interface Category {
     name: string;
     description: string;
+    destination: string;
 }
 
 export const HomeView = () => {
@@ -32,6 +33,9 @@ export const HomeView = () => {
                         type="horizontal"
                         title={category.name}
                         subtitle={category.description}
+                        onClick={() => {
+                            console.log(`Categoría seleccionada: ${category.destination}`);
+                        }}
                     />
                 ))}
             </div>

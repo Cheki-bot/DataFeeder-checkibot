@@ -14,6 +14,7 @@ type CardComponentProps = {
     forAddCard?: boolean;
     detailsModal?: () => void;
     type?: CardType; // nueva prop
+    onClick?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -39,7 +40,7 @@ export const CardComponent = (props: CardComponentProps) => {
 
     if (type === 'horizontal') {
         return (
-            <article className={style.horizontalCard}>
+            <article className={style.horizontalCard} onClick={props.onClick}>
                 {mainImageUrl && (
                     <img
                         className={style.horizontalImage}
