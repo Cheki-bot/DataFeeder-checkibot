@@ -59,7 +59,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
     if (type === 'select') {
         return <SelectComponent label={label} options={options} />;
     }
-    
+
     return (
         <div className={styles.inputWrapper}>
             <div className={styles.inputContainer}>
@@ -77,6 +77,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         name={name}
                         className={styles.input}
                         placeholder={placeholder}
+                        value={currentValue}
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
                         onBlur={() => setFocused(false)}
