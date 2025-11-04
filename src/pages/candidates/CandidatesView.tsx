@@ -1,12 +1,40 @@
 import { useState } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
 import { ButtonComponent, InputComponent } from '@/components';
+import { AddButton } from '@/components/add-button-component/AddButton';
 import { ListComponent } from '@/components/list-component/ListComponent';
 import { SearchComponent } from '@/components/search-component/SearchComponent';
-import { AddButton } from '@/components/add-button-component/AddButton';
+import {
+    candidateSchema,
+    type CandidateFormData,
+} from './schemas/candidatesSchema';
+
+import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
+
 import style from './CandidatesView.module.css';
+import type { Candidate } from '@/interfaces/Candidate';
 
 const CandidatesView = () => {
     const [showForm, setShowForm] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        reset,
+        watch,
+        setValue,
+        resetField,
+        formState: { errors },
+    } = useForm<CandidateFormData>({
+        resolver: zodResolver(candidateSchema),
+        defaultValues: {
+            fullName: '',
+            position: '',
+            isActive: false,
+        },
+    });
 
     const candidates = [
         'Alice',
@@ -24,12 +52,16 @@ const CandidatesView = () => {
         'Eve',
     ];
 
-    const handleAddCandidate = (candidate: string) => {
+    const handleAddCandidate = (candidate: Candidate) => {
         console.log(`Adding candidate: ${candidate}`);
+        reset();
     };
 
-    const handleRemove = (candidates: string[]) => {
-        console.log(`Removing candidates: ${candidates.join(', ')}`);
+    const handleRemove = (candidates: Array<Candidate | string>) => {
+        const names = candidates.map((c) =>
+            typeof c === 'string' ? c : c.fullName
+        );
+        console.log(`Removing candidates: ${names.join(', ')}`);
     };
 
     return (
@@ -51,10 +83,10 @@ const CandidatesView = () => {
                             >
                                 <path
                                     fill="#ffff"
-                                    fill-opacity=".8"
-                                    fill-rule="evenodd"
+                                    fillOpacity=".8"
+                                    fillRule="evenodd"
                                     d="M6.293 9.657 11.95 4l1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-5.657-5.657a1 1 0 0 1 0-1.414Z"
-                                    clip-rule="evenodd"
+                                    clipRule="evenodd"
                                 />
                             </svg>
                             <p>Volver</p>
@@ -77,18 +109,42 @@ const CandidatesView = () => {
                     }}
                 >
                     <h3>Información del Candidato</h3>
-                    <InputComponent label="Nombre Completo" type="text" />
-                    <InputComponent label="Posición" type="text" />
+                    <div className={style.checkboxField}>
+                        <p>Esta activo</p>
+                        <CustomCheckbox
+                            checked={watch('isActive')}
+                            onChange={(checked: boolean) => {
+                                setValue('isActive', checked);
+                            }}
+                        />
+                    </div>
                     <InputComponent
-                        label="Estado del candidato"
-                        type="select"
-                        options={['option1', 'option2']}
+                        label="Nombre Completo"
+                        type="text"
+                        value={watch('fullName')}
+                        validationProps={register('fullName')}
+                        errors={errors.fullName}
+                        onClear={() => {
+                            resetField('fullName');
+                        }}
+                    />
+                    <InputComponent
+                        label="Posición"
+                        type="text"
+                        value={watch('position')}
+                        validationProps={register('position')}
+                        errors={errors.position}
+                        onClear={() => {
+                            resetField('position');
+                        }}
                     />
                     <span className={style.buttonContainer}>
                         <ButtonComponent
                             label="Agregar Candidato"
                             type="button"
-                            onClick={() => handleAddCandidate('candidate')}
+                            onClick={handleSubmit((data) =>
+                                handleAddCandidate(data)
+                            )}
                         />
                     </span>
                 </form>
