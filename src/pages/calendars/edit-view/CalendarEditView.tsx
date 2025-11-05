@@ -4,7 +4,7 @@ import { ButtonComponent } from '@components/index';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
 import type { UpdateElectoralCalendarData } from '@/interfaces/Calendar';
 import { getCalendarById, updateCalendar } from '@/services/calendar.service';
-import styles from './CalendarEditView.module.css';
+import styles from '../create-view/CalendarCreateView.module.css';
 
 export const CalendarEditView = () => {
     const { id } = useParams<{ id: string }>();
@@ -65,7 +65,7 @@ export const CalendarEditView = () => {
             };
 
             await updateCalendar(id, formData);
-            navigate(`/calendars/${id}`);
+            navigate('/calendars');
         } catch (err) {
             console.error('Error updating calendar:', err);
             setError('Error al actualizar el calendario');
@@ -78,7 +78,9 @@ export const CalendarEditView = () => {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
-                <div className={styles.loading}>Cargando calendario...</div>
+                <div className={styles.content}>
+                    <div className={styles.loading}>Cargando calendario...</div>
+                </div>
             </div>
         );
     }
@@ -159,17 +161,21 @@ export const CalendarEditView = () => {
                             />
                         </div>
 
+                        <div className={styles.note}>
+                            <p>Nota: La edición de firmas y eventos estará disponible próximamente.</p>
+                        </div>
+
                         <div className={styles.actions}>
                             <ButtonComponent
                                 label="Cancelar"
-                                onClick={() => navigate(`/calendars/${id}`)}
+                                onClick={() => navigate('/calendars')}
                             />
                             <button
                                 type="submit"
                                 className={styles.submitButton}
                                 disabled={loading}
                             >
-                                {loading ? 'Guardando...' : 'Actualizar Calendario'}
+                                {loading ? 'Actualizando...' : 'Guardar Cambios'}
                             </button>
                         </div>
                     </form>

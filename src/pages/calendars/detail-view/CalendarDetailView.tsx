@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
-import { getCalendarById } from '@/services/calendar.service';
+import { getCalendarById, deleteCalendar } from '@/services/calendar.service';
 import styles from './CalendarDetailView.module.css';
 
 export const CalendarDetailView = () => {
@@ -31,11 +31,33 @@ export const CalendarDetailView = () => {
         fetchCalendar();
     }, [id]);
 
+    const handleEdit = () => {
+        navigate(`/calendars/edit/${id}`);
+    };
+
+    const handleDelete = async () => {
+        if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
+            return;
+        }
+
+        if (!id) return;
+
+        try {
+            await deleteCalendar(id);
+            navigate('/calendars');
+        } catch (err) {
+            console.error('Error deleting calendar:', err);
+            setError('Error al eliminar el calendario');
+        }
+    };
+
     if (loading) {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
-                <div className={styles.loading}>Cargando calendario...</div>
+                <div className={styles.content}>
+                    <div className={styles.loading}>Cargando calendario...</div>
+                </div>
             </div>
         );
     }
@@ -44,7 +66,9 @@ export const CalendarDetailView = () => {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
-                <div className={styles.error}>{error || 'Calendario no encontrado'}</div>
+                <div className={styles.content}>
+                    <div className={styles.error}>{error || 'Calendario no encontrado'}</div>
+                </div>
             </div>
         );
     }
@@ -68,47 +92,67 @@ export const CalendarDetailView = () => {
                 </div>
 
                 <div className={styles.eventsGrid}>
-                    {calendar.events.map((event, index) => (
-                        <div key={event._id || index} className={styles.eventCard}>
-                            <div className={styles.eventHeader}>
-                                <div className={styles.avatar}>A</div>
-                                <div className={styles.eventHeaderText}>
-                                    <h3>Header</h3>
-                                    <p>Subhead</p>
+                    {calendar.events && calendar.events.length > 0 ? (
+                        calendar.events.map((event, index) => (
+                            <div key={event._id || index} className={styles.eventCard}>
+                                <div className={styles.eventHeader}>
+                                    <div className={styles.avatar}>A</div>
+                                    <div className={styles.eventHeaderText}>
+                                        <h3>Header</h3>
+                                        <p>Subhead</p>
+                                    </div>
                                 </div>
+                                <div className={styles.eventContent}>
+                                    <h4>{event.activity || 'Sin actividad'}</h4>
+                                    <p><strong>Escenario:</strong> {event.scenery || 'N/A'}</p>
+                                    {event.from_date && (
+                                        <p><strong>Desde:</strong> {new Date(event.from_date).toLocaleDateString()}</p>
+                                    )}
+                                    {event.to_date && (
+                                        <p><strong>Hasta:</strong> {new Date(event.to_date).toLocaleDateString()}</p>
+                                    )}
+                                    {event.duration && (
+                                        <p><strong>Duración:</strong> {event.duration} días</p>
+                                    )}
+                                    {event.reference && (
+                                        <p><strong>Referencia:</strong> {event.reference}</p>
+                                    )}
+                                    {event.place && (
+                                        <p><strong>Lugar:</strong> {event.place}</p>
+                                    )}
+                                </div>
+                                {index < calendar.events.length - 1 && (
+                                    <div className={styles.arrow}>→</div>
+                                )}
                             </div>
-                            <div className={styles.eventContent}>
-                                <h4>{event.activity || 'Sin actividad'}</h4>
-                                <p><strong>Escenario:</strong> {event.scenery || 'N/A'}</p>
-                                {event.from_date && (
-                                    <p><strong>Desde:</strong> {new Date(event.from_date).toLocaleDateString()}</p>
-                                )}
-                                {event.to_date && (
-                                    <p><strong>Hasta:</strong> {new Date(event.to_date).toLocaleDateString()}</p>
-                                )}
-                                {event.duration && (
-                                    <p><strong>Duración:</strong> {event.duration} días</p>
-                                )}
-                                {event.reference && (
-                                    <p><strong>Referencia:</strong> {event.reference}</p>
-                                )}
-                                {event.place && (
-                                    <p><strong>Lugar:</strong> {event.place}</p>
-                                )}
-                            </div>
-                            {index < calendar.events.length - 1 && (
-                                <div className={styles.arrow}>→</div>
-                            )}
+                        ))
+                    ) : (
+                        <div className={styles.noEvents}>
+                            <p>No hay eventos registrados en este calendario.</p>
                         </div>
-                    ))}
+                    )}
                 </div>
 
-                <button 
-                    className={styles.backButton} 
-                    onClick={() => navigate('/calendars')}
-                >
-                    Volver a la lista
-                </button>
+                <div className={styles.buttonGroup}>
+                    <button 
+                        className={styles.editButton} 
+                        onClick={handleEdit}
+                    >
+                        Editar Calendario
+                    </button>
+                    <button 
+                        className={styles.deleteButton} 
+                        onClick={handleDelete}
+                    >
+                        Eliminar Calendario
+                    </button>
+                    <button 
+                        className={styles.backButton} 
+                        onClick={() => navigate('/calendars')}
+                    >
+                        Volver a la lista
+                    </button>
+                </div>
             </div>
         </div>
     );

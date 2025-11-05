@@ -13,7 +13,9 @@ type CardComponentProps = {
     mainImageUrl?: string;
     forAddCard?: boolean;
     detailsModal?: () => void;
-    type?: CardType; // nueva prop
+    type?: CardType;
+    onEdit?: () => void;
+    onDelete?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -26,6 +28,8 @@ export const CardComponent = (props: CardComponentProps) => {
         forAddCard,
         detailsModal,
         type = 'vertical',
+        onEdit,
+        onDelete,
     } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -100,20 +104,37 @@ export const CardComponent = (props: CardComponentProps) => {
                                 >
                                     Detalles
                                 </button>
+                                {onEdit && (
+                                    <button
+                                        className={style.menuItem}
+                                        onClick={() => {
+                                            onEdit();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Editar
+                                    </button>
+                                )}
                                 <button className={style.menuItem}>
                                     Candidatos
                                 </button>
                                 <button className={style.menuItem}>
                                     Programa de Gobierno
                                 </button>
-                                <button
-                                    className={[
-                                        style.menuItem,
-                                        style.delete,
-                                    ].join(' ')}
-                                >
-                                    Eliminar
-                                </button>
+                                {onDelete && (
+                                    <button
+                                        className={[
+                                            style.menuItem,
+                                            style.delete,
+                                        ].join(' ')}
+                                        onClick={() => {
+                                            onDelete();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Eliminar
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

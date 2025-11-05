@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { CardComponent } from '@components/card-component/CardComponent';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
-import { getAllCalendars } from '@/services/calendar.service';
+import { getAllCalendars, deleteCalendar } from '@/services/calendar.service';
 import styles from './CalendarListView.module.css';
 
 export const CalendarListView = () => {
@@ -37,11 +37,32 @@ export const CalendarListView = () => {
         navigate(`/calendars/${calendarId}`);
     };
 
+    const handleEdit = (calendarId: string) => {
+        navigate(`/calendars/edit/${calendarId}`);
+    };
+
+    const handleDelete = async (calendarId: string) => {
+        if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
+            return;
+        }
+
+        try {
+            await deleteCalendar(calendarId);
+            const response = await getAllCalendars();
+            setCalendars(response.data);
+        } catch (err) {
+            console.error('Error deleting calendar:', err);
+            setError('Error al eliminar el calendario');
+        }
+    };
+
     if (loading) {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
-                <div className={styles.loading}>Cargando calendarios...</div>
+                <div className={styles.content}>
+                    <div className={styles.loading}>Cargando calendarios...</div>
+                </div>
             </div>
         );
     }
@@ -50,7 +71,9 @@ export const CalendarListView = () => {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
-                <div className={styles.error}>{error}</div>
+                <div className={styles.content}>
+                    <div className={styles.error}>{error}</div>
+                </div>
             </div>
         );
     }
@@ -68,6 +91,8 @@ export const CalendarListView = () => {
                             subtitle={calendar.resolution}
                             description={calendar.introduction || 'Sin descripción'}
                             detailsModal={() => handleViewDetails(calendar._id)}
+                            onEdit={() => handleEdit(calendar._id)}
+                            onDelete={() => handleDelete(calendar._id)}
                         />
                     ))}
                     <CardComponent
