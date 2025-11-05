@@ -3,6 +3,9 @@ import {
   PartiesView,
   SignUpView,
   VerificationCreateView,
+  CalendarListView,
+  CalendarDetailView,
+  CalendarCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -46,6 +49,18 @@ const router = createBrowserRouter([
             {
                 path: '/verifications',
                 Component: VerificationCreateView,
+            },
+            {
+                path: '/calendars',
+                Component: CalendarListView,
+            },
+            {
+                path: '/calendars/:id',
+                Component: CalendarDetailView,
+            },
+            {
+                path: '/calendars/create',
+                Component: CalendarCreateView,
             },
         ],
     },
