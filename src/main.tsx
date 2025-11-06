@@ -5,7 +5,6 @@ import {
   VerificationCreateView,
   CalendarListView,
   CalendarDetailView,
-  CalendarCreateView,
   CalendarEditView,
 } from '@pages/index';
 import { StrictMode } from 'react';
@@ -54,10 +53,6 @@ const router = createBrowserRouter([
             {
                 path: '/calendars',
                 Component: CalendarListView,
-            },
-            {
-                path: '/calendars/create',
-                Component: CalendarCreateView,
             },
             {
                 path: '/calendars/edit/:id',

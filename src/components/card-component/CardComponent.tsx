@@ -60,7 +60,10 @@ export const CardComponent = (props: CardComponentProps) => {
     }
 
     return (
-        <article className={forAddCard ? style.foraddCard : style.card}>
+        <article 
+            className={forAddCard ? style.foraddCard : style.card}
+            onClick={forAddCard ? detailsModal : undefined}
+        >
             {forAddCard ? (
                 <div className={style.addCard}>
                     <PlusIcon width={100} height={100} />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
+import { ButtonComponent } from '@components/index';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
 import { getCalendarById, deleteCalendar } from '@/services/calendar.service';
 import styles from './CalendarDetailView.module.css';
@@ -134,24 +135,19 @@ export const CalendarDetailView = () => {
                 </div>
 
                 <div className={styles.buttonGroup}>
-                    <button 
-                        className={styles.editButton} 
+                    <ButtonComponent
+                        label="Editar Calendario"
                         onClick={handleEdit}
-                    >
-                        Editar Calendario
-                    </button>
-                    <button 
-                        className={styles.deleteButton} 
+                    />
+                    <ButtonComponent
+                        label="Eliminar Calendario"
                         onClick={handleDelete}
-                    >
-                        Eliminar Calendario
-                    </button>
-                    <button 
-                        className={styles.backButton} 
+                        danger
+                    />
+                    <ButtonComponent
+                        label="Volver a la lista"
                         onClick={() => navigate('/calendars')}
-                    >
-                        Volver a la lista
-                    </button>
+                    />
                 </div>
             </div>
         </div>

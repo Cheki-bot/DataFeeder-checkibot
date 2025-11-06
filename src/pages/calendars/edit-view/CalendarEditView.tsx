@@ -4,7 +4,7 @@ import { ButtonComponent } from '@components/index';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
 import type { UpdateElectoralCalendarData } from '@/interfaces/Calendar';
 import { getCalendarById, updateCalendar } from '@/services/calendar.service';
-import styles from '../create-view/CalendarCreateView.module.css';
+import styles from './CalendarEditView.module.css';
 
 export const CalendarEditView = () => {
     const { id } = useParams<{ id: string }>();
@@ -169,14 +169,12 @@ export const CalendarEditView = () => {
                             <ButtonComponent
                                 label="Cancelar"
                                 onClick={() => navigate('/calendars')}
+                                type="button"
                             />
-                            <button
+                            <ButtonComponent
+                                label={loading ? 'Actualizando...' : 'Guardar Cambios'}
                                 type="submit"
-                                className={styles.submitButton}
-                                disabled={loading}
-                            >
-                                {loading ? 'Actualizando...' : 'Guardar Cambios'}
-                            </button>
+                            />
                         </div>
                     </form>
                 </div>
