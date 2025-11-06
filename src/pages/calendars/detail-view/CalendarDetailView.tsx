@@ -33,7 +33,7 @@ export const CalendarDetailView = () => {
     }, [id]);
 
     const handleEdit = () => {
-        navigate(`/calendars/edit/${id}`);
+        navigate('/calendars', { state: { editCalendarId: id } });
     };
 
     const handleDelete = async () => {
