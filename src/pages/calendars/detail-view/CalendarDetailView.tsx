@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
-import { ButtonComponent } from '@components/index';
+import { ButtonComponent, InputComponent } from '@components/index';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
-import { getCalendarById, deleteCalendar } from '@/services/calendar.service';
+import { getCalendarById, deleteCalendar, updateCalendar } from '@/services/calendar.service';
 import styles from './CalendarDetailView.module.css';
+
+interface EventFormData {
+    scenery: string;
+    activity: string;
+    from_date: string;
+    to_date: string;
+    duration: number;
+    reference: string;
+    place: string;
+}
 
 export const CalendarDetailView = () => {
     const { id } = useParams<{ id: string }>();
@@ -12,6 +22,19 @@ export const CalendarDetailView = () => {
     const [calendar, setCalendar] = useState<ElectoralCalendar | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    // Estados para el modal de eventos
+    const [showEventModal, setShowEventModal] = useState(false);
+    const [editingEventIndex, setEditingEventIndex] = useState<number | null>(null);
+    const [eventForm, setEventForm] = useState<EventFormData>({
+        scenery: '',
+        activity: '',
+        from_date: '',
+        to_date: '',
+        duration: 0,
+        reference: '',
+        place: ''
+    });
 
     useEffect(() => {
         const fetchCalendar = async () => {
@@ -31,6 +54,121 @@ export const CalendarDetailView = () => {
 
         fetchCalendar();
     }, [id]);
+
+    const handleOpenEventModal = (index?: number) => {
+        if (index !== undefined && calendar?.events[index]) {
+            const event = calendar.events[index];
+            setEditingEventIndex(index);
+            setEventForm({
+                scenery: event.scenery || '',
+                activity: event.activity || '',
+                from_date: event.from_date ? new Date(event.from_date).toISOString().split('T')[0] : '',
+                to_date: event.to_date ? new Date(event.to_date).toISOString().split('T')[0] : '',
+                duration: event.duration || 0,
+                reference: event.reference || '',
+                place: event.place || ''
+            });
+        } else {
+            setEditingEventIndex(null);
+            setEventForm({
+                scenery: '',
+                activity: '',
+                from_date: '',
+                to_date: '',
+                duration: 0,
+                reference: '',
+                place: ''
+            });
+        }
+        setShowEventModal(true);
+    };
+
+    const handleCloseEventModal = () => {
+        setShowEventModal(false);
+        setEditingEventIndex(null);
+        setEventForm({
+            scenery: '',
+            activity: '',
+            from_date: '',
+            to_date: '',
+            duration: 0,
+            reference: '',
+            place: ''
+        });
+    };
+
+    const handleEventInputChange = (field: keyof EventFormData, value: string | number) => {
+        setEventForm(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleSubmitEvent = async () => {
+        if (!calendar || !id) return;
+
+        const newEvent = {
+            scenery: eventForm.scenery,
+            activity: eventForm.activity,
+            from_date: eventForm.from_date ? new Date(eventForm.from_date) : undefined,
+            to_date: eventForm.to_date ? new Date(eventForm.to_date) : undefined,
+            duration: eventForm.duration,
+            reference: eventForm.reference,
+            place: eventForm.place
+        };
+
+        let updatedEvents = [...(calendar.events || [])];
+        
+        if (editingEventIndex !== null) {
+            updatedEvents[editingEventIndex] = {
+                ...newEvent,
+                no: editingEventIndex + 1
+            };
+        } else {
+            updatedEvents.push({
+                ...newEvent,
+                no: updatedEvents.length + 1
+            });
+        }
+
+        // Renumerar todos los eventos
+        updatedEvents = updatedEvents.map((event, index) => ({
+            ...event,
+            no: index + 1
+        }));
+
+        try {
+            await updateCalendar(id, { events: updatedEvents });
+            const response = await getCalendarById(id);
+            setCalendar(response.data);
+            handleCloseEventModal();
+        } catch (err) {
+            console.error('Error updating events:', err);
+            setError('Error al guardar el evento');
+        }
+    };
+
+    const handleDeleteEvent = async (index: number) => {
+        if (!calendar || !id) return;
+        
+        if (!confirm('¿Estás seguro de que deseas eliminar este evento?')) {
+            return;
+        }
+
+        let updatedEvents = calendar.events.filter((_, i) => i !== index);
+        
+        // Renumerar todos los eventos
+        updatedEvents = updatedEvents.map((event, idx) => ({
+            ...event,
+            no: idx + 1
+        }));
+
+        try {
+            await updateCalendar(id, { events: updatedEvents });
+            const response = await getCalendarById(id);
+            setCalendar(response.data);
+        } catch (err) {
+            console.error('Error deleting event:', err);
+            setError('Error al eliminar el evento');
+        }
+    };
 
     const handleEdit = () => {
         navigate('/calendars', { state: { editCalendarId: id } });
@@ -92,20 +230,19 @@ export const CalendarDetailView = () => {
                     )}
                 </div>
 
-                <div className={styles.eventsGrid}>
-                    {calendar.events && calendar.events.length > 0 ? (
-                        calendar.events.map((event, index) => (
-                            <div key={event._id || index} className={styles.eventCard}>
+                                <div className={styles.eventsGrid}>
+                    {calendar.events && calendar.events.map((event, index) => (
+                        <div key={event._id || index} className={styles.eventCardWrapper}>
+                            <div className={styles.eventCard}>
                                 <div className={styles.eventHeader}>
-                                    <div className={styles.avatar}>A</div>
+                                    <div className={styles.avatar}>E</div>
                                     <div className={styles.eventHeaderText}>
-                                        <h3>Header</h3>
-                                        <p>Subhead</p>
+                                        <h3>{event.scenery || 'Sin escenario'}</h3>
+                                        <p>Evento</p>
                                     </div>
                                 </div>
                                 <div className={styles.eventContent}>
                                     <h4>{event.activity || 'Sin actividad'}</h4>
-                                    <p><strong>Escenario:</strong> {event.scenery || 'N/A'}</p>
                                     {event.from_date && (
                                         <p><strong>Desde:</strong> {new Date(event.from_date).toLocaleDateString()}</p>
                                     )}
@@ -122,16 +259,28 @@ export const CalendarDetailView = () => {
                                         <p><strong>Lugar:</strong> {event.place}</p>
                                     )}
                                 </div>
-                                {index < calendar.events.length - 1 && (
-                                    <div className={styles.arrow}>→</div>
-                                )}
+                                <div className={styles.eventActions}>
+                                    <ButtonComponent
+                                        label="Editar"
+                                        onClick={() => handleOpenEventModal(index)}
+                                    />
+                                    <ButtonComponent
+                                        label="Eliminar"
+                                        onClick={() => handleDeleteEvent(index)}
+                                        danger
+                                    />
+                                </div>
                             </div>
-                        ))
-                    ) : (
-                        <div className={styles.noEvents}>
-                            <p>No hay eventos registrados en este calendario.</p>
+                            {index < calendar.events.length - 1 && (
+                                <div className={styles.arrow}>→</div>
+                            )}
                         </div>
-                    )}
+                    ))}
+                    
+                    <div className={styles.addEventCard} onClick={() => handleOpenEventModal()}>
+                        <div className={styles.addEventIcon}>+</div>
+                        <p>Agregar Evento</p>
+                    </div>
                 </div>
 
                 <div className={styles.buttonGroup}>
@@ -149,6 +298,88 @@ export const CalendarDetailView = () => {
                         onClick={() => navigate('/calendars')}
                     />
                 </div>
+
+                {showEventModal && (
+                    <div className={styles.modalOverlay} onClick={handleCloseEventModal}>
+                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                            <h2>{editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}</h2>
+                            <form onSubmit={(e) => { e.preventDefault(); handleSubmitEvent(); }}>
+                                <InputComponent
+                                    label="Escenario"
+                                    type="text"
+                                    value={eventForm.scenery}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('scenery', e.target.value)
+                                    }}
+                                    required
+                                />
+                                <InputComponent
+                                    label="Actividad"
+                                    type="text"
+                                    value={eventForm.activity}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('activity', e.target.value)
+                                    }}
+                                    required
+                                />
+                                <InputComponent
+                                    label="Fecha Inicio"
+                                    type="date"
+                                    value={eventForm.from_date}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('from_date', e.target.value)
+                                    }}
+                                    required
+                                />
+                                <InputComponent
+                                    label="Fecha Fin"
+                                    type="date"
+                                    value={eventForm.to_date}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('to_date', e.target.value)
+                                    }}
+                                    required
+                                />
+                                <InputComponent
+                                    label="Duración (días)"
+                                    type="number"
+                                    value={eventForm.duration.toString()}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('duration', parseInt(e.target.value) || 0)
+                                    }}
+                                    required
+                                />
+                                <InputComponent
+                                    label="Referencia"
+                                    type="text"
+                                    value={eventForm.reference}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('reference', e.target.value)
+                                    }}
+                                />
+                                <InputComponent
+                                    label="Lugar"
+                                    type="text"
+                                    value={eventForm.place}
+                                    validationProps={{
+                                        onChange: (e) => handleEventInputChange('place', e.target.value)
+                                    }}
+                                />
+                                <div className={styles.modalActions}>
+                                    <ButtonComponent
+                                        label={editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
+                                        type="submit"
+                                    />
+                                    <ButtonComponent
+                                        label="Cancelar"
+                                        onClick={handleCloseEventModal}
+                                        type="button"
+                                    />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
