@@ -5,9 +5,6 @@ export interface CalendarFilters {
   election_id?: string;
 }
 
-/**
- * Get all electoral calendars with optional filters
- */
 export const getAllCalendars = async (filters?: CalendarFilters) => {
   const params = new URLSearchParams();
   
@@ -26,9 +23,6 @@ export const getAllCalendars = async (filters?: CalendarFilters) => {
   return response.data;
 };
 
-/**
- * Get a single electoral calendar by ID
- */
 export const getCalendarById = async (id: string) => {
   const response = await api.get<{ 
     message: string; 
@@ -41,9 +35,6 @@ export const getCalendarById = async (id: string) => {
   return response.data;
 };
 
-/**
- * Create a new electoral calendar
- */
 export const createCalendar = async (calendarData: CreateElectoralCalendarData) => {
   const response = await api.post<{ 
     message: string; 
@@ -56,9 +47,6 @@ export const createCalendar = async (calendarData: CreateElectoralCalendarData) 
   return response.data;
 };
 
-/**
- * Update an existing electoral calendar
- */
 export const updateCalendar = async (id: string, updateData: UpdateElectoralCalendarData) => {
   const response = await api.patch<{ 
     message: string; 
@@ -71,9 +59,6 @@ export const updateCalendar = async (id: string, updateData: UpdateElectoralCale
   return response.data;
 };
 
-/**
- * Delete an electoral calendar
- */
 export const deleteCalendar = async (id: string) => {
   const response = await api.delete<{ 
     message: string; 
