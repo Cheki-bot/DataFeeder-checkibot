@@ -44,19 +44,15 @@ export const CalendarListView = () => {
         fetchCalendars();
     }, []);
 
-    // Detectar si se navega con el estado de editar
     useEffect(() => {
         const state = location.state as { editCalendarId?: string } | null;
         if (state?.editCalendarId) {
             const calendarId = state.editCalendarId;
-            // Abrir modal de edición con el ID del calendario
             const loadCalendarForEdit = async () => {
                 try {
                     setError(null);
                     const response = await getCalendarById(calendarId);
                     const calendar = response.data;
-                    
-                    // Cargar datos en el formulario
                     setTitle(calendar.title);
                     setResolution(calendar.resolution);
                     setDate(new Date(calendar.date).toISOString().split('T')[0]);
@@ -72,10 +68,8 @@ export const CalendarListView = () => {
             };
             
             loadCalendarForEdit();
-            // Limpiar el estado de navegación
             navigate(location.pathname, { replace: true, state: {} });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.state]);
 
     const handleCreateNew = () => {
@@ -84,7 +78,6 @@ export const CalendarListView = () => {
 
     const handleCloseModal = () => {
         setShowCreateModal(false);
-        // Reset form
         setTitle('');
         setResolution('');
         setDate(new Date().toISOString().split('T')[0]);
@@ -134,7 +127,6 @@ export const CalendarListView = () => {
             const response = await getCalendarById(calendarId);
             const calendar = response.data;
             
-            // Cargar datos en el formulario
             setTitle(calendar.title);
             setResolution(calendar.resolution);
             setDate(new Date(calendar.date).toISOString().split('T')[0]);
@@ -152,7 +144,6 @@ export const CalendarListView = () => {
     const handleCloseEditModal = () => {
         setShowEditModal(false);
         setEditingCalendarId(null);
-        // Reset form
         setTitle('');
         setResolution('');
         setDate(new Date().toISOString().split('T')[0]);
