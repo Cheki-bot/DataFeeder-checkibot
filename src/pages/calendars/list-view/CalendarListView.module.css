@@ -109,12 +109,12 @@
 }
 
 .modalContent::-webkit-scrollbar-thumb {
-    background: #6750a4;
+    background: #00cfaf;
     border-radius: 4px;
 }
 
 .modalContent::-webkit-scrollbar-thumb:hover {
-    background: #7965af;
+    background: #00b39f;
 }
 
 .modalTitle {

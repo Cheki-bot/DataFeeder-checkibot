@@ -40,12 +40,12 @@
 }
 
 .metadata::-webkit-scrollbar-thumb {
-    background: #6750a4;
+    background: #00cfaf;
     border-radius: 4px;
 }
 
 .metadata::-webkit-scrollbar-thumb:hover {
-    background: #7965af;
+    background: #00b39f;
 }
 
 .metadata p {
@@ -62,7 +62,7 @@
     display: inline-block;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background-color: #6750a4;
+    background-color: #00cfaf;
     color: #ffffff;
     text-decoration: none;
     border-radius: 4px;
@@ -70,7 +70,7 @@
 }
 
 .pdfLink:hover {
-    background-color: #7965af;
+    background-color: #00b39f;
 }
 
 .eventsGrid {
