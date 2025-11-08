@@ -113,11 +113,19 @@
 }
 
 .eventCard {
-    background-color: #d8b4fe;
+    background-color: #ffffff;
     color: #1e1e1e;
     border-radius: 12px;
     padding: 1.5rem;
     position: relative;
+    border: 2px solid #00cfaf;
+    box-shadow: 0 2px 8px rgba(0, 207, 175, 0.1);
+    transition: all 0.3s ease;
+}
+
+.eventCard:hover {
+    box-shadow: 0 4px 16px rgba(0, 207, 175, 0.2);
+    transform: translateY(-2px);
 }
 
 .eventHeader {
@@ -130,7 +138,7 @@
 .avatar {
     width: 40px;
     height: 40px;
-    background-color: #a855f7;
+    background-color: #00cfaf;
     color: #ffffff;
     border-radius: 50%;
     display: flex;
