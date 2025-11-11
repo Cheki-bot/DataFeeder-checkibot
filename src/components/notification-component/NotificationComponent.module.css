@@ -1,0 +1,107 @@
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    max-width: 500px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.notification.exiting {
+    animation: slideOut 0.3s ease-in forwards;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.message {
+    flex: 1;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color-dark);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-color-dark);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.closeButton:hover {
+    opacity: 1;
+}
+
+.success {
+    border-left: 4px solid var(--primary-color);
+}
+
+.success .icon {
+    color: var(--primary-color);
+}
+
+.error {
+    border-left: 4px solid var(--red-color);
+}
+
+.error .icon {
+    color: var(--red-color);
+}
+
+.warning {
+    border-left: 4px solid #ffa500;
+}
+
+.warning .icon {
+    color: #ffa500;
+}
+
+.info {
+    border-left: 4px solid var(--auxiliary-color);
+}
+
+.info .icon {
+    color: var(--auxiliary-color);
+}
