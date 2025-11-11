@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,24 +12,25 @@ import {
     SearchComponent,
 } from '@/components';
 
-import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import style from './QuestionsAnswers.module.css';
+import { createQuestionAnswer, getQuestionsAnswers } from './service/questions-answers.service';
 
 interface AnswersQuestions {
     question: string;
     answer: string;
-    isActive: boolean;
 }
 
 export const QuestionsAnswers = () => {
     const [showForm, setShowForm] = useState(false);
+    const [questionsAnswers, setQuestionsAnswers] = useState<
+        AnswersQuestions[]
+    >([]);
     const {
         register,
         handleSubmit,
         reset,
         watch,
-        setValue,
         resetField,
         formState: { errors },
     } = useForm<AnswersQuestions>({
@@ -37,28 +38,21 @@ export const QuestionsAnswers = () => {
         defaultValues: {
             question: '',
             answer: '',
-            isActive: false,
         },
     });
 
-    const candidates = [
-        'Alice',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getQuestionsAnswers();
+            console.log(response);
+            setQuestionsAnswers(response);
+        };
+        fetchData();
+    }, []);
 
-    const handleAddCandidate = (question: AnswersQuestions) => {
-        console.log(`Adding candidate: ${question}`);
+    const handleAddCandidate = async (question: AnswersQuestions) => {
+        await createQuestionAnswer(question.question, question.answer);
+        setQuestionsAnswers((prev) => [...prev, question]);
         reset();
     };
 
@@ -68,6 +62,7 @@ export const QuestionsAnswers = () => {
         );
         console.log(`Removing questions: ${names.join(', ')}`);
     };
+
 
     return (
         <div className={style.container}>
@@ -115,13 +110,6 @@ export const QuestionsAnswers = () => {
                 >
                     <h3>Formulario de Preguntas y Respuestas</h3>
                     <div className={style.checkboxField}>
-                        <p>Esta activo</p>
-                        <CustomCheckbox
-                            checked={watch('isActive')}
-                            onChange={(checked: boolean) => {
-                                setValue('isActive', checked);
-                            }}
-                        />
                     </div>
                     <InputComponent
                         label="Pregunta"
@@ -157,13 +145,13 @@ export const QuestionsAnswers = () => {
                 {!showForm && (
                     <div className={style.listContainer}>
                         <SearchComponent />
-                        <ListComponent items={candidates} />
+                        <ListComponent items={questionsAnswers.map((q) => q.question)} />
                         <span className={style.buttonContainer}>
                             <ButtonComponent
                                 label="Eliminar"
                                 type="button"
                                 danger
-                                onClick={() => handleRemove(candidates)}
+                                onClick={() => handleRemove(questionsAnswers)}
                             />
                         </span>
                     </div>
