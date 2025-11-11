@@ -53,6 +53,46 @@
     box-sizing: border-box;
 }
 
+.listActions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.selectLabel {
+    font-size: 0.9rem;
+    color: var(--light-gray-color);
+}
+
+.selectControl {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-color);
+    background-color: var(--dark-gray-color);
+    color: var(--text-color-light);
+    outline: none;
+    appearance: none;
+}
+
+.selectControl:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 207, 175, 0.2);
+}
+
+.listStatus {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--light-gray-color);
+    margin-block: 0.5rem;
+}
+
+.validationMessage {
+    color: var(--red-color);
+    font-size: 0.8rem;
+}
+
 .buttonContainer {
     display: flex;
     justify-content: center;
@@ -102,6 +142,10 @@
     .listContainer {
         max-width: 100%;
         padding-inline: 0.5em;
+    }
+
+    .selectControl {
+        background-color: var(--black-color);
     }
 
     .backButton {
