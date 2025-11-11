@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './TagsInputComponent.module.css';
 import { InputComponent, TagsComponent } from '@components/index';
+import type { FieldError } from 'react-hook-form';
 
 export type Tag = {
     name: string;
@@ -22,6 +23,8 @@ export const TagsInputComponent = (props: TagsInputProps) => {
         url: '',
     });
     const [tags, setTags] = useState<Tag[]>([]);
+    const [nameError, setNameError] = useState<FieldError | undefined>();
+    const [urlError, setUrlError] = useState<FieldError | undefined>();
 
     const displayNameToId = (s: string) =>
         s
@@ -29,14 +32,64 @@ export const TagsInputComponent = (props: TagsInputProps) => {
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-|-$)/g, '');
 
-    const canAdd = data.name.trim() !== '' && data.url.trim() !== '';
+    const validateName = (): boolean => {
+        const value = data.name.trim();
+        if (value === '') {
+            setNameError({
+                type: 'required',
+                message: 'El nombre de la etiqueta es obligatorio',
+            } as FieldError);
+            return false;
+        }
+        setNameError(undefined);
+        return true;
+    };
+
+    const validateUrl = (): boolean => {
+        const value = data.url.trim();
+        if (value === '') {
+            setUrlError({
+                type: 'required',
+                message: 'La URL de la etiqueta es obligatoria',
+            } as FieldError);
+            return false;
+        }
+
+        const isAbsoluteUrl = (() => {
+            try {
+                new URL(value);
+                return true;
+            } catch {
+                return false;
+            }
+        })();
+
+        const domainLikeRegex =
+            /^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?:\/\S*)?$/i;
+
+        if (!isAbsoluteUrl && !domainLikeRegex.test(value)) {
+            setUrlError({
+                type: 'pattern',
+                message:
+                    'La URL no es válida. Debe incluir https:// o un dominio como dominio.tld',
+            } as FieldError);
+            return false;
+        }
+
+        setUrlError(undefined);
+        return true;
+    };
 
     const handleAdd = () => {
-        if (!canAdd) return;
+        const okName = validateName();
+        const okUrl = validateUrl();
+        if (!okName || !okUrl) return;
         const newTag = { name: data.name.trim(), url: data.url.trim() };
         setTags((s) => [...s, newTag]);
         onAdd?.(newTag);
         setData({ name: '', url: '' });
+        setNameError(undefined);
+        setUrlError(undefined);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,12 +110,21 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         type="text"
                         label={nameLabel}
                         value={data.name}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setData((prev) => ({
-                                ...prev,
-                                name: e.target.value,
-                            }))
-                        }
+                        validationProps={{
+                            onChange: (
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setData((prev) => ({
+                                    ...prev,
+                                    name: e.target.value,
+                                }));
+                                if (nameError) setNameError(undefined);
+                            },
+                            onBlur: () => {
+                                validateName();
+                            },
+                        }}
+                        errors={nameError}
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(nameLabel)}-name`}
                     />
@@ -72,12 +134,21 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                         type="text"
                         label={urlLabel}
                         value={data.url}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setData((prev) => ({
-                                ...prev,
-                                url: e.target.value,
-                            }))
-                        }
+                        validationProps={{
+                            onChange: (
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setData((prev) => ({
+                                    ...prev,
+                                    url: e.target.value,
+                                }));
+                                if (urlError) setUrlError(undefined);
+                            },
+                            onBlur: () => {
+                                validateUrl();
+                            },
+                        }}
+                        errors={urlError}
                         onKeyDown={handleKeyDown}
                         id={`tag-${displayNameToId(urlLabel)}-url`}
                     />

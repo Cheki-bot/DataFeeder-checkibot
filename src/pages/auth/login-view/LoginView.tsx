@@ -1,13 +1,16 @@
 import { useForm } from 'react-hook-form';
-
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type UserFormData } from '../schemas/userSchema';
-
 import { ButtonComponent, InputComponent } from '@components/index';
-
 import style from './LoginView.module.css';
+import { useAuth } from '../../../contexts/auth-context/useAuth';
+import { useEffect } from 'react';
 
 export const LoginView = () => {
+    const { login, isAuthenticated } = useAuth();
+
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -19,11 +22,20 @@ export const LoginView = () => {
         resolver: zodResolver(loginSchema),
     });
 
-    const onSubmit = (data: UserFormData) => {
-        console.log(data);
-        reset();
-    };
+    useEffect(() => {
+        if (isAuthenticated) {
+            reset();
+            navigate('/home', { replace: true });
+        }
+    }, [isAuthenticated, navigate, reset]);
 
+    const onSubmit = async (data: UserFormData) => {
+        try {
+            await login(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <div className={style.login}>
             <section className={style.imageSection}>
@@ -49,7 +61,9 @@ export const LoginView = () => {
                         value={watch('email') || ''}
                         validationProps={register('email')}
                         errors={errors.email}
-                        onClear={() => {resetField('email')}}
+                        onClear={() => {
+                            resetField('email');
+                        }}
                     />
                     <InputComponent
                         label="Contraseña"
@@ -57,7 +71,9 @@ export const LoginView = () => {
                         value={watch('password') || ''}
                         validationProps={register('password')}
                         errors={errors.password}
-                        onClear={() => {resetField('password')}}
+                        onClear={() => {
+                            resetField('password');
+                        }}
                     />
                     <ButtonComponent
                         label="Ingresar"

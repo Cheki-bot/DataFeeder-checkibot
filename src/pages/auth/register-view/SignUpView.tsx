@@ -6,8 +6,10 @@ import { registerSchema, type RegisterFormData } from '../schemas/userSchema';
 import { ButtonComponent, InputComponent } from '@components/index';
 
 import style from './SignUpView.module.css';
+import { useAuth } from '../../../contexts/auth-context/useAuth';
 
 export const SignUpView = () => {
+    const { register: registerUser } = useAuth();
     const {
         register,
         handleSubmit,
@@ -19,9 +21,13 @@ export const SignUpView = () => {
         resolver: zodResolver(registerSchema),
     });
 
-    const onSubmit = (data: RegisterFormData) => {
-        console.log(data);
-        reset();
+    const onSubmit = async (data: RegisterFormData) => {
+        try {
+            await registerUser(data);
+            reset();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -42,7 +48,7 @@ export const SignUpView = () => {
             </section>
             <section className={style.loginSection}>
                 <div className={style.form}>
-                    <h2>Registrate</h2>
+                    <h2>Registrar nuevos usuarios</h2>
                     <InputComponent
                         label="Nombre de usuario"
                         type="text"
@@ -84,7 +90,7 @@ export const SignUpView = () => {
                         }}
                     />
                     <ButtonComponent
-                        label="Ingresar"
+                        label="Registrar"
                         onClick={handleSubmit(onSubmit)}
                     />
                 </div>
