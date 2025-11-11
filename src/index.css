@@ -34,6 +34,10 @@
     margin: 0;
 }
 
+html, body, #root {
+    width: 100%;
+}
+
 a {
     font-weight: 500;
     color: #646cff;

@@ -1,8 +1,10 @@
 import {
-    LoginView,
-    PartiesView,
-    SignUpView,
-    VerificationCreateView,
+  LoginView,
+  PartiesView,
+  SignUpView,
+  VerificationCreateView,
+  CalendarListView,
+  CalendarDetailView,
 } from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
                     { path: '/news_verifications', element: <VerificationCreateView /> },
                     { path: '/questions_and_answers', element: <QuestionsAnswers /> },
                 ],
+            },
+            {
+                path: '/calendars',
+                Component: CalendarListView,
+            },
+            {
+                path: '/calendars/:id',
+                Component: CalendarDetailView,
             },
         ],
     },

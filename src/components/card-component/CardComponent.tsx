@@ -1,7 +1,7 @@
-import PlusIcon from '@/assets/svg/icons/plus-icon';
 import { useState } from 'react';
 import { ButtonComponent } from '../button-component/ButtonComponent';
 import style from './CardComponent.module.css';
+import PlusIcon from '@/assets/svg/icons/plus-icon';
 
 type CardType = 'vertical' | 'horizontal';
 
@@ -9,14 +9,13 @@ type CardComponentProps = {
     title?: string;
     subtitle?: string;
     description?: string;
+    headerImageUrl?: string;
     mainImageUrl?: string;
     forAddCard?: boolean;
     detailsModal?: () => void;
     type?: CardType;
-    onClick?: () => void;
-    Candidates?: () => void;
-    GovernmentProgram?: () => void;
-    Delete?: () => void;
+    onEdit?: () => void;
+    onDelete?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -24,14 +23,13 @@ export const CardComponent = (props: CardComponentProps) => {
         title,
         subtitle,
         description: rawDescription,
+        headerImageUrl,
         mainImageUrl,
         forAddCard,
         detailsModal,
-        onClick,
-        Candidates,
-        GovernmentProgram,
-        Delete,
         type = 'vertical',
+        onEdit,
+        onDelete,
     } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,7 +43,7 @@ export const CardComponent = (props: CardComponentProps) => {
 
     if (type === 'horizontal') {
         return (
-            <article className={style.horizontalCard} onClick={onClick}>
+            <article className={style.horizontalCard}>
                 {mainImageUrl && (
                     <img
                         className={style.horizontalImage}
@@ -62,7 +60,10 @@ export const CardComponent = (props: CardComponentProps) => {
     }
 
     return (
-        <article className={forAddCard ? style.foraddCard : style.card}>
+        <article 
+            className={forAddCard ? style.foraddCard : style.card}
+            onClick={forAddCard ? detailsModal : undefined}
+        >
             {forAddCard ? (
                 <div className={style.addCard}>
                     <PlusIcon width={100} height={100} />
@@ -71,6 +72,11 @@ export const CardComponent = (props: CardComponentProps) => {
                 <>
                     <div className={style.header}>
                         <div className={style.info}>
+                            <img
+                                className={style.headerImage}
+                                src={headerImageUrl}
+                                alt="Card Image"
+                            />
                             <span className={style.titles}>
                                 <h3 className={style.title}>{title}</h3>
                                 <h4 className={style.subtitle}>{subtitle}</h4>
@@ -91,7 +97,7 @@ export const CardComponent = (props: CardComponentProps) => {
                             </svg>
                         </ButtonComponent>
                         {isMenuOpen && (
-                            <div className={style.menu} onClick={(e) => e.stopPropagation()}>
+                            <div className={style.menu}>
                                 <button
                                     className={style.menuItem}
                                     onClick={() => {
@@ -101,37 +107,37 @@ export const CardComponent = (props: CardComponentProps) => {
                                 >
                                     Detalles
                                 </button>
-                                <button
-                                    className={style.menuItem}
-                                    onClick={() => {
-                                        if (Candidates) Candidates();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
+                                {onEdit && (
+                                    <button
+                                        className={style.menuItem}
+                                        onClick={() => {
+                                            onEdit();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Editar
+                                    </button>
+                                )}
+                                <button className={style.menuItem}>
                                     Candidatos
                                 </button>
-                                <button
-                                    className={style.menuItem}
-                                    onClick={() => {
-                                        if (GovernmentProgram)
-                                            GovernmentProgram();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
+                                <button className={style.menuItem}>
                                     Programa de Gobierno
                                 </button>
-                                <button
-                                    className={[
-                                        style.menuItem,
-                                        style.delete,
-                                    ].join(' ')}
-                                    onClick={() => {
-                                        if (Delete) Delete();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Eliminar
-                                </button>
+                                {onDelete && (
+                                    <button
+                                        className={[
+                                            style.menuItem,
+                                            style.delete,
+                                        ].join(' ')}
+                                        onClick={() => {
+                                            onDelete();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Eliminar
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

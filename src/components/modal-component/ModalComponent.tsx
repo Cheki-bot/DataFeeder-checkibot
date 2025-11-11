@@ -6,6 +6,8 @@ interface ModalProps {
     isOpen?: boolean;
     onClose: () => void;
     Accept: () => void;
+    acceptLabel?: string;
+    isLoading?: boolean;
 }
 
 export const ModalComponent = ({
@@ -13,6 +15,8 @@ export const ModalComponent = ({
     isOpen,
     onClose,
     Accept,
+    acceptLabel = 'Accept',
+    isLoading = false,
 }: ModalProps) => {
     if (!isOpen) return null;
 
@@ -20,28 +24,22 @@ export const ModalComponent = ({
         <div
             className={styles.overlay}
             role="dialog"
-            aria-modal
-            onClick={
-                onClose ||
-                (() => {
-                    isOpen = false;
-                })
-            }
+            aria-modal="true"
+            onClick={onClose}
         >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <button
                     className={styles.closeButton}
-                    onClick={
-                        onClose ||
-                        (() => {
-                            isOpen = false;
-                        })
-                    }
+                    onClick={onClose}
+                    aria-label="Cerrar modal"
                 >
-                    x
+                    ×
                 </button>
                 {children}
-                <ButtonComponent label="Accept" onClick={Accept} />
+                <ButtonComponent 
+                    label={isLoading ? 'Guardando...' : acceptLabel} 
+                    onClick={Accept}
+                />
             </div>
         </div>
     );
