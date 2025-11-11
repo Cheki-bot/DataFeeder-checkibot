@@ -13,6 +13,7 @@ import './index.css';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { HomeView } from './pages/home/HomeView.tsx';
+import CalendarEventsView from './pages/calendar-events/CalendarEventsView.tsx';
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: '/verifications',
                 Component: VerificationCreateView,
+            },
+            {
+                path: '/calendar-events',
+                Component: CalendarEventsView,
             },
         ],
     },
