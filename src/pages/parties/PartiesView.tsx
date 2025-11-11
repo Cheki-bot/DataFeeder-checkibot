@@ -8,6 +8,7 @@ import { PartyDetails } from './details/PartyDetails';
 import { deleteCandidacy, getCandidacies } from './service/parties.service';
 
 import style from './PartiesView.module.css';
+import { useNotification } from '@/hooks/useNotification';
 
 export const PartiesView = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,7 @@ export const PartiesView = () => {
         null
     );
     const navigate = useNavigate();
+    const { addNotification } = useNotification();
 
     useEffect(() => {
         const fetchParties = async () => {
@@ -77,6 +79,10 @@ export const PartiesView = () => {
                         }}
                         Delete={() => {
                             handleDelete(item!.id);
+                            addNotification('Partido eliminado correctamente', 'success');
+                            setParties((prev) =>
+                                prev.filter((party) => party.id !== item.id)
+                            );
                         }}
                         key={item.id}
                     />
