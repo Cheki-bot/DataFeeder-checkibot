@@ -14,6 +14,7 @@ import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { HomeView } from './pages/home/HomeView.tsx';
 import CalendarEventsView from './pages/calendar-events/CalendarEventsView.tsx';
+import { HeaderComponent } from './components/header-component/HeaderComponent.tsx';
 
 const router = createBrowserRouter([
     {
@@ -37,16 +38,22 @@ const router = createBrowserRouter([
                 Component: HomeView,
             },
             {
-                path: '/parties',
+                path: '/candidacies',
                 Component: PartiesView,
             },
             {
-                path: '/parties/candidates',
+                path: '/candidacies/candidates/:partyId',
                 Component: CandidatesView,
             },
             {
-                path: '/verifications',
+                path: '/calendars',
+            },
+            {
+                path: '/news_verifications',
                 Component: VerificationCreateView,
+            },
+            {
+                path: '/questions_and_answers',
             },
             {
                 path: '/calendar-events',
@@ -59,6 +66,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <AuthProvider>
+            <HeaderComponent type='logged'/>
             <RouterProvider router={router} />
         </AuthProvider>
     </StrictMode>

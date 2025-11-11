@@ -1,12 +1,13 @@
 .header {
-    position: absolute;
+    display: flex;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 10;
-    background-color: #1e1e1e;
+    background-color: var(--background-color);
     padding: 15px 20px;
-    display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: small;
 }
 
@@ -40,5 +41,6 @@
 
     .header {
         padding: 10px 15px;
+        
     }
 }
