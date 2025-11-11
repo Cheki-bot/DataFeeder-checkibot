@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { ButtonComponent } from '@/components';
 import { CardComponent } from '@/components/card-component/CardComponent';
 import type { IPoliticalParty } from '@/interfaces/Candidacies';
 import { PartyDetails } from './details/PartyDetails';
-import { deleteCandidacy, getCandidacies } from './services/parties.service';
+import { deleteCandidacy, getCandidacies } from './service/parties.service';
 
 import style from './PartiesView.module.css';
-import { ButtonComponent } from '@/components';
 
 export const PartiesView = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -46,9 +46,12 @@ export const PartiesView = () => {
             <div className={style.title}>
                 <h1>Parties</h1>
                 <span className={style.addButton}>
-                    <ButtonComponent label="Añadir Nuevo Partido" onClick={() => {
-                        navigate('create');
-                    }} />
+                    <ButtonComponent
+                        label="Añadir Nuevo Partido"
+                        onClick={() => {
+                            navigate('create');
+                        }}
+                    />
                 </span>
             </div>
             <div className={style.cardContainer}>
