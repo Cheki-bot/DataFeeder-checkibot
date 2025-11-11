@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
-import { ButtonComponent, InputComponent } from '@components/index';
+import { ButtonComponent } from '@components/index';
+import { ModalComponent } from '@components/modal-component/ModalComponent';
+import { EventForm } from '@components/event-form/EventForm';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
 import { getCalendarById, deleteCalendar, updateCalendar } from '@/services/calendar.service';
 import styles from './CalendarDetailView.module.css';
@@ -299,87 +301,20 @@ export const CalendarDetailView = () => {
                     />
                 </div>
 
-                {showEventModal && (
-                    <div className={styles.modalOverlay} onClick={handleCloseEventModal}>
-                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                            <h2>{editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}</h2>
-                            <form onSubmit={(e) => { e.preventDefault(); handleSubmitEvent(); }}>
-                                <InputComponent
-                                    label="Escenario"
-                                    type="text"
-                                    value={eventForm.scenery}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('scenery', e.target.value)
-                                    }}
-                                    required
-                                />
-                                <InputComponent
-                                    label="Actividad"
-                                    type="text"
-                                    value={eventForm.activity}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('activity', e.target.value)
-                                    }}
-                                    required
-                                />
-                                <InputComponent
-                                    label="Fecha Inicio"
-                                    type="date"
-                                    value={eventForm.from_date}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('from_date', e.target.value)
-                                    }}
-                                    required
-                                />
-                                <InputComponent
-                                    label="Fecha Fin"
-                                    type="date"
-                                    value={eventForm.to_date}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('to_date', e.target.value)
-                                    }}
-                                    required
-                                />
-                                <InputComponent
-                                    label="Duración (días)"
-                                    type="number"
-                                    value={eventForm.duration.toString()}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('duration', parseInt(e.target.value) || 0)
-                                    }}
-                                    required
-                                />
-                                <InputComponent
-                                    label="Referencia"
-                                    type="text"
-                                    value={eventForm.reference}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('reference', e.target.value)
-                                    }}
-                                />
-                                <InputComponent
-                                    label="Lugar"
-                                    type="text"
-                                    value={eventForm.place}
-                                    validationProps={{
-                                        onChange: (e) => handleEventInputChange('place', e.target.value)
-                                    }}
-                                />
-                                <div className={styles.modalActions}>
-                                    <ButtonComponent
-                                        label={editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
-                                        type="submit"
-                                    />
-                                    <ButtonComponent
-                                        label="Cancelar"
-                                        onClick={handleCloseEventModal}
-                                        type="button"
-                                    />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
+                <ModalComponent
+                    isOpen={showEventModal}
+                    onClose={handleCloseEventModal}
+                    Accept={handleSubmitEvent}
+                    acceptLabel={editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
+                >
+                    <h2 className={styles.modalTitle}>
+                        {editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}
+                    </h2>
+                    <EventForm
+                        formData={eventForm}
+                        onFieldChange={handleEventInputChange}
+                    />
+                </ModalComponent>
             </div>
         </div>
     );

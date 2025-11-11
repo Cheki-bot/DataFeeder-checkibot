@@ -19,7 +19,6 @@ export const getAllCalendars = async (filters?: CalendarFilters) => {
     data: ElectoralCalendar[] 
   }>(`/calendars?${params.toString()}`);
   
-  console.log("Calendars response:", response);
   return response.data;
 };
 
@@ -31,7 +30,6 @@ export const getCalendarById = async (id: string) => {
     data: ElectoralCalendar 
   }>(`/calendars/${id}`);
   
-  console.log("Calendar by ID response:", response);
   return response.data;
 };
 
@@ -43,7 +41,6 @@ export const createCalendar = async (calendarData: CreateElectoralCalendarData) 
     data: ElectoralCalendar 
   }>('/calendars', calendarData);
   
-  console.log("Create calendar response:", response);
   return response.data;
 };
 
@@ -55,7 +52,6 @@ export const updateCalendar = async (id: string, updateData: UpdateElectoralCale
     data: ElectoralCalendar 
   }>(`/calendars/${id}`, updateData);
   
-  console.log("Update calendar response:", response);
   return response.data;
 };
 
@@ -66,6 +62,5 @@ export const deleteCalendar = async (id: string) => {
     status: number; 
   }>(`/calendars/${id}`);
   
-  console.log("Delete calendar response:", response);
   return response.data;
 };

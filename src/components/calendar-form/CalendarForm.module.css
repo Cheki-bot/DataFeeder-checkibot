@@ -1,0 +1,62 @@
+.error {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.inputGroup label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #b0b0b0;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+    outline: none;
+    border-color: #00cfaf;
+    box-shadow: 0 0 0 3px rgba(0, 207, 175, 0.1);
+}
+
+.inputGroup textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.note {
+    background-color: #3a3a3a;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #b0b0b0;
+    border-left: 4px solid #00cfaf;
+}
+
+.note p {
+    margin: 0;
+    line-height: 1.5;
+}

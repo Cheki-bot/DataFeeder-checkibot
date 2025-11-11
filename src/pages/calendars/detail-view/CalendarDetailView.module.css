@@ -258,6 +258,15 @@
     color: #ff6b6b;
 }
 
+.modalTitle {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
 .modalOverlay {
     position: fixed;
     top: 0;
