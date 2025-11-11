@@ -61,6 +61,13 @@
 
 .titles {
     font-size: small;
+    text-align: left;
+}
+
+.title {
+    font-size: small;
+    font-weight: 600;
+    margin: 0;
 }
 
 .image {

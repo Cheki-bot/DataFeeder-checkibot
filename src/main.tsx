@@ -41,7 +41,7 @@ const router = createBrowserRouter([
                 Component: PartiesView,
             },
             {
-                path: '/candidacies/candidates',
+                path: '/candidacies/candidates/:partyId',
                 Component: CandidatesView,
             },
             {

@@ -36,7 +36,7 @@ export const HomeView = () => {
                         type="horizontal"
                         title={category.name}
                         subtitle={category.description}
-                        onClick={() => navigate(category.destination)}
+                        onClick={() => navigate('/' + category.destination)}
                     />
                 ))}
             </div>
