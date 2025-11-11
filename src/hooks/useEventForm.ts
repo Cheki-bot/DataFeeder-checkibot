@@ -28,6 +28,7 @@ type EventFormAction =
     | { type: 'SET_ERROR'; payload: string | null }
     | { type: 'OPEN_CREATE_EVENT_MODAL' }
     | { type: 'OPEN_EDIT_EVENT_MODAL'; payload: { index: number; data: EventFormData } }
+    | { type: 'PREPARE_EDIT_EVENT'; payload: number }
     | { type: 'CLOSE_EVENT_MODAL' }
     | { type: 'UPDATE_EVENT_FIELD'; payload: { field: keyof EventFormData; value: string | number } }
     | { type: 'SET_SAVING_EVENT'; payload: boolean }
@@ -113,6 +114,28 @@ function eventFormReducer(state: EventFormState, action: EventFormAction): Event
                 error: null,
             };
         
+        case 'PREPARE_EDIT_EVENT':
+            const event = state.calendar?.events[action.payload];
+            if (!event) return state;
+            
+            const formData: EventFormData = {
+                scenery: event.scenery || '',
+                activity: event.activity || '',
+                from_date: event.from_date ? new Date(event.from_date).toISOString().split('T')[0] : '',
+                to_date: event.to_date ? new Date(event.to_date).toISOString().split('T')[0] : '',
+                duration: event.duration || 0,
+                reference: event.reference || '',
+                place: event.place || ''
+            };
+            
+            return {
+                ...state,
+                showEventModal: true,
+                editingEventIndex: action.payload,
+                eventForm: formData,
+                error: null,
+            };
+        
         case 'CLOSE_EVENT_MODAL':
             return {
                 ...state,
@@ -168,24 +191,8 @@ export const useEventForm = (): UseEventFormReturn => {
     }, []);
 
     const openEditEventModal = useCallback((index: number) => {
-        if (!state.calendar?.events[index]) return;
-        
-        const event = state.calendar.events[index];
-        const formData: EventFormData = {
-            scenery: event.scenery || '',
-            activity: event.activity || '',
-            from_date: event.from_date ? new Date(event.from_date).toISOString().split('T')[0] : '',
-            to_date: event.to_date ? new Date(event.to_date).toISOString().split('T')[0] : '',
-            duration: event.duration || 0,
-            reference: event.reference || '',
-            place: event.place || ''
-        };
-        
-        dispatch({
-            type: 'OPEN_EDIT_EVENT_MODAL',
-            payload: { index, data: formData }
-        });
-    }, [state.calendar]);
+        dispatch({ type: 'PREPARE_EDIT_EVENT', payload: index });
+    }, []);
 
     const closeEventModal = useCallback(() => {
         dispatch({ type: 'CLOSE_EVENT_MODAL' });
@@ -215,29 +222,23 @@ export const useEventForm = (): UseEventFormReturn => {
             let updatedEvents = [...(state.calendar.events || [])];
             
             if (state.editingEventIndex !== null) {
-                // Editar evento existente
                 updatedEvents[state.editingEventIndex] = {
                     ...newEvent,
                     no: state.editingEventIndex + 1
                 };
             } else {
-                // Agregar nuevo evento
                 updatedEvents.push({
                     ...newEvent,
                     no: updatedEvents.length + 1
                 });
             }
 
-            // Renumerar todos los eventos
             updatedEvents = updatedEvents.map((event, index) => ({
                 ...event,
                 no: index + 1
             }));
 
-            await updateCalendar(calendarId, { events: updatedEvents });
-            
-            // Recargar el calendario actualizado
-            const response = await getCalendarById(calendarId);
+            const response = await updateCalendar(calendarId, { events: updatedEvents });
             dispatch({ type: 'SET_CALENDAR', payload: response.data });
             dispatch({ type: 'CLOSE_EVENT_MODAL' });
         } catch (err) {
@@ -260,16 +261,12 @@ export const useEventForm = (): UseEventFormReturn => {
             
             let updatedEvents = state.calendar.events.filter((_, i) => i !== index);
             
-            // Renumerar todos los eventos
             updatedEvents = updatedEvents.map((event, idx) => ({
                 ...event,
                 no: idx + 1
             }));
 
-            await updateCalendar(calendarId, { events: updatedEvents });
-            
-            // Recargar el calendario actualizado
-            const response = await getCalendarById(calendarId);
+            const response = await updateCalendar(calendarId, { events: updatedEvents });
             dispatch({ type: 'SET_CALENDAR', payload: response.data });
         } catch (err) {
             console.error('Error deleting event:', err);

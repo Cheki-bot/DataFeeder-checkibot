@@ -57,6 +57,18 @@ export const CalendarListView = () => {
         }
     };
 
+    const handleNavigateToDetail = useCallback((calendarId: string) => {
+        navigate(`/calendars/${calendarId}`);
+    }, [navigate]);
+
+    const handleEditCalendar = useCallback((calendarId: string) => {
+        calendarForm.openEditModal(calendarId);
+    }, [calendarForm.openEditModal]);
+
+    const handleDeleteCalendar = useCallback((calendarId: string) => {
+        handleDelete(calendarId);
+    }, []);
+
     const handleSubmitCreate = () => {
         calendarForm.submitCreate();
     };
@@ -119,9 +131,9 @@ export const CalendarListView = () => {
                             title={calendar.title}
                             subtitle={calendar.resolution}
                             description={calendar.introduction || 'Sin descripción'}
-                            detailsModal={() => navigate(`/calendars/${calendar._id}`)}
-                            onEdit={() => calendarForm.openEditModal(calendar._id)}
-                            onDelete={() => handleDelete(calendar._id)}
+                            detailsModal={() => handleNavigateToDetail(calendar._id)}
+                            onEdit={() => handleEditCalendar(calendar._id)}
+                            onDelete={() => handleDeleteCalendar(calendar._id)}
                         />
                     ))}
                     <CardComponent
