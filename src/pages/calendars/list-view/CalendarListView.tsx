@@ -43,7 +43,7 @@ export const CalendarListView = () => {
         }
     }, [location.state, location.pathname, navigate, calendarForm.openEditModal]);
 
-    const handleDelete = async (calendarId: string) => {
+    const handleDelete = useCallback(async (calendarId: string) => {
         if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
             return;
         }
@@ -55,7 +55,7 @@ export const CalendarListView = () => {
             console.error('Error deleting calendar:', err);
             setListError('Error al eliminar el calendario');
         }
-    };
+    }, [fetchCalendars]);
 
     const handleNavigateToDetail = useCallback((calendarId: string) => {
         navigate(`/calendars/${calendarId}`);
@@ -67,7 +67,7 @@ export const CalendarListView = () => {
 
     const handleDeleteCalendar = useCallback((calendarId: string) => {
         handleDelete(calendarId);
-    }, []);
+    }, [handleDelete]);
 
     const handleSubmitCreate = () => {
         calendarForm.submitCreate();

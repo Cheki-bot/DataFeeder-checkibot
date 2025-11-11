@@ -222,15 +222,9 @@ export const useEventForm = (): UseEventFormReturn => {
             let updatedEvents = [...(state.calendar.events || [])];
             
             if (state.editingEventIndex !== null) {
-                updatedEvents[state.editingEventIndex] = {
-                    ...newEvent,
-                    no: state.editingEventIndex + 1
-                };
+                updatedEvents[state.editingEventIndex] = newEvent;
             } else {
-                updatedEvents.push({
-                    ...newEvent,
-                    no: updatedEvents.length + 1
-                });
+                updatedEvents.push(newEvent);
             }
 
             updatedEvents = updatedEvents.map((event, index) => ({

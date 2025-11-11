@@ -16,76 +16,104 @@ interface CalendarFormProps {
     idPrefix?: string;
 }
 
+interface FormFieldProps {
+    id: string;
+    label: string;
+    type: string;
+    value: string;
+    onChange: (value: string) => void;
+    required?: boolean;
+    pattern?: string;
+    placeholder?: string;
+    rows?: number;
+}
+
+const FormField = ({ id, label, type, value, onChange, required, pattern, placeholder, rows }: FormFieldProps) => (
+    <div className={styles.inputGroup}>
+        <label htmlFor={id}>{label} {required && '*'}</label>
+        {type === 'textarea' ? (
+            <textarea
+                id={id}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={placeholder}
+                rows={rows}
+            />
+        ) : (
+            <input
+                id={id}
+                type={type}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                required={required}
+                pattern={pattern}
+                placeholder={placeholder}
+            />
+        )}
+    </div>
+);
+
 export const CalendarForm = ({ formData, onFieldChange, error, idPrefix = '' }: CalendarFormProps) => {
     return (
         <>
             {error && <div className={styles.error}>{error}</div>}
             
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}title`}>Título *</label>
-                <input
-                    id={`${idPrefix}title`}
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) => onFieldChange('title', e.target.value)}
-                    required
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}title`}
+                label="Título"
+                type="text"
+                value={formData.title}
+                onChange={(value) => onFieldChange('title', value)}
+                required
+            />
 
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}resolution`}>Resolución *</label>
-                <input
-                    id={`${idPrefix}resolution`}
-                    type="text"
-                    value={formData.resolution}
-                    onChange={(e) => onFieldChange('resolution', e.target.value)}
-                    required
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}resolution`}
+                label="Resolución"
+                type="text"
+                value={formData.resolution}
+                onChange={(value) => onFieldChange('resolution', value)}
+                required
+            />
 
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}date`}>Fecha *</label>
-                <input
-                    id={`${idPrefix}date`}
-                    type="date"
-                    value={formData.date}
-                    onChange={(e) => onFieldChange('date', e.target.value)}
-                    required
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}date`}
+                label="Fecha"
+                type="date"
+                value={formData.date}
+                onChange={(value) => onFieldChange('date', value)}
+                required
+            />
 
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}electionId`}>ID de Elección *</label>
-                <input
-                    id={`${idPrefix}electionId`}
-                    type="text"
-                    value={formData.electionId}
-                    onChange={(e) => onFieldChange('electionId', e.target.value)}
-                    required
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}electionId`}
+                label="ID de Elección"
+                type="text"
+                value={formData.electionId}
+                onChange={(value) => onFieldChange('electionId', value)}
+                required
+                pattern="[A-Z0-9\-]+"
+                placeholder="Ej: EL-2024-001"
+            />
 
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}pdfUrl`}>URL del PDF *</label>
-                <input
-                    id={`${idPrefix}pdfUrl`}
-                    type="url"
-                    value={formData.pdfUrl}
-                    onChange={(e) => onFieldChange('pdfUrl', e.target.value)}
-                    required
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}pdfUrl`}
+                label="URL del PDF"
+                type="url"
+                value={formData.pdfUrl}
+                onChange={(value) => onFieldChange('pdfUrl', value)}
+                required
+            />
 
-            <div className={styles.inputGroup}>
-                <label htmlFor={`${idPrefix}introduction`}>Introducción (Markdown)</label>
-                <textarea
-                    id={`${idPrefix}introduction`}
-                    value={formData.introduction}
-                    onChange={(e) => onFieldChange('introduction', e.target.value)}
-                    placeholder="Puedes usar Markdown para formatear el texto..."
-                    rows={4}
-                />
-            </div>
+            <FormField
+                id={`${idPrefix}introduction`}
+                label="Introducción (Markdown)"
+                type="textarea"
+                value={formData.introduction}
+                onChange={(value) => onFieldChange('introduction', value)}
+                placeholder="Puedes usar Markdown para formatear el texto..."
+                rows={4}
+            />
 
             <div className={styles.note}>
                 <p>Nota: Los campos de firmas y eventos se pueden agregar después de crear el calendario.</p>

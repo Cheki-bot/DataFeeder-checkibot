@@ -231,15 +231,6 @@
     margin: 0.25rem 0;
 }
 
-.arrow {
-    position: absolute;
-    right: -2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #ffffff;
-}
-
 .buttonGroup {
     display: flex;
     gap: 1rem;

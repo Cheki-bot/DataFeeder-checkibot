@@ -18,7 +18,8 @@ export const CalendarDetailView = () => {
         if (id) {
             eventFormHook.fetchCalendar(id);
         }
-    }, [id, eventFormHook.fetchCalendar]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
 
     const handleEdit = () => {
         navigate('/calendars', { state: { editCalendarId: id } });
