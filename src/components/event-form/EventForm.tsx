@@ -17,6 +17,11 @@ interface EventFormProps {
 }
 
 export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
+    const handleChange = (field: keyof EventFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = field === 'duration' ? parseInt(e.target.value) || 0 : e.target.value;
+        onFieldChange(field, value);
+    };
+
     return (
         <div className={styles.formContainer}>
             <InputComponent
@@ -24,7 +29,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="text"
                 value={formData.scenery}
                 validationProps={{
-                    onChange: (e) => onFieldChange('scenery', e.target.value)
+                    onChange: handleChange('scenery')
                 }}
                 required
             />
@@ -33,7 +38,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="text"
                 value={formData.activity}
                 validationProps={{
-                    onChange: (e) => onFieldChange('activity', e.target.value)
+                    onChange: handleChange('activity')
                 }}
                 required
             />
@@ -42,7 +47,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="date"
                 value={formData.from_date}
                 validationProps={{
-                    onChange: (e) => onFieldChange('from_date', e.target.value)
+                    onChange: handleChange('from_date')
                 }}
                 required
             />
@@ -51,7 +56,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="date"
                 value={formData.to_date}
                 validationProps={{
-                    onChange: (e) => onFieldChange('to_date', e.target.value)
+                    onChange: handleChange('to_date')
                 }}
                 required
             />
@@ -60,7 +65,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="number"
                 value={formData.duration.toString()}
                 validationProps={{
-                    onChange: (e) => onFieldChange('duration', parseInt(e.target.value) || 0)
+                    onChange: handleChange('duration')
                 }}
                 required
             />
@@ -69,7 +74,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="text"
                 value={formData.reference}
                 validationProps={{
-                    onChange: (e) => onFieldChange('reference', e.target.value)
+                    onChange: handleChange('reference')
                 }}
             />
             <InputComponent
@@ -77,7 +82,7 @@ export const EventForm = ({ formData, onFieldChange }: EventFormProps) => {
                 type="text"
                 value={formData.place}
                 validationProps={{
-                    onChange: (e) => onFieldChange('place', e.target.value)
+                    onChange: handleChange('place')
                 }}
             />
         </div>

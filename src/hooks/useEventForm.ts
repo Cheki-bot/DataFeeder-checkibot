@@ -31,8 +31,7 @@ type EventFormAction =
     | { type: 'PREPARE_EDIT_EVENT'; payload: number }
     | { type: 'CLOSE_EVENT_MODAL' }
     | { type: 'UPDATE_EVENT_FIELD'; payload: { field: keyof EventFormData; value: string | number } }
-    | { type: 'SET_SAVING_EVENT'; payload: boolean }
-    | { type: 'RESET_EVENT_FORM' };
+    | { type: 'SET_SAVING_EVENT'; payload: boolean };
 
 interface UseEventFormReturn {
     calendar: ElectoralCalendar | null;
@@ -158,13 +157,6 @@ function eventFormReducer(state: EventFormState, action: EventFormAction): Event
             return {
                 ...state,
                 savingEvent: action.payload,
-            };
-        
-        case 'RESET_EVENT_FORM':
-            return {
-                ...state,
-                eventForm: initialEventFormData,
-                error: null,
             };
         
         default:
