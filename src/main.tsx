@@ -13,6 +13,7 @@ import './index.css';
 import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { HomeView } from './pages/home/HomeView.tsx';
+import CalendarEventsView from './pages/calendar-events/CalendarEventsView.tsx';
 import { HeaderComponent } from './components/header-component/HeaderComponent.tsx';
 
 const router = createBrowserRouter([
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
             },
             {
                 path: '/questions_and_answers',
+            },
+            {
+                path: '/calendar-events',
+                Component: CalendarEventsView,
             },
         ],
     },
