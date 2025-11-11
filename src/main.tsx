@@ -15,6 +15,7 @@ import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { HomeView } from './pages/home/HomeView.tsx';
 import CalendarEventsView from './pages/calendar-events/CalendarEventsView.tsx';
 import { HeaderComponent } from './components/header-component/HeaderComponent.tsx';
+import { QuestionsAnswers } from './pages/questions-answers/QuestionsAnswers.tsx';
 
 const router = createBrowserRouter([
     {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/questions_and_answers',
+                Component: QuestionsAnswers,
             },
             {
                 path: '/calendar-events',

@@ -39,5 +39,3 @@ export const TagsComponent: React.FC<TagsComponentProps> = ({
         </div>
     );
 };
-
-export default TagsComponent;

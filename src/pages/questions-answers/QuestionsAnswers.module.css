@@ -1,0 +1,92 @@
+.checkboxField {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    padding: 2em;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 6em;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    padding: 2em;
+    gap: 2em;
+    width: 80%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding-inline: 5em;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.backButton {
+    position: absolute;
+    top: 1em;
+    display: none;
+    flex-direction: column;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: var(--white-color);
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 1em;
+    font-size: 1em;
+}
+
+.backContent {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+@media screen and (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        width: 100%;
+        padding: 1em;
+        font-size: 0.9em;
+    }
+
+    .form {
+        display: none;
+    }
+
+    .listContainer {
+        padding-inline: 1em;
+    }
+
+    .backButton {
+        display: flex;
+    }
+}
