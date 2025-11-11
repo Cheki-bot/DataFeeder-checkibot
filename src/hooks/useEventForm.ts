@@ -113,7 +113,7 @@ function eventFormReducer(state: EventFormState, action: EventFormAction): Event
                 error: null,
             };
         
-        case 'PREPARE_EDIT_EVENT':
+        case 'PREPARE_EDIT_EVENT': {
             const event = state.calendar?.events[action.payload];
             if (!event) return state;
             
@@ -134,6 +134,7 @@ function eventFormReducer(state: EventFormState, action: EventFormAction): Event
                 eventForm: formData,
                 error: null,
             };
+        }
         
         case 'CLOSE_EVENT_MODAL':
             return {

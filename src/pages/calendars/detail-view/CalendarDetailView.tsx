@@ -12,13 +12,29 @@ export const CalendarDetailView = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     
-    const eventFormHook = useEventForm();
+    const {
+        calendar,
+        loading,
+        error,
+        showEventModal,
+        editingEventIndex,
+        eventForm,
+        savingEvent,
+        fetchCalendar,
+        openCreateEventModal,
+        openEditEventModal,
+        closeEventModal,
+        updateEventField,
+        submitEvent,
+        deleteEvent,
+        setError
+    } = useEventForm();
 
     useEffect(() => {
         if (id) {
-            eventFormHook.fetchCalendar(id);
+            fetchCalendar(id);
         }
-    }, [id, eventFormHook.fetchCalendar]);
+    }, [id, fetchCalendar]);
 
     const handleEdit = () => {
         navigate('/calendars', { state: { editCalendarId: id } });
@@ -36,29 +52,29 @@ export const CalendarDetailView = () => {
             navigate('/calendars');
         } catch (err) {
             console.error('Error deleting calendar:', err);
-            eventFormHook.setError('Error al eliminar el calendario');
+            setError('Error al eliminar el calendario');
         }
     };
 
     const handleSubmitEvent = () => {
         if (!id) return;
-        eventFormHook.submitEvent(id);
+        submitEvent(id);
     };
 
     const handleDeleteEvent = (index: number) => {
         if (!id) return;
-        eventFormHook.deleteEvent(id, index);
+        deleteEvent(id, index);
     };
 
     const handleOpenEventModal = (index?: number) => {
         if (index !== undefined) {
-            eventFormHook.openEditEventModal(index);
+            openEditEventModal(index);
         } else {
-            eventFormHook.openCreateEventModal();
+            openCreateEventModal();
         }
     };
 
-    if (eventFormHook.loading) {
+    if (loading) {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
@@ -69,12 +85,12 @@ export const CalendarDetailView = () => {
         );
     }
 
-    if (eventFormHook.error || !eventFormHook.calendar) {
+    if (error || !calendar) {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
                 <div className={styles.content}>
-                    <div className={styles.error}>{eventFormHook.error || 'Calendario no encontrado'}</div>
+                    <div className={styles.error}>{error || 'Calendario no encontrado'}</div>
                 </div>
             </div>
         );
@@ -84,22 +100,22 @@ export const CalendarDetailView = () => {
         <div className={styles.container}>
             <HeaderComponent type="simple" />
             <div className={styles.content}>
-                <h1 className={styles.title}>{eventFormHook.calendar.title}</h1>
+                <h1 className={styles.title}>{calendar.title}</h1>
                 <div className={styles.metadata}>
-                    <p><strong>Resolución:</strong> {eventFormHook.calendar.resolution}</p>
-                    <p><strong>Fecha:</strong> {new Date(eventFormHook.calendar.date).toLocaleDateString()}</p>
-                    {eventFormHook.calendar.introduction && (
-                        <p className={styles.introduction}>{eventFormHook.calendar.introduction}</p>
+                    <p><strong>Resolución:</strong> {calendar.resolution}</p>
+                    <p><strong>Fecha:</strong> {new Date(calendar.date).toLocaleDateString()}</p>
+                    {calendar.introduction && (
+                        <p className={styles.introduction}>{calendar.introduction}</p>
                     )}
-                    {eventFormHook.calendar.pdf_url && (
-                        <a href={eventFormHook.calendar.pdf_url} target="_blank" rel="noopener noreferrer" className={styles.pdfLink}>
+                    {calendar.pdf_url && (
+                        <a href={calendar.pdf_url} target="_blank" rel="noopener noreferrer" className={styles.pdfLink}>
                             Ver PDF
                         </a>
                     )}
                 </div>
 
                 <div className={styles.eventsGrid}>
-                    {eventFormHook.calendar.events && eventFormHook.calendar.events.map((event, index) => (
+                    {calendar.events && calendar.events.map((event, index) => (
                         <div key={event._id || index} className={styles.eventCardWrapper}>
                             <div className={styles.eventCard}>
                                 <div className={styles.eventHeader}>
@@ -139,7 +155,7 @@ export const CalendarDetailView = () => {
                                     />
                                 </div>
                             </div>
-                            {index < (eventFormHook.calendar?.events.length ?? 0) - 1 && (
+                            {index < (calendar?.events.length ?? 0) - 1 && (
                                 <div className={styles.arrow}>→</div>
                             )}
                         </div>
@@ -168,18 +184,18 @@ export const CalendarDetailView = () => {
                 </div>
 
                 <ModalComponent
-                    isOpen={eventFormHook.showEventModal}
-                    onClose={eventFormHook.closeEventModal}
+                    isOpen={showEventModal}
+                    onClose={closeEventModal}
                     Accept={handleSubmitEvent}
-                    acceptLabel={eventFormHook.editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
-                    isLoading={eventFormHook.savingEvent}
+                    acceptLabel={editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
+                    isLoading={savingEvent}
                 >
                     <h2 className={styles.modalTitle}>
-                        {eventFormHook.editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}
+                        {editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}
                     </h2>
                     <EventForm
-                        formData={eventFormHook.eventForm}
-                        onFieldChange={eventFormHook.updateEventField}
+                        formData={eventForm}
+                        onFieldChange={updateEventField}
                     />
                 </ModalComponent>
             </div>

@@ -29,7 +29,20 @@ export const CalendarListView = () => {
         }
     }, []);
 
-    const calendarForm = useCalendarForm(fetchCalendars);
+    const {
+        data,
+        showCreateModal,
+        showEditModal,
+        error,
+        creating,
+        updating,
+        openCreateModal,
+        closeModal,
+        openEditModal,
+        updateFormField,
+        submitCreate,
+        submitEdit
+    } = useCalendarForm(fetchCalendars);
 
     useEffect(() => {
         fetchCalendars();
@@ -38,10 +51,10 @@ export const CalendarListView = () => {
     useEffect(() => {
         const state = location.state as { editCalendarId?: string } | null;
         if (state?.editCalendarId) {
-            calendarForm.openEditModal(state.editCalendarId);
+            openEditModal(state.editCalendarId);
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [location.state, location.pathname, navigate, calendarForm.openEditModal]);
+    }, [location.state, location.pathname, navigate, openEditModal]);
 
     const handleDelete = useCallback(async (calendarId: string) => {
         if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
@@ -62,19 +75,19 @@ export const CalendarListView = () => {
     }, [navigate]);
 
     const handleEditCalendar = useCallback((calendarId: string) => {
-        calendarForm.openEditModal(calendarId);
-    }, [calendarForm.openEditModal]);
+        openEditModal(calendarId);
+    }, [openEditModal]);
 
     const handleDeleteCalendar = useCallback((calendarId: string) => {
         handleDelete(calendarId);
     }, [handleDelete]);
 
     const handleSubmitCreate = () => {
-        calendarForm.submitCreate();
+        submitCreate();
     };
 
     const handleSubmitEdit = () => {
-        calendarForm.submitEdit();
+        submitEdit();
     };
 
     const renderModal = (
@@ -87,16 +100,16 @@ export const CalendarListView = () => {
     ) => (
         <ModalComponent
             isOpen={isOpen}
-            onClose={calendarForm.closeModal}
+            onClose={closeModal}
             Accept={onSubmit}
             acceptLabel={acceptLabel}
             isLoading={isLoading}
         >
             <h2 className={styles.modalTitle}>{title}</h2>
             <CalendarForm
-                formData={calendarForm.data}
-                onFieldChange={calendarForm.updateFormField}
-                error={calendarForm.error}
+                formData={data}
+                onFieldChange={updateFormField}
+                error={error}
                 idPrefix={idPrefix}
             />
         </ModalComponent>
@@ -138,25 +151,25 @@ export const CalendarListView = () => {
                     ))}
                     <CardComponent
                         forAddCard
-                        detailsModal={calendarForm.openCreateModal}
+                        detailsModal={openCreateModal}
                     />
                 </div>
             </div>
 
             {renderModal(
-                calendarForm.showCreateModal,
+                showCreateModal,
                 handleSubmitCreate,
                 'Crear Calendario Electoral',
                 'Guardar y Cerrar',
-                calendarForm.creating
+                creating
             )}
 
             {renderModal(
-                calendarForm.showEditModal,
+                showEditModal,
                 handleSubmitEdit,
                 'Editar Calendario Electoral',
                 'Guardar Cambios',
-                calendarForm.updating,
+                updating,
                 'edit-'
             )}
         </div>
