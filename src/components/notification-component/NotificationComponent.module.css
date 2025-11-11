@@ -14,13 +14,28 @@
 
 @keyframes slideIn {
     from {
-        transform: translateY(-100%);
+        transform: translateX(100%);
         opacity: 0;
     }
     to {
-        transform: translateY(0);
+        transform: translateX(0);
         opacity: 1;
     }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.notification.exiting {
+    animation: slideOut 0.3s ease-in forwards;
 }
 
 .icon {

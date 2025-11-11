@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { NotificationType } from '@/interfaces/Notification';
 import styles from './NotificationComponent.module.css';
 
@@ -24,16 +24,30 @@ export const NotificationComponent = ({
     duration = 3000,
     onClose,
 }: NotificationComponentProps) => {
+    const [isExiting, setIsExiting] = useState(false);
+
     useEffect(() => {
         const timer = setTimeout(() => {
-            onClose(id);
+            setIsExiting(true);
+            setTimeout(() => {
+                onClose(id);
+            }, 300);
         }, duration);
 
         return () => clearTimeout(timer);
     }, [id, duration, onClose]);
 
+    const handleClose = () => {
+        setIsExiting(true);
+        setTimeout(() => {
+            onClose(id);
+        }, 300);
+    };
+
     return (
-        <div className={`${styles.notification} ${styles[type]}`}>
+        <div
+            className={`${styles.notification} ${styles[type]} ${isExiting ? styles.exiting : ''}`}
+        >
             <div className={styles.icon}>
                 <svg
                     width="24"
@@ -48,7 +62,7 @@ export const NotificationComponent = ({
             <p className={styles.message}>{message}</p>
             <button
                 className={styles.closeButton}
-                onClick={() => onClose(id)}
+                onClick={handleClose}
                 aria-label="Cerrar notificación"
             >
                 ×
