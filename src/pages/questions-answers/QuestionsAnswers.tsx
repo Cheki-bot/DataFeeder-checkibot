@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { QuestionsAnswersSchema } from './schemas/questions-answers';
 
@@ -12,20 +11,28 @@ import {
     SearchComponent,
 } from '@/components';
 
-
 import style from './QuestionsAnswers.module.css';
-import { createQuestionAnswer, getQuestionsAnswers } from './service/questions-answers.service';
+import {
+    createQuestionAnswer,
+    deleteQuestionAnswer,
+    getQuestionsAnswers,
+} from './service/questions-answers.service';
 
-interface AnswersQuestions {
-    question: string;
-    answer: string;
-}
+import { useNotification } from '@/hooks/useNotification';
+import { NotificationComponent } from '@/components/notification-component/NotificationComponent';
+import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
 
 export const QuestionsAnswers = () => {
     const [showForm, setShowForm] = useState(false);
+    const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
     const [questionsAnswers, setQuestionsAnswers] = useState<
-        AnswersQuestions[]
+        IQuestionsAndAnswers[]
     >([]);
+
+    // 🟢 Hook de notificaciones
+    const { notifications, addNotification, removeNotification } =
+        useNotification();
+
     const {
         register,
         handleSubmit,
@@ -33,7 +40,7 @@ export const QuestionsAnswers = () => {
         watch,
         resetField,
         formState: { errors },
-    } = useForm<AnswersQuestions>({
+    } = useForm<IQuestionsAndAnswers>({
         resolver: zodResolver(QuestionsAnswersSchema),
         defaultValues: {
             question: '',
@@ -41,31 +48,76 @@ export const QuestionsAnswers = () => {
         },
     });
 
+    const items = useMemo(
+        () => questionsAnswers.map((q) => q.question),
+        [questionsAnswers]
+    );
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await getQuestionsAnswers();
-            console.log(response);
             setQuestionsAnswers(response);
         };
         fetchData();
     }, []);
 
-    const handleAddCandidate = async (question: AnswersQuestions) => {
+    const handleAddCandidate = async (question: IQuestionsAndAnswers) => {
         await createQuestionAnswer(question.question, question.answer);
         setQuestionsAnswers((prev) => [...prev, question]);
+        addNotification('Pregunta agregada correctamente', 'success'); // ✅ notificación
         reset();
     };
 
-    const handleRemove = (questions: Array<AnswersQuestions | string>) => {
-        const names = questions.map((c) =>
-            typeof c === 'string' ? c : c.question
-        );
-        console.log(`Removing questions: ${names.join(', ')}`);
-    };
+    const handleSelectionChange = useCallback((selectedItems: string[]) => {
+        setSelectedQuestions(selectedItems);
+    }, []);
 
+    const handleRemove = async () => {
+        const questionsToDelete = questionsAnswers.filter((qa) =>
+            selectedQuestions.includes(qa.question)
+        );
+
+        const questionsIds = questionsToDelete
+            .map((q) => q._id)
+            .filter((id): id is string => Boolean(id));
+
+        if (questionsIds.length === 0) {
+            addNotification(
+                'No hay preguntas seleccionadas para eliminar',
+                'warning'
+            );
+            return;
+        }
+
+        addNotification(
+            `Se han eliminado las preguntas: ${questionsToDelete.map((q) => q.question).join(', ')}`,
+            'success'
+        );
+
+        await deleteQuestionAnswer(questionsIds);
+        setQuestionsAnswers((prev) =>
+            prev.filter((q) => !questionsToDelete.includes(q))
+        );
+    };
 
     return (
         <div className={style.container}>
+            {/* 🔔 Contenedor de notificaciones */}
+            <div
+                style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999 }}
+            >
+                {notifications.map((n) => (
+                    <NotificationComponent
+                        key={n.id}
+                        id={n.id}
+                        message={n.message}
+                        type={n.type}
+                        duration={n.duration}
+                        onClose={removeNotification}
+                    />
+                ))}
+            </div>
+
             {showForm && (
                 <div className={style.backButton}>
                     <ButtonComponent
@@ -94,6 +146,7 @@ export const QuestionsAnswers = () => {
                     </ButtonComponent>
                 </div>
             )}
+
             <h2>Preguntas y respuestas</h2>
 
             <div className={style.content}>
@@ -109,17 +162,14 @@ export const QuestionsAnswers = () => {
                     }}
                 >
                     <h3>Formulario de Preguntas y Respuestas</h3>
-                    <div className={style.checkboxField}>
-                    </div>
+                    <div className={style.checkboxField}></div>
                     <InputComponent
                         label="Pregunta"
                         type="text"
                         value={watch('question')}
                         validationProps={register('question')}
                         errors={errors.question}
-                        onClear={() => {
-                            resetField('question');
-                        }}
+                        onClear={() => resetField('question')}
                     />
                     <InputComponent
                         label="Respuesta"
@@ -127,9 +177,7 @@ export const QuestionsAnswers = () => {
                         value={watch('answer')}
                         validationProps={register('answer')}
                         errors={errors.answer}
-                        onClear={() => {
-                            resetField('answer');
-                        }}
+                        onClear={() => resetField('answer')}
                     />
                     <span className={style.buttonContainer}>
                         <ButtonComponent
@@ -145,13 +193,16 @@ export const QuestionsAnswers = () => {
                 {!showForm && (
                     <div className={style.listContainer}>
                         <SearchComponent />
-                        <ListComponent items={questionsAnswers.map((q) => q.question)} />
+                        <ListComponent
+                            items={items}
+                            onSelectionChange={handleSelectionChange}
+                        />
                         <span className={style.buttonContainer}>
                             <ButtonComponent
                                 label="Eliminar"
                                 type="button"
                                 danger
-                                onClick={() => handleRemove(questionsAnswers)}
+                                onClick={handleRemove}
                             />
                         </span>
                     </div>
