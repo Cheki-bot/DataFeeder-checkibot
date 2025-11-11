@@ -1,62 +1,49 @@
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 import style from './ListComponent.module.css';
-import { ItemList } from "./components/ItemList";
+import { ItemList } from './components/ItemList';
 
 type ListItem = { id: string; label: string };
 
 type ListComponentProps = {
-  items: Array<string | ListItem>;
-  multiple?: boolean;
-  selectedIds?: string[];
-  onChangeSelected?: (ids: string[]) => void;
+    items: string[];
+    onSelectionChange?: (selectedItems: string[]) => void;
 };
 
-export const ListComponent = ({ items, multiple = false, selectedIds, onChangeSelected }: ListComponentProps) => {
-  const normalized: ListItem[] = useMemo(() => {
-    return items.map((item, index) =>
-      typeof item === 'string'
-        ? { id: String(index), label: item }
-        : item
+export const ListComponent = ({
+    items,
+    onSelectionChange,
+}: ListComponentProps) => {
+    const [checkedItems, setCheckedItems] = useState(
+        new Array(items.length).fill(false)
     );
-  }, [items]);
 
-  const [internalSelected, setInternalSelected] = useState<string[]>([]);
+    const handleChange = (index: number, value: boolean) => {
+        const newChecked = [...checkedItems];
+        newChecked[index] = value;
+        setCheckedItems(newChecked);
+    };
 
-  useEffect(() => {
-    setInternalSelected((prev) => prev.filter((id) => normalized.some((it) => it.id === id)));
-  }, [normalized]);
+    useEffect(() => {
+        if (onSelectionChange) {
+            const selectedItems = items.filter(
+                (_, index) => checkedItems[index]
+            );
+            onSelectionChange(selectedItems);
+          }
+    }, [checkedItems, items, onSelectionChange]);
 
-  const selected = selectedIds ?? internalSelected;
-
-  const handleChange = (index: number, value: boolean) => {
-    const id = normalized[index].id;
-    let next: string[] = [];
-    if (multiple) {
-      const set = new Set(selected);
-      if (value) set.add(id); else set.delete(id);
-      next = Array.from(set);
-    } else {
-      next = value ? [id] : [];
-    }
-
-    onChangeSelected?.(next);
-    if (selectedIds === undefined) {
-      setInternalSelected(next);
-    }
-  };
-
-  return (
-    <div className={style.container}>
-      <ul className={style.list}>
-        {normalized.map((item, index) => (
-          <ItemList
-            key={item.id}
-            label={item.label}
-            checked={selected.includes(item.id)}
-            onChange={(value) => handleChange(index, value)}
-          />
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div className={style.container}>
+            <ul className={style.list}>
+                {items.map((item, index) => (
+                    <ItemList
+                        key={index}
+                        label={item}
+                        checked={checkedItems[index]}
+                        onChange={(value) => handleChange(index, value)}
+                    />
+                ))}
+            </ul>
+        </div>
+    );
 };

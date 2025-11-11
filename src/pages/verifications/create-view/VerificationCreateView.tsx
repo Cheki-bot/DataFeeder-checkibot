@@ -402,19 +402,20 @@ export const VerificationCreateView = () => {
                         ) : null}
                         {filteredVerifications.length > 0 && (
                             <ListComponent
-                                items={filteredVerifications.map((v) => ({
-                                    id: v._id,
-                                    label: `${v.title} - ${v.classified_as}`,
-                                }))}
-                                multiple={false}
-                                selectedIds={
-                                    selectedVerificationId
-                                        ? [selectedVerificationId]
-                                        : []
-                                }
-                                onChangeSelected={(ids) =>
-                                    setSelectedVerificationId(ids[0] ?? '')
-                                }
+                                items={filteredVerifications.map(
+                                    (v) => `${v.title} - ${v.classified_as}`
+                                )}
+                                onSelectionChange={(selectedLabels) => {
+                                    const last = selectedLabels[selectedLabels.length - 1];
+                                    if (!last) {
+                                        setSelectedVerificationId('');
+                                        return;
+                                    }
+                                    const match = filteredVerifications.find(
+                                        (v) => `${v.title} - ${v.classified_as}` === last
+                                    );
+                                    setSelectedVerificationId(match?._id ?? '');
+                                }}
                             />
                         )}
                         <span className={styles.buttonContainer}>
