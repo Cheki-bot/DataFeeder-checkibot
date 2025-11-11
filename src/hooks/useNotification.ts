@@ -1,21 +1,11 @@
 import { useState, useCallback } from 'react';
-
-interface Notification {
-    id: string;
-    message: string;
-    type?: 'success' | 'error' | 'warning' | 'info';
-    duration?: number;
-}
+import type { Notification, NotificationType } from '@/interfaces/Notification';
 
 export const useNotification = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
 
     const addNotification = useCallback(
-        (
-            message: string,
-            type: 'success' | 'error' | 'warning' | 'info' = 'info',
-            duration = 3000
-        ) => {
+        (message: string, type: NotificationType = 'info', duration = 3000) => {
             const id = Math.random().toString(36).substring(2, 9);
             const newNotification: Notification = {
                 id,

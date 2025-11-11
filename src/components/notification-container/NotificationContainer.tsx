@@ -1,12 +1,6 @@
+import type { Notification } from '@/interfaces/Notification';
 import { NotificationComponent } from '../notification-component/NotificationComponent';
 import styles from './NotificationContainer.module.css';
-
-interface Notification {
-    id: string;
-    message: string;
-    type?: 'success' | 'error' | 'warning' | 'info';
-    duration?: number;
-}
 
 interface NotificationContainerProps {
     notifications: Notification[];
