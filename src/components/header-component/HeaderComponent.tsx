@@ -1,4 +1,5 @@
-import InputComponent from '../input-component/InputComponent';
+import { SearchComponent } from '../search-component/SearchComponent';
+
 import style from './HeaderComponent.module.css';
 
 interface HeaderComponentProps {
@@ -19,7 +20,7 @@ export const HeaderComponent = (props: HeaderComponentProps) => {
                 <header className={style.header}>
                     <h1 className={style.title}>Chequea Bolivia</h1>
                     <nav>
-                        <InputComponent type='text' label='Busqueda'/>
+                        <SearchComponent />
                     </nav>
                 </header>
             )}

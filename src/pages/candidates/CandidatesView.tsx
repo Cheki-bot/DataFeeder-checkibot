@@ -15,7 +15,7 @@ import {
 import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import style from './CandidatesView.module.css';
-import type { Candidate } from '@/interfaces/Candidate';
+import type { Candidate } from '@/interfaces/Candidacies';
 
 const CandidatesView = () => {
     const [showForm, setShowForm] = useState(false);

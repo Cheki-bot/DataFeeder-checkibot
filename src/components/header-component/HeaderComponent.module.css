@@ -1,14 +1,15 @@
 .header {
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 100;
-    background-color: #1e1e1e;
+    z-index: 10;
+    background-color: var(--background-color);
     padding: 15px 20px;
-    display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: small;
 }
 
@@ -18,8 +19,8 @@
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 100;
-    background-color: #1e1e1e;
+    z-index: 10;
+    background-color: var(--background-color);
     border-bottom: solid 1px var(--light-gray-color);
     padding: 15px 20px;
     display: flex;
@@ -44,5 +45,6 @@
 
     .header {
         padding: 10px 15px;
+        
     }
 }
