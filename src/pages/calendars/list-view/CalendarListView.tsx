@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router';
 import { CardComponent } from '@components/card-component/CardComponent';
 import { HeaderComponent } from '@components/header-component/HeaderComponent';
 import { ButtonComponent } from '@components/index';
-import type { ElectoralCalendar, CreateElectoralCalendarData, UpdateElectoralCalendarData } from '@/interfaces/Calendar';
-import { getAllCalendars, deleteCalendar, createCalendar, getCalendarById, updateCalendar } from '@/services/calendar.service';
+import type { ElectoralCalendar } from '@/interfaces/Calendar';
+import { getAllCalendars, deleteCalendar } from '@/services/calendar.service';
+import { useCalendarForm } from '@/hooks/useCalendarForm';
 import styles from './CalendarListView.module.css';
 
 export const CalendarListView = () => {
@@ -12,176 +13,34 @@ export const CalendarListView = () => {
     const location = useLocation();
     const [calendars, setCalendars] = useState<ElectoralCalendar[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [creating, setCreating] = useState(false);
-    const [updating, setUpdating] = useState(false);
-    const [editingCalendarId, setEditingCalendarId] = useState<string | null>(null);
-    
-    // Form states
-    const [title, setTitle] = useState('');
-    const [resolution, setResolution] = useState('');
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-    const [pdfUrl, setPdfUrl] = useState('');
-    const [introduction, setIntroduction] = useState('');
-    const [electionId, setElectionId] = useState('');
+    const [listError, setListError] = useState<string | null>(null);
+
+    const fetchCalendars = async () => {
+        try {
+            setLoading(true);
+            const response = await getAllCalendars();
+            setCalendars(response.data);
+        } catch (err) {
+            console.error('Error fetching calendars:', err);
+            setListError('Error al cargar los calendarios');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const calendarForm = useCalendarForm(fetchCalendars);
 
     useEffect(() => {
-        const fetchCalendars = async () => {
-            try {
-                setLoading(true);
-                const response = await getAllCalendars();
-                setCalendars(response.data);
-            } catch (err) {
-                console.error('Error fetching calendars:', err);
-                setError('Error al cargar los calendarios');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchCalendars();
     }, []);
 
     useEffect(() => {
         const state = location.state as { editCalendarId?: string } | null;
         if (state?.editCalendarId) {
-            const calendarId = state.editCalendarId;
-            const loadCalendarForEdit = async () => {
-                try {
-                    setError(null);
-                    const response = await getCalendarById(calendarId);
-                    const calendar = response.data;
-                    setTitle(calendar.title);
-                    setResolution(calendar.resolution);
-                    setDate(new Date(calendar.date).toISOString().split('T')[0]);
-                    setPdfUrl(calendar.pdf_url || '');
-                    setIntroduction(calendar.introduction || '');
-                    setElectionId(calendar.election_id);
-                    setEditingCalendarId(calendarId);
-                    setShowEditModal(true);
-                } catch (err) {
-                    console.error('Error loading calendar:', err);
-                    setError('Error al cargar el calendario');
-                }
-            };
-            
-            loadCalendarForEdit();
+            calendarForm.openEditModal(state.editCalendarId);
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location.state]);
-
-    const handleCreateNew = () => {
-        setShowCreateModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowCreateModal(false);
-        setTitle('');
-        setResolution('');
-        setDate(new Date().toISOString().split('T')[0]);
-        setPdfUrl('');
-        setIntroduction('');
-        setElectionId('');
-        setError(null);
-    };
-
-    const handleSubmitCreate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        try {
-            setCreating(true);
-            setError(null);
-            
-            const formData: CreateElectoralCalendarData = {
-                title,
-                resolution,
-                date,
-                pdf_url: pdfUrl,
-                introduction,
-                election_id: electionId,
-                signatures: [],
-                events: [],
-            };
-
-            await createCalendar(formData);
-            const response = await getAllCalendars();
-            setCalendars(response.data);
-            handleCloseModal();
-        } catch (err) {
-            console.error('Error creating calendar:', err);
-            setError('Error al crear el calendario');
-        } finally {
-            setCreating(false);
-        }
-    };
-
-    const handleViewDetails = (calendarId: string) => {
-        navigate(`/calendars/${calendarId}`);
-    };
-
-    const handleEdit = async (calendarId: string) => {
-        try {
-            setError(null);
-            const response = await getCalendarById(calendarId);
-            const calendar = response.data;
-            
-            setTitle(calendar.title);
-            setResolution(calendar.resolution);
-            setDate(new Date(calendar.date).toISOString().split('T')[0]);
-            setPdfUrl(calendar.pdf_url || '');
-            setIntroduction(calendar.introduction || '');
-            setElectionId(calendar.election_id);
-            setEditingCalendarId(calendarId);
-            setShowEditModal(true);
-        } catch (err) {
-            console.error('Error loading calendar:', err);
-            setError('Error al cargar el calendario');
-        }
-    };
-
-    const handleCloseEditModal = () => {
-        setShowEditModal(false);
-        setEditingCalendarId(null);
-        setTitle('');
-        setResolution('');
-        setDate(new Date().toISOString().split('T')[0]);
-        setPdfUrl('');
-        setIntroduction('');
-        setElectionId('');
-        setError(null);
-    };
-
-    const handleSubmitEdit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        if (!editingCalendarId) return;
-        
-        try {
-            setUpdating(true);
-            setError(null);
-            
-            const formData: UpdateElectoralCalendarData = {
-                title,
-                resolution,
-                date,
-                pdf_url: pdfUrl,
-                introduction,
-                election_id: electionId,
-            };
-
-            await updateCalendar(editingCalendarId, formData);
-            const response = await getAllCalendars();
-            setCalendars(response.data);
-            handleCloseEditModal();
-        } catch (err) {
-            console.error('Error updating calendar:', err);
-            setError('Error al actualizar el calendario');
-        } finally {
-            setUpdating(false);
-        }
-    };
 
     const handleDelete = async (calendarId: string) => {
         if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
@@ -190,12 +49,21 @@ export const CalendarListView = () => {
 
         try {
             await deleteCalendar(calendarId);
-            const response = await getAllCalendars();
-            setCalendars(response.data);
+            await fetchCalendars();
         } catch (err) {
             console.error('Error deleting calendar:', err);
-            setError('Error al eliminar el calendario');
+            setListError('Error al eliminar el calendario');
         }
+    };
+
+    const handleSubmitCreate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await calendarForm.submitCreate();
+    };
+
+    const handleSubmitEdit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await calendarForm.submitEdit();
     };
 
     if (loading) {
@@ -209,12 +77,12 @@ export const CalendarListView = () => {
         );
     }
 
-    if (error) {
+    if (listError) {
         return (
             <div className={styles.container}>
                 <HeaderComponent type="simple" />
                 <div className={styles.content}>
-                    <div className={styles.error}>{error}</div>
+                    <div className={styles.error}>{listError}</div>
                 </div>
             </div>
         );
@@ -232,24 +100,24 @@ export const CalendarListView = () => {
                             title={calendar.title}
                             subtitle={calendar.resolution}
                             description={calendar.introduction || 'Sin descripción'}
-                            detailsModal={() => handleViewDetails(calendar._id)}
-                            onEdit={() => handleEdit(calendar._id)}
+                            detailsModal={() => navigate(`/calendars/${calendar._id}`)}
+                            onEdit={() => calendarForm.openEditModal(calendar._id)}
                             onDelete={() => handleDelete(calendar._id)}
                         />
                     ))}
                     <CardComponent
                         forAddCard
-                        detailsModal={handleCreateNew}
+                        detailsModal={calendarForm.openCreateModal}
                     />
                 </div>
             </div>
 
-            {showCreateModal && (
-                <div className={styles.modalOverlay} onClick={handleCloseModal}>
+            {calendarForm.showCreateModal && (
+                <div className={styles.modalOverlay} onClick={calendarForm.closeModal}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <h2 className={styles.modalTitle}>Crear Calendario Electoral</h2>
 
-                        {error && <div className={styles.modalError}>{error}</div>}
+                        {calendarForm.error && <div className={styles.modalError}>{calendarForm.error}</div>}
 
                         <form className={styles.modalForm} onSubmit={handleSubmitCreate}>
                             <div className={styles.inputGroup}>
@@ -257,8 +125,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="title"
                                     type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    value={calendarForm.formData.title}
+                                    onChange={(e) => calendarForm.updateFormField('title', e.target.value)}
                                     required
                                 />
                             </div>
@@ -268,8 +136,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="resolution"
                                     type="text"
-                                    value={resolution}
-                                    onChange={(e) => setResolution(e.target.value)}
+                                    value={calendarForm.formData.resolution}
+                                    onChange={(e) => calendarForm.updateFormField('resolution', e.target.value)}
                                     required
                                 />
                             </div>
@@ -279,8 +147,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="date"
                                     type="date"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
+                                    value={calendarForm.formData.date}
+                                    onChange={(e) => calendarForm.updateFormField('date', e.target.value)}
                                     required
                                 />
                             </div>
@@ -290,8 +158,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="electionId"
                                     type="text"
-                                    value={electionId}
-                                    onChange={(e) => setElectionId(e.target.value)}
+                                    value={calendarForm.formData.electionId}
+                                    onChange={(e) => calendarForm.updateFormField('electionId', e.target.value)}
                                     required
                                 />
                             </div>
@@ -301,8 +169,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="pdfUrl"
                                     type="url"
-                                    value={pdfUrl}
-                                    onChange={(e) => setPdfUrl(e.target.value)}
+                                    value={calendarForm.formData.pdfUrl}
+                                    onChange={(e) => calendarForm.updateFormField('pdfUrl', e.target.value)}
                                     required
                                 />
                             </div>
@@ -311,8 +179,8 @@ export const CalendarListView = () => {
                                 <label htmlFor="introduction">Introducción (Markdown)</label>
                                 <textarea
                                     id="introduction"
-                                    value={introduction}
-                                    onChange={(e) => setIntroduction(e.target.value)}
+                                    value={calendarForm.formData.introduction}
+                                    onChange={(e) => calendarForm.updateFormField('introduction', e.target.value)}
                                     placeholder="Puedes usar Markdown para formatear el texto..."
                                     rows={4}
                                 />
@@ -325,11 +193,11 @@ export const CalendarListView = () => {
                             <div className={styles.modalActions}>
                                 <ButtonComponent
                                     label="Cancelar"
-                                    onClick={handleCloseModal}
+                                    onClick={calendarForm.closeModal}
                                     type="button"
                                 />
                                 <ButtonComponent
-                                    label={creating ? 'Guardando...' : 'Guardar y Cerrar'}
+                                    label={calendarForm.creating ? 'Guardando...' : 'Guardar y Cerrar'}
                                     type="submit"
                                 />
                             </div>
@@ -338,12 +206,12 @@ export const CalendarListView = () => {
                 </div>
             )}
 
-            {showEditModal && (
-                <div className={styles.modalOverlay} onClick={handleCloseEditModal}>
+            {calendarForm.showEditModal && (
+                <div className={styles.modalOverlay} onClick={calendarForm.closeModal}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <h2 className={styles.modalTitle}>Editar Calendario Electoral</h2>
 
-                        {error && <div className={styles.modalError}>{error}</div>}
+                        {calendarForm.error && <div className={styles.modalError}>{calendarForm.error}</div>}
 
                         <form className={styles.modalForm} onSubmit={handleSubmitEdit}>
                             <div className={styles.inputGroup}>
@@ -351,8 +219,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="edit-title"
                                     type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    value={calendarForm.formData.title}
+                                    onChange={(e) => calendarForm.updateFormField('title', e.target.value)}
                                     required
                                 />
                             </div>
@@ -362,8 +230,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="edit-resolution"
                                     type="text"
-                                    value={resolution}
-                                    onChange={(e) => setResolution(e.target.value)}
+                                    value={calendarForm.formData.resolution}
+                                    onChange={(e) => calendarForm.updateFormField('resolution', e.target.value)}
                                     required
                                 />
                             </div>
@@ -373,8 +241,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="edit-date"
                                     type="date"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
+                                    value={calendarForm.formData.date}
+                                    onChange={(e) => calendarForm.updateFormField('date', e.target.value)}
                                     required
                                 />
                             </div>
@@ -384,8 +252,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="edit-electionId"
                                     type="text"
-                                    value={electionId}
-                                    onChange={(e) => setElectionId(e.target.value)}
+                                    value={calendarForm.formData.electionId}
+                                    onChange={(e) => calendarForm.updateFormField('electionId', e.target.value)}
                                     required
                                 />
                             </div>
@@ -395,8 +263,8 @@ export const CalendarListView = () => {
                                 <input
                                     id="edit-pdfUrl"
                                     type="url"
-                                    value={pdfUrl}
-                                    onChange={(e) => setPdfUrl(e.target.value)}
+                                    value={calendarForm.formData.pdfUrl}
+                                    onChange={(e) => calendarForm.updateFormField('pdfUrl', e.target.value)}
                                     required
                                 />
                             </div>
@@ -405,8 +273,8 @@ export const CalendarListView = () => {
                                 <label htmlFor="edit-introduction">Introducción (Markdown)</label>
                                 <textarea
                                     id="edit-introduction"
-                                    value={introduction}
-                                    onChange={(e) => setIntroduction(e.target.value)}
+                                    value={calendarForm.formData.introduction}
+                                    onChange={(e) => calendarForm.updateFormField('introduction', e.target.value)}
                                     placeholder="Puedes usar Markdown para formatear el texto..."
                                     rows={4}
                                 />
@@ -419,11 +287,11 @@ export const CalendarListView = () => {
                             <div className={styles.modalActions}>
                                 <ButtonComponent
                                     label="Cancelar"
-                                    onClick={handleCloseEditModal}
+                                    onClick={calendarForm.closeModal}
                                     type="button"
                                 />
                                 <ButtonComponent
-                                    label={updating ? 'Actualizando...' : 'Guardar Cambios'}
+                                    label={calendarForm.updating ? 'Actualizando...' : 'Guardar Cambios'}
                                     type="submit"
                                 />
                             </div>
