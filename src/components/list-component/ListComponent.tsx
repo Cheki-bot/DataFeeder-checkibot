@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import style from './ListComponent.module.css';
 import { ItemList } from './components/ItemList';
 
-type ListItem = { id: string; label: string };
-
 type ListComponentProps = {
     items: string[];
     onSelectionChange?: (selectedItems: string[]) => void;
