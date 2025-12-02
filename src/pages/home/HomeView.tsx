@@ -31,23 +31,13 @@ export const HomeView = () => {
             <h2>Elige la categoría</h2>
             <div className={style.cardContainer}>
                 {categories.map((category, index) => (
-                    <div
+                    <CardComponent
                         key={index}
-                        role="button"
-                        tabIndex={0}
+                        type="horizontal"
+                        title={category.name}
+                        subtitle={category.description}
                         onClick={() => navigate('/' + category.destination)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                navigate('/' + category.destination);
-                            }
-                        }}
-                    >
-                        <CardComponent
-                            type="horizontal"
-                            title={category.name}
-                            subtitle={category.description}
-                        />
-                    </div>
+                    />
                 ))}
             </div>
         </div>

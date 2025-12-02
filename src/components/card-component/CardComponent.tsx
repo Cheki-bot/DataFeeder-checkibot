@@ -16,6 +16,7 @@ type CardComponentProps = {
     type?: CardType;
     onEdit?: () => void;
     onDelete?: () => void;
+    onClick?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -30,6 +31,7 @@ export const CardComponent = (props: CardComponentProps) => {
         type = 'vertical',
         onEdit,
         onDelete,
+        onClick,
     } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,7 +53,15 @@ export const CardComponent = (props: CardComponentProps) => {
                         alt="Card Image"
                     />
                 )}
-                <div className={style.horizontalContent}>
+                <div
+                    className={style.horizontalContent}
+                    onClick={onClick}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && onClick) onClick();
+                    }}
+                >
                     <h3 className={style.title}>{title}</h3>
                     <p className={style.subtitle}>{subtitle}</p>
                 </div>
@@ -60,7 +70,7 @@ export const CardComponent = (props: CardComponentProps) => {
     }
 
     return (
-        <article 
+        <article
             className={forAddCard ? style.foraddCard : style.card}
             onClick={forAddCard ? detailsModal : undefined}
         >
