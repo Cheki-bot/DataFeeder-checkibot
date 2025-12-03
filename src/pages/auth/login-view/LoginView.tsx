@@ -25,7 +25,7 @@ export const LoginView = () => {
     useEffect(() => {
         if (isAuthenticated) {
             reset();
-            navigate('/home', { replace: true });
+            navigate('/', { replace: true });
         }
     }, [isAuthenticated, navigate, reset]);
 

@@ -1,14 +1,9 @@
-import { Outlet, useLocation } from 'react-router-dom';
-import { HeaderComponent } from './components';
+import { Outlet } from 'react-router-dom';
 
 export const Root = () => {
-    const location = useLocation();
-
-    const headerType = location.pathname === '/login' ? 'simple' : 'logged';
 
     return (
         <>
-            <HeaderComponent type={headerType} />
             <Outlet />
         </>
     );

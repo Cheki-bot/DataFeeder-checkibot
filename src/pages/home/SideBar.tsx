@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { getCategories } from '@/services/categories.service';
-import { CardComponent } from '@/components/card-component/CardComponent';
 
-import style from './HomeView.module.css';
+import style from './Sidebar.module.css';
 
 interface Category {
     name: string;
@@ -12,7 +11,7 @@ interface Category {
     destination: string;
 }
 
-export const HomeView = () => {
+export const Sidebar = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const navigate = useNavigate();
 
@@ -31,13 +30,18 @@ export const HomeView = () => {
             <h2>Elige la categoría</h2>
             <div className={style.cardContainer}>
                 {categories.map((category, index) => (
-                    <CardComponent
+                    <div
                         key={index}
-                        type="horizontal"
-                        title={category.name}
-                        subtitle={category.description}
+                        className={style.optionCard}
                         onClick={() => navigate('/' + category.destination)}
-                    />
+                    >
+                        <h4 className={style.optionCardTitle}>
+                            {category.name}
+                        </h4>
+                        <p className={style.optionCardDescription}>
+                            {category.description}
+                        </p>
+                    </div>
                 ))}
             </div>
         </div>

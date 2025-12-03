@@ -1,12 +1,11 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router';
-import { CardComponent } from '@components/card-component/CardComponent';
-import { HeaderComponent } from '@components/header-component/HeaderComponent';
-import { ModalComponent } from '@components/modal-component/ModalComponent';
-import { CalendarForm } from '@components/calendar-form/CalendarForm';
-import type { ElectoralCalendar } from '@/interfaces/Calendar';
-import { getAllCalendars, deleteCalendar } from '@/services/calendar.service';
 import { useCalendarForm } from '@/hooks/useCalendarForm';
+import type { ElectoralCalendar } from '@/interfaces/Calendar';
+import { deleteCalendar, getAllCalendars } from '@/services/calendar.service';
+import { CalendarForm } from '@components/calendar-form/CalendarForm';
+import { CardComponent } from '@components/card-component/CardComponent';
+import { ModalComponent } from '@components/modal-component/ModalComponent';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import styles from './CalendarListView.module.css';
 
 export const CalendarListView = () => {
@@ -117,7 +116,6 @@ export const CalendarListView = () => {
 
     const renderEmptyState = (message: string, isError = false) => (
         <div className={styles.container}>
-            <HeaderComponent type="simple" />
             <div className={styles.content}>
                 <div className={isError ? styles.error : styles.loading}>{message}</div>
             </div>
@@ -134,7 +132,6 @@ export const CalendarListView = () => {
 
     return (
         <div className={styles.container}>
-            <HeaderComponent type="simple" />
             <div className={styles.content}>
                 <h1 className={styles.title}>Calendarios Electorales</h1>
                 <div className={styles.grid}>

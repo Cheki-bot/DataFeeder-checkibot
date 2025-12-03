@@ -4,18 +4,16 @@
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    padding: 20px;
-    margin: 0 auto;
+    padding: 15px;
     width: 100%;
-    max-width: 380px;
-    min-height: 520px;
+    max-width: 250px;
+    min-height: 200px;
     color: var(--text-color-dark);
     transition: all 0.3s ease;
     overflow: hidden;
 }
 
 .card:hover {
-    transform: translateY(-6px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
@@ -124,13 +122,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex-grow: 1;
     gap: 16px;
 }
 
 .description {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.5;
     color: #555;
     margin: 0;
     display: -webkit-box;
@@ -152,7 +149,6 @@
     margin: 0 auto;
     width: 100%;
     max-width: 380px;
-    min-height: 520px;
     cursor: pointer;
     transition: all 0.3s ease;
 }

@@ -17,6 +17,9 @@ type CardComponentProps = {
     onEdit?: () => void;
     onDelete?: () => void;
     onClick?: () => void;
+    Candidates?: () => void;
+    GovernmentProgram?: () => void;
+    DeleteParty?: () => void;
 };
 
 export const CardComponent = (props: CardComponentProps) => {
@@ -32,6 +35,9 @@ export const CardComponent = (props: CardComponentProps) => {
         onEdit,
         onDelete,
         onClick,
+        Candidates,
+        GovernmentProgram,
+        DeleteParty,
     } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -82,11 +88,13 @@ export const CardComponent = (props: CardComponentProps) => {
                 <>
                     <div className={style.header}>
                         <div className={style.info}>
-                            <img
-                                className={style.headerImage}
-                                src={headerImageUrl}
-                                alt="Card Image"
-                            />
+                            {headerImageUrl && (
+                                <img
+                                    className={style.headerImage}
+                                    src={headerImageUrl}
+                                    alt="Card Image"
+                                />
+                            )}
                             <span className={style.titles}>
                                 <h3 className={style.title}>{title}</h3>
                                 <h4 className={style.subtitle}>{subtitle}</h4>
@@ -128,10 +136,23 @@ export const CardComponent = (props: CardComponentProps) => {
                                         Editar
                                     </button>
                                 )}
-                                <button className={style.menuItem}>
+                                <button
+                                    className={style.menuItem}
+                                    onClick={() => {
+                                        if (Candidates) Candidates();
+                                        setIsMenuOpen(false);
+                                    }}
+                                >
                                     Candidatos
                                 </button>
-                                <button className={style.menuItem}>
+                                <button
+                                    className={style.menuItem}
+                                    onClick={() => {
+                                        if (GovernmentProgram)
+                                            GovernmentProgram();
+                                        setIsMenuOpen(false);
+                                    }}
+                                >
                                     Programa de Gobierno
                                 </button>
                                 {onDelete && (
@@ -151,13 +172,17 @@ export const CardComponent = (props: CardComponentProps) => {
                             </div>
                         )}
                     </div>
-                    <img
-                        className={style.image}
-                        src={mainImageUrl}
-                        alt="Political Party Logo"
-                    />
+                    {mainImageUrl && (
+                        <img
+                            className={style.image}
+                            src={mainImageUrl}
+                            alt="Political Party Logo"
+                        />
+                    )}
                     <div className={style.content}>
-                        <p className={style.description}>{description}</p>
+                        {description && (
+                            <p className={style.description}>{description}</p>
+                        )}
                         <ButtonComponent onClick={detailsModal}>
                             Ver más
                         </ButtonComponent>
