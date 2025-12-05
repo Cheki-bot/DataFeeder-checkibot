@@ -34,6 +34,13 @@
     font-size: 1.5em;
 }
 
+.nav {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 15px;
+}
+
 @media screen and (max-width: 768px) {
     .title {
         font-size: 1.2em;

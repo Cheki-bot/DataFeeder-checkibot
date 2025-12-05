@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import style from './ListComponent.module.css';
 import { ItemList } from './components/ItemList';
 
+type Item = {
+    label: string;
+    subLabel?: string;
+}
+
 type ListComponentProps = {
-    items: string[];
-    onSelectionChange?: (selectedItems: string[]) => void;
+    items: Item[];
+    onSelectionChange?: (selectedItems: Item[]) => void;
 };
 
 export const ListComponent = ({
@@ -36,7 +41,7 @@ export const ListComponent = ({
                 {items.map((item, index) => (
                     <ItemList
                         key={index}
-                        label={item}
+                        label={item.label}
                         checked={checkedItems[index]}
                         onChange={(value) => handleChange(index, value)}
                     />

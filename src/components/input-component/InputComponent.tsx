@@ -50,9 +50,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
     const clearValue = () => {
         setInternalValue('');
         if (onClear) {
-            console.log('limpiando... ');
             onClear();
-            console.log('limpiado ');
         }
     };
 

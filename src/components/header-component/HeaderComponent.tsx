@@ -1,4 +1,4 @@
-import { SearchComponent } from '../search-component/SearchComponent';
+import { ProfileComponent } from './components/profile-component/ProfileComponent';
 
 import style from './HeaderComponent.module.css';
 
@@ -7,6 +7,7 @@ interface HeaderComponentProps {
 }
 
 export const HeaderComponent = (props: HeaderComponentProps) => {
+
     return (
         <>
             {props.type === 'simple' ? (
@@ -19,8 +20,8 @@ export const HeaderComponent = (props: HeaderComponentProps) => {
             ) : (
                 <header className={style.header}>
                     <h1 className={style.title}>Chequea Bolivia</h1>
-                    <nav>
-                        <SearchComponent />
+                    <nav className={style.nav}>
+                        <ProfileComponent />
                     </nav>
                 </header>
             )}

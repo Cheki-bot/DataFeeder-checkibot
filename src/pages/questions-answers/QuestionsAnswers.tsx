@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { QuestionsAnswersSchema } from './schemas/questions-answers';
 
 import {
@@ -18,8 +18,8 @@ import {
     getQuestionsAnswers,
 } from './service/questions-answers.service';
 
-import { useNotification } from '@/hooks/useNotification';
 import { NotificationComponent } from '@/components/notification-component/NotificationComponent';
+import { useNotification } from '@/hooks/useNotification';
 import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
 
 export const QuestionsAnswers = () => {
@@ -29,7 +29,6 @@ export const QuestionsAnswers = () => {
         IQuestionsAndAnswers[]
     >([]);
 
-    // 🟢 Hook de notificaciones
     const { notifications, addNotification, removeNotification } =
         useNotification();
 
@@ -68,9 +67,9 @@ export const QuestionsAnswers = () => {
         reset();
     };
 
-    const handleSelectionChange = useCallback((selectedItems: string[]) => {
-        setSelectedQuestions(selectedItems);
-    }, []);
+    // const handleSelectionChange = useCallback((selectedItems: string[]) => {
+    //     setSelectedQuestions(selectedItems);
+    // }, []);
 
     const handleRemove = async () => {
         const questionsToDelete = questionsAnswers.filter((qa) =>
@@ -99,7 +98,6 @@ export const QuestionsAnswers = () => {
             prev.filter((q) => !questionsToDelete.includes(q))
         );
     };
-
     return (
         <div className={style.container}>
             {/* 🔔 Contenedor de notificaciones */}
@@ -192,10 +190,17 @@ export const QuestionsAnswers = () => {
 
                 {!showForm && (
                     <div className={style.listContainer}>
-                        <SearchComponent />
+                        <SearchComponent
+                            data={items.map((question) => ({
+                                label: question,
+                            }))}
+                            searchKeys={['label']}
+                            hasDropdown
+                        />
                         <ListComponent
-                            items={items}
-                            onSelectionChange={handleSelectionChange}
+                            items={items.map((question) => ({
+                                label: question,
+                            }))}
                         />
                         <span className={style.buttonContainer}>
                             <ButtonComponent

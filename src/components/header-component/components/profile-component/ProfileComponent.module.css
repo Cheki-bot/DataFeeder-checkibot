@@ -1,0 +1,20 @@
+.menu {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    background-color: var(--white-color);
+    border-radius: 1em;
+}
+
+.profileComponent {
+    position: relative;
+}
+
+.menuItem {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: var(--black-color);
+    border: none;
+    width: 100%;
+    background-color: transparent;
+}
