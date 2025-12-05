@@ -6,7 +6,6 @@ export const getQuestionsAnswers = async (): Promise<
 > => {
     try {
         const response = await api.get('/questions-answers');
-        console.log(response);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching questions and answers:', error);

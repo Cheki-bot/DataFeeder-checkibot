@@ -10,15 +10,14 @@
     justify-content: center;
     align-items: center;
     gap: 2em;
-    padding: 2em;
+    padding-top: 2em;
 }
 
 .content {
     display: flex;
     align-items: center;
-    padding: 2em;
     gap: 2em;
-    width: 80%;
+    width: 100%;
 }
 
 .form {
@@ -28,7 +27,6 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 1em;
 }
 
 .listContainer {
@@ -36,7 +34,6 @@
     flex-direction: column;
     gap: 1.5rem;
     width: 100%;
-    padding-inline: 5em;
 }
 
 .buttonContainer {

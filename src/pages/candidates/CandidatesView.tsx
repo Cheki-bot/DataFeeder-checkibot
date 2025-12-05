@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -14,10 +14,14 @@ import {
 
 import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
-import style from './CandidatesView.module.css';
 import type { Candidate } from '@/interfaces/Candidacies';
+import { getCandidatesByPartyId } from '@/services/candidates.service';
+import { useParams } from 'react-router';
+import style from './CandidatesView.module.css';
 
 const CandidatesView = () => {
+    const [candidates, setCandidates] = useState<Candidate[]>([]);
+    const [filteredCandidates, setFilteredCandidates] = useState(candidates);
     const [showForm, setShowForm] = useState(false);
     const {
         register,
@@ -30,27 +34,25 @@ const CandidatesView = () => {
     } = useForm<CandidateFormData>({
         resolver: zodResolver(candidateSchema),
         defaultValues: {
-            fullName: '',
+            full_name: '',
             position: '',
             isActive: false,
         },
     });
+    const { partyId } = useParams<{ partyId: string }>();
 
-    const candidates = [
-        'Alice',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-        'Bob',
-        'Charlie',
-        'David',
-        'Eve',
-    ];
+    useEffect(() => {
+        const loadCandidates = async () => {
+            if (!partyId) return;
+            try {
+                const candidates = await getCandidatesByPartyId(partyId);
+                setCandidates(candidates.data);
+            } catch (error) {
+                console.error('Error loading candidates:', error);
+            }
+        };
+        loadCandidates();
+    }, [partyId]);
 
     const handleAddCandidate = (candidate: Candidate) => {
         console.log(`Adding candidate: ${candidate}`);
@@ -59,7 +61,7 @@ const CandidatesView = () => {
 
     const handleRemove = (candidates: Array<Candidate | string>) => {
         const names = candidates.map((c) =>
-            typeof c === 'string' ? c : c.fullName
+            typeof c === 'string' ? c : c.full_name
         );
         console.log(`Removing candidates: ${names.join(', ')}`);
     };
@@ -121,11 +123,11 @@ const CandidatesView = () => {
                     <InputComponent
                         label="Nombre Completo"
                         type="text"
-                        value={watch('fullName')}
-                        validationProps={register('fullName')}
-                        errors={errors.fullName}
+                        value={watch('full_name')}
+                        validationProps={register('full_name')}
+                        errors={errors.full_name}
                         onClear={() => {
-                            resetField('fullName');
+                            resetField('full_name');
                         }}
                     />
                     <InputComponent
@@ -151,8 +153,29 @@ const CandidatesView = () => {
 
                 {!showForm && (
                     <div className={style.listContainer}>
-                        <SearchComponent />
-                        <ListComponent items={candidates} />
+                        <SearchComponent
+                            data={candidates.map((candidate) => ({
+                                id: candidate.id
+                                    ? Number(candidate.id)
+                                    : undefined,
+                                name: candidate.full_name,
+                            }))}
+                            searchKeys={['full_name', 'position', 'name']}
+                            onResultsChange={(results) => {
+                                setFilteredCandidates(
+                                    candidates.filter((c) =>
+                                        results.some((r) => r.id === c.id)
+                                    )
+                                );
+                            }}
+                            hasDropdown={false}
+                        />
+                        <ListComponent
+                            items={filteredCandidates.map((candidate) => ({
+                                label: candidate.full_name,
+                                subLabel: candidate.position,
+                            }))}
+                        />
                         <span className={style.buttonContainer}>
                             <ButtonComponent
                                 label="Eliminar"

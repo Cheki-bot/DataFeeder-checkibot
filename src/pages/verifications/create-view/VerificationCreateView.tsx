@@ -383,7 +383,13 @@ export const VerificationCreateView = () => {
                 {!showForm && (
                     <div className={styles.listContainer}>
                         <div ref={searchWrapperRef}>
-                            <SearchComponent />
+                            <SearchComponent
+                                data={filteredVerifications.map((v) => ({
+                                    name: `${v.title} - ${v.classified_as}`,
+                                }))}
+                                searchKeys={['name']}
+                                hasDropdown={true}
+                            />
                         </div>
                         <div className={styles.listActions}>
                             <label className={styles.selectLabel}>
@@ -402,21 +408,32 @@ export const VerificationCreateView = () => {
                         ) : null}
                         {filteredVerifications.length > 0 && (
                             <ListComponent
-                                items={filteredVerifications.map(
-                                    (v) => `${v.title} - ${v.classified_as}`
-                                )}
-                                onSelectionChange={(selectedLabels) => {
-                                    const last = selectedLabels[selectedLabels.length - 1];
-                                    if (!last) {
-                                        setSelectedVerificationId('');
-                                        return;
-                                    }
-                                    const match = filteredVerifications.find(
-                                        (v) => `${v.title} - ${v.classified_as}` === last
-                                    );
-                                    setSelectedVerificationId(match?._id ?? '');
-                                }}
-                            />
+                                    items={filteredVerifications.map(
+                                        (v) => ({
+                                            label: `${v.title} - ${v.classified_as}`,
+                                        })
+                                    )}
+                                    onSelectionChange={(selectedLabels) => {
+                                        const last =
+                                            selectedLabels[
+                                                selectedLabels.length - 1
+                                            ];
+                                        if (!last) {
+                                            setSelectedVerificationId('');
+                                            return;
+                                        }
+                                        const label =
+                                            typeof last === 'string'
+                                                ? last
+                                                : (last as { label?: string }).label ?? '';
+                                        const match = filteredVerifications.find(
+                                            (v) =>
+                                                `${v.title} - ${v.classified_as}` ===
+                                                label
+                                        );
+                                        setSelectedVerificationId(match?._id ?? '');
+                                    }}
+                                />
                         )}
                         <span className={styles.buttonContainer}>
                             <ButtonComponent
