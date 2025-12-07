@@ -1,7 +1,7 @@
+import PlusIcon from '@/assets/svg/icons/plus-icon';
 import { useState } from 'react';
 import { ButtonComponent } from '../button-component/ButtonComponent';
 import style from './CardComponent.module.css';
-import PlusIcon from '@/assets/svg/icons/plus-icon';
 
 type CardType = 'vertical' | 'horizontal';
 
@@ -37,7 +37,6 @@ export const CardComponent = (props: CardComponentProps) => {
         onClick,
         Candidates,
         GovernmentProgram,
-        DeleteParty,
     } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
