@@ -2,13 +2,12 @@
     display: flex;
     justify-content: space-between;
     background-color: var(--white-color);
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 10px;
     gap: 5px;
     align-items: center;
     width: 100%;
-    min-height: 50px;
-
+    min-height: 40px;
     color: var(--black-color);
 }
 
