@@ -84,7 +84,6 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
                         onBlur={(e) => {
-                            console.log('no se esta focuseando xd: ', focused);
                             setFocused(false);
                             rhfOnBlur?.(e);
                         }}
