@@ -34,7 +34,8 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         onClear,
     } = props;
 
-    const {onBlur: rhfOnBlur, ...restValidation } = props.validationProps || {};
+    const { onBlur: rhfOnBlur, ...restValidation } =
+        props.validationProps || {};
 
     const inputId = id ?? label;
 
@@ -68,21 +69,23 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         focused || currentValue ? styles.active : ''
                     }`}
                 >
-                    <label htmlFor={inputId} className={styles.label}>
-                        {label}
-                    </label>
+                    {type !== 'date' && (
+                        <label htmlFor={inputId} className={styles.label}>
+                            {label}
+                        </label>
+                    )}
                     <input
                         type={type}
                         id={inputId}
                         name={name}
-                        className={styles.input}
+                        className={type === 'date' ? styles['date-input'] : styles.input}
                         placeholder={placeholder}
                         value={currentValue}
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
                         onBlur={(e) => {
-                            console.log("no se esta focuseando xd: ", focused);
-                            setFocused(false)
+                            console.log('no se esta focuseando xd: ', focused);
+                            setFocused(false);
                             rhfOnBlur?.(e);
                         }}
                         required={required}
