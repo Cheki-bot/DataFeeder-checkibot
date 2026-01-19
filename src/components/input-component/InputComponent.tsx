@@ -34,6 +34,8 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         onClear,
     } = props;
 
+    const {onBlur: rhfOnBlur, ...restValidation } = props.validationProps || {};
+
     const inputId = id ?? label;
 
     const [focused, setFocused] = useState(false);
@@ -78,9 +80,13 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         value={currentValue}
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
+                        onBlur={(e) => {
+                            console.log("no se esta focuseando xd: ", focused);
+                            setFocused(false)
+                            rhfOnBlur?.(e);
+                        }}
                         required={required}
-                        {...props.validationProps}
+                        {...restValidation}
                     />
                 </div>
 
