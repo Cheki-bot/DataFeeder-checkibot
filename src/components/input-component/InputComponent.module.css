@@ -47,6 +47,15 @@
     background-color: transparent;
 }
 
+.date-input {
+    border: none;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--black-color);
+    background-color: transparent;
+}
+
 .input:focus {
     outline: none;
 }
