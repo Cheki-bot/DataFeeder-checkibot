@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -23,6 +24,8 @@ import style from './CandidatesView.module.css';
 const CandidatesView = () => {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
     const [filteredCandidates, setFilteredCandidates] = useState(candidates);
+    const [candidates, setCandidates] = useState<Candidate[]>([]);
+    const [filteredCandidates, setFilteredCandidates] = useState(candidates);
     const [showForm, setShowForm] = useState(false);
     const {
         register,
@@ -35,6 +38,7 @@ const CandidatesView = () => {
     } = useForm<CandidateFormData>({
         resolver: zodResolver(candidateSchema),
         defaultValues: {
+            full_name: '',
             full_name: '',
             position: '',
             isActive: false,
@@ -63,6 +67,7 @@ const CandidatesView = () => {
 
     const handleRemove = (candidates: Array<Candidate | string>) => {
         const names = candidates.map((c) =>
+            typeof c === 'string' ? c : c.full_name
             typeof c === 'string' ? c : c.full_name
         );
         console.log(`Removing candidates: ${names.join(', ')}`);
@@ -129,7 +134,11 @@ const CandidatesView = () => {
                         value={watch('full_name')}
                         validationProps={register('full_name')}
                         errors={errors.full_name}
+                        value={watch('full_name')}
+                        validationProps={register('full_name')}
+                        errors={errors.full_name}
                         onClear={() => {
+                            resetField('full_name');
                             resetField('full_name');
                         }}
                     />
@@ -156,6 +165,29 @@ const CandidatesView = () => {
 
                 {!showForm && (
                     <div className={style.listContainer}>
+                        <SearchComponent
+                            data={candidates.map((candidate) => ({
+                                id: candidate.id
+                                    ? Number(candidate.id)
+                                    : undefined,
+                                name: candidate.full_name,
+                            }))}
+                            searchKeys={['full_name', 'position', 'name']}
+                            onResultsChange={(results) => {
+                                setFilteredCandidates(
+                                    candidates.filter((c) =>
+                                        results.some((r) => r.id === c.id)
+                                    )
+                                );
+                            }}
+                            hasDropdown={false}
+                        />
+                        <ListComponent
+                            items={filteredCandidates.map((candidate) => ({
+                                label: candidate.full_name,
+                                subLabel: candidate.position,
+                            }))}
+                        />
                         <SearchComponent
                             data={candidates.map((candidate) => ({
                                 id: candidate.id

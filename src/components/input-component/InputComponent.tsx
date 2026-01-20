@@ -37,6 +37,9 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
     const { onBlur: rhfOnBlur, ...restValidation } =
         props.validationProps || {};
 
+    const { onBlur: rhfOnBlur, ...restValidation } =
+        props.validationProps || {};
+
     const inputId = id ?? label;
 
     const [focused, setFocused] = useState(false);
@@ -74,10 +77,16 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                             {label}
                         </label>
                     )}
+                    {type !== 'date' && (
+                        <label htmlFor={inputId} className={styles.label}>
+                            {label}
+                        </label>
+                    )}
                     <input
                         type={type}
                         id={inputId}
                         name={name}
+                        className={type === 'date' ? styles['date-input'] : styles.input}
                         className={type === 'date' ? styles['date-input'] : styles.input}
                         placeholder={placeholder}
                         value={currentValue}
