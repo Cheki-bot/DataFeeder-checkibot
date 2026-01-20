@@ -21,11 +21,12 @@
     --gray-color: #3d3d3d;
     --dark-gray-color: #1c1c1c;
     --light-gray-color: #c5c5c5;
+    --gray-color-20: #7979791e;
     --red-color: #ff4d6d;
     --text-color-light: #e4e4e4;
     --text-color-dark: #141414;
     --transparent-color: transparent;
-
+    --hover-color: #2a2a2a;
 }
 
 * {

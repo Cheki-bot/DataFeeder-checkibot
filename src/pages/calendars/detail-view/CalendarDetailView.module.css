@@ -1,8 +1,7 @@
 .container {
-    min-height: 100vh;
     background-color: #1e1e1e;
     color: #ffffff;
-    padding-top: 80px;
+    padding: 2rem 0;
 }
 
 .content {
@@ -128,7 +127,7 @@
     .eventsGrid {
         grid-template-columns: 1fr;
     }
-    
+
     .content {
         padding: 2rem 1rem;
     }
@@ -335,7 +334,7 @@
     .eventsGrid {
         grid-template-columns: 1fr;
     }
-    
+
     .arrow {
         display: none;
     }

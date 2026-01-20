@@ -59,9 +59,7 @@ export const PartiesView = () => {
             <div className={style.cardContainer}>
                 {parties.map((item) => (
                     <CardComponent
-                        description={
-                            item.description || 'No description available.'
-                        }
+                        description={item.description}
                         mainImageUrl={
                             item.logoUrl || 'https://picsum.photos/2000/3000'
                         } //MARK: agregar imagenes a la bd
@@ -77,9 +75,12 @@ export const PartiesView = () => {
                         GovernmentProgram={() => {
                             navigate(`government-program/${item.id}`);
                         }}
-                        Delete={() => {
+                        DeleteParty={() => {
                             handleDelete(item!.id);
-                            addNotification('Partido eliminado correctamente', 'success');
+                            addNotification(
+                                'Partido eliminado correctamente',
+                                'success'
+                            );
                             setParties((prev) =>
                                 prev.filter((party) => party.id !== item.id)
                             );

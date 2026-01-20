@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import { HeaderComponent } from '@components/header-component/HeaderComponent';
+import { useEventForm } from '@/hooks/useEventForm';
+import { deleteCalendar } from '@/services/calendar.service';
+import { EventForm } from '@components/event-form/EventForm';
 import { ButtonComponent } from '@components/index';
 import { ModalComponent } from '@components/modal-component/ModalComponent';
-import { EventForm } from '@components/event-form/EventForm';
-import { deleteCalendar } from '@/services/calendar.service';
-import { useEventForm } from '@/hooks/useEventForm';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import styles from './CalendarDetailView.module.css';
 
 export const CalendarDetailView = () => {
@@ -77,7 +76,6 @@ export const CalendarDetailView = () => {
     if (loading) {
         return (
             <div className={styles.container}>
-                <HeaderComponent type="simple" />
                 <div className={styles.content}>
                     <div className={styles.loading}>Cargando calendario...</div>
                 </div>
@@ -88,7 +86,6 @@ export const CalendarDetailView = () => {
     if (error || !calendar) {
         return (
             <div className={styles.container}>
-                <HeaderComponent type="simple" />
                 <div className={styles.content}>
                     <div className={styles.error}>{error || 'Calendario no encontrado'}</div>
                 </div>
@@ -98,7 +95,6 @@ export const CalendarDetailView = () => {
 
     return (
         <div className={styles.container}>
-            <HeaderComponent type="simple" />
             <div className={styles.content}>
                 <h1 className={styles.title}>{calendar.title}</h1>
                 <div className={styles.metadata}>
