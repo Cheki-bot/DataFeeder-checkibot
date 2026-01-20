@@ -3,7 +3,7 @@ import {
     CalendarListView,
     LoginView,
     PartiesView,
-    VerificationCreateView
+    VerificationCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -16,6 +16,7 @@ import CandidatesView from './pages/candidates/CandidatesView.tsx';
 import { QuestionsAnswers } from './pages/questions-answers/QuestionsAnswers.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { Root } from './Root.tsx';
+import { EmptyComponent } from './components/empty-component/EmptyComponent.tsx';
 
 const router = createBrowserRouter([
     {
@@ -32,10 +33,10 @@ const router = createBrowserRouter([
                         path: '/',
                         element: <Layout />,
                         children: [
-                            { index: true, element: <PartiesView /> }, // página por defecto
+                            { index: true, element: <EmptyComponent /> },
                             { path: 'candidacies', element: <PartiesView /> },
                             {
-                                path: 'candidacies/candidates/:partyId',
+                                path: 'candidacies/candidates/:partyName/:partyId',
                                 element: <CandidatesView />,
                             },
                             {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
                                 element: <QuestionsAnswers />,
                             },
                             { path: 'calendars', Component: CalendarListView },
+                            // {
+                            //     path: '*',
+                            //     element: </>
+                            // },
                             {
                                 path: 'calendars/:id',
                                 Component: CalendarDetailView,

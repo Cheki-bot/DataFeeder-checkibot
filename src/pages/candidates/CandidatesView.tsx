@@ -16,8 +16,9 @@ import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import type { Candidate } from '@/interfaces/Candidacies';
 import { getCandidatesByPartyId } from '@/services/candidates.service';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import style from './CandidatesView.module.css';
+
 
 const CandidatesView = () => {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -39,7 +40,8 @@ const CandidatesView = () => {
             isActive: false,
         },
     });
-    const { partyId } = useParams<{ partyId: string }>();
+    const { partyId, partyName } = useParams<{ partyId: string, partyName: string }>();
+    const navigation = useNavigate();
 
     useEffect(() => {
         const loadCandidates = async () => {
@@ -68,6 +70,7 @@ const CandidatesView = () => {
 
     return (
         <div className={style.container}>
+            <p className={style.backButtonMain} onClick={() => navigation(-1)}>Volver</p>
             {showForm && (
                 <div className={style.backButton}>
                     <ButtonComponent
@@ -96,7 +99,7 @@ const CandidatesView = () => {
                     </ButtonComponent>
                 </div>
             )}
-            <h2>Candidatos</h2>
+            <h2>Candidatos de {partyName}</h2>
 
             <div className={style.content}>
                 <form

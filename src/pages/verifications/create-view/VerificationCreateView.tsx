@@ -300,22 +300,24 @@ export const VerificationCreateView = () => {
                     style={{ display: shouldShowForm ? 'flex' : 'none' }}
                 >
                     <h3>Crear Verificación</h3>
-                    <InputComponent
-                        label="Título"
-                        type="text"
-                        value={watch('title') || ''}
-                        validationProps={register('title')}
-                        errors={errors.title}
-                        onClear={() => resetField('title')}
-                    />
-                    <InputComponent
-                        label="Resumen"
-                        type="text"
-                        value={watch('summary') || ''}
-                        validationProps={register('summary')}
-                        errors={errors.summary}
-                        onClear={() => resetField('summary')}
-                    />
+                    <div className={styles.twoColumns}>
+                        <InputComponent
+                            label="Título"
+                            type="text"
+                            value={watch('title') || ''}
+                            validationProps={register('title')}
+                            errors={errors.title}
+                            onClear={() => resetField('title')}
+                        />
+                        <InputComponent
+                            label="Resumen"
+                            type="text"
+                            value={watch('summary') || ''}
+                            validationProps={register('summary')}
+                            errors={errors.summary}
+                            onClear={() => resetField('summary')}
+                        />
+                    </div>
                     <InputComponent
                         label="Cuerpo"
                         type="text"
@@ -332,22 +334,24 @@ export const VerificationCreateView = () => {
                         errors={errors.classification}
                         onClear={() => resetField('classification')}
                     />
-                    <InputComponent
-                        label="URL de la Sección"
-                        type="text"
-                        value={watch('sectionUrl') || ''}
-                        validationProps={register('sectionUrl')}
-                        errors={errors.sectionUrl}
-                        onClear={() => resetField('sectionUrl')}
-                    />
-                    <InputComponent
-                        label="URL de la Fuente"
-                        type="text"
-                        value={watch('url') || ''}
-                        validationProps={register('url')}
-                        errors={errors.url}
-                        onClear={() => resetField('url')}
-                    />
+                    <div className={styles.twoColumns}>
+                        <InputComponent
+                            label="URL de la Sección"
+                            type="text"
+                            value={watch('sectionUrl') || ''}
+                            validationProps={register('sectionUrl')}
+                            errors={errors.sectionUrl}
+                            onClear={() => resetField('sectionUrl')}
+                        />
+                        <InputComponent
+                            label="URL de la Fuente"
+                            type="text"
+                            value={watch('url') || ''}
+                            validationProps={register('url')}
+                            errors={errors.url}
+                            onClear={() => resetField('url')}
+                        />
+                    </div>
                     <InputComponent
                         label="Fecha de Publicación"
                         type="date"
@@ -408,32 +412,31 @@ export const VerificationCreateView = () => {
                         ) : null}
                         {filteredVerifications.length > 0 && (
                             <ListComponent
-                                    items={filteredVerifications.map(
-                                        (v) => ({
-                                            label: `${v.title} - ${v.classified_as}`,
-                                        })
-                                    )}
-                                    onSelectionChange={(selectedLabels) => {
-                                        const last =
-                                            selectedLabels[
-                                                selectedLabels.length - 1
-                                            ];
-                                        if (!last) {
-                                            setSelectedVerificationId('');
-                                            return;
-                                        }
-                                        const label =
-                                            typeof last === 'string'
-                                                ? last
-                                                : (last as { label?: string }).label ?? '';
-                                        const match = filteredVerifications.find(
-                                            (v) =>
-                                                `${v.title} - ${v.classified_as}` ===
-                                                label
-                                        );
-                                        setSelectedVerificationId(match?._id ?? '');
-                                    }}
-                                />
+                                items={filteredVerifications.map((v) => ({
+                                    label: `${v.title} - ${v.classified_as}`,
+                                }))}
+                                onSelectionChange={(selectedLabels) => {
+                                    const last =
+                                        selectedLabels[
+                                            selectedLabels.length - 1
+                                        ];
+                                    if (!last) {
+                                        setSelectedVerificationId('');
+                                        return;
+                                    }
+                                    const label =
+                                        typeof last === 'string'
+                                            ? last
+                                            : ((last as { label?: string })
+                                                  .label ?? '');
+                                    const match = filteredVerifications.find(
+                                        (v) =>
+                                            `${v.title} - ${v.classified_as}` ===
+                                            label
+                                    );
+                                    setSelectedVerificationId(match?._id ?? '');
+                                }}
+                            />
                         )}
                         <span className={styles.buttonContainer}>
                             <ButtonComponent

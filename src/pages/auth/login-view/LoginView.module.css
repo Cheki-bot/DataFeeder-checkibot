@@ -28,7 +28,7 @@
 
 .imageSection {
     position: relative;
-    width: 50%;
+    width: 80%;
     height: 100vh;
 }
 
@@ -44,13 +44,23 @@
 .imageOverlay {
     position: absolute;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* padding: 10; */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
+}
+
+.imageText {
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+    max-width: 80%;
+    margin-top: 20px;
 }
 
 .imageLogo {

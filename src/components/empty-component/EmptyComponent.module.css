@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    height: 100%;
+    color: var(--primary-color);
+    opacity: 0.3;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    /* width: 100%; */
+}
+
+.icon {
+    position: absolute;
+    left: 5%;
+    font-size: 4rem;
+    color: var(--secondary-color);
+    opacity: 0.3;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-20px);
+    }
+}

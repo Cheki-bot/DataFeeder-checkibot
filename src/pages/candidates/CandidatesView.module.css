@@ -6,6 +6,7 @@
 
 .container {
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -62,6 +63,13 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
+}
+
+.backButtonMain{
+    color: #00cfaf;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 @media screen and (max-width: 768px) {

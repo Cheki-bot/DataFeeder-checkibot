@@ -50,10 +50,14 @@ export const LoginView = () => {
                         src="/Logo_ChequeaBolivia.png"
                         alt="Logo Chequea Bolivia"
                     />
+                    <p className={style.imageText}>
+                        Plataforma para la verificación y actualización de datos en
+                        tiempo real para el sistema CheckiBot
+                    </p>
                 </span>
             </section>
             <section className={style.loginSection}>
-                <div className={style.form}>
+                <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
                     <h2>Iniciar sesión</h2>
                     <InputComponent
                         label="Correo electrónico"
@@ -77,9 +81,9 @@ export const LoginView = () => {
                     />
                     <ButtonComponent
                         label="Ingresar"
-                        onClick={handleSubmit(onSubmit)}
+                        type='submit'
                     />
-                </div>
+                </form>
             </section>
         </div>
     );

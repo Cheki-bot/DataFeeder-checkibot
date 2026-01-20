@@ -33,7 +33,7 @@ export const Sidebar = () => {
                     <div
                         key={index}
                         className={style.optionCard}
-                        onClick={() => navigate('/' + category.destination)}
+                        onClick={() => navigate(`/${category.destination}`)}
                     >
                         <h4 className={style.optionCardTitle}>
                             {category.name}

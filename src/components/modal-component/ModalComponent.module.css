@@ -5,6 +5,7 @@
     top: 0;
     left: 0;
     width: 100vw;
+    color: var(--white-color);
     height: 100vh;
     justify-content: center;
     align-items: center;
@@ -17,6 +18,7 @@
     gap: 1.25rem;
     position: relative;
     background-color: #2a2a2a;
+    color: var(--white-color);
     border-radius: 1rem;
     padding: 2.5rem;
     max-width: 64rem;
@@ -50,7 +52,7 @@
     position: absolute;
     top: 5%;
     right: 5%;
-    color: #ffffff;
+    color: var(--white-color);
     font-weight: bold;
     font-size: 1.25rem;
     background-color: transparent;

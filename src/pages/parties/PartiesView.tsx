@@ -70,7 +70,7 @@ export const PartiesView = () => {
                             setSelectedParty(item);
                         }}
                         Candidates={() => {
-                            navigate(`candidates/${item.id}`);
+                            navigate(`candidates/${item.name}/${item.id}/`);
                         }}
                         GovernmentProgram={() => {
                             navigate(`government-program/${item.id}`);
