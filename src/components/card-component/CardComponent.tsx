@@ -135,25 +135,29 @@ export const CardComponent = (props: CardComponentProps) => {
                                         Editar
                                     </button>
                                 )}
-                                <button
-                                    className={style.menuItem}
-                                    onClick={() => {
-                                        if (Candidates) Candidates();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Candidatos
-                                </button>
-                                <button
-                                    className={style.menuItem}
-                                    onClick={() => {
-                                        if (GovernmentProgram)
-                                            GovernmentProgram();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Programa de Gobierno
-                                </button>
+                                {Candidates && (
+                                    <button
+                                        className={style.menuItem}
+                                        onClick={() => {
+                                            if (Candidates) Candidates();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Candidatos
+                                    </button>
+                                )}
+                                {GovernmentProgram && (
+                                    <button
+                                        className={style.menuItem}
+                                        onClick={() => {
+                                            if (GovernmentProgram)
+                                                GovernmentProgram();
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        Programa de Gobierno
+                                    </button>
+                                )}
                                 {onDelete && (
                                     <button
                                         className={[

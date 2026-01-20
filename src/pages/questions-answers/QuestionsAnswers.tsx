@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { QuestionsAnswersSchema } from './schemas/questions-answers';
 
@@ -67,9 +67,9 @@ export const QuestionsAnswers = () => {
         reset();
     };
 
-    // const handleSelectionChange = useCallback((selectedItems: string[]) => {
-    //     setSelectedQuestions(selectedItems);
-    // }, []);
+    const handleSelectionChange = useCallback((selectedItems: { label: string }[]) => {
+        setSelectedQuestions(selectedItems.map((item) => item.label));
+    }, []);
 
     const handleRemove = async () => {
         const questionsToDelete = questionsAnswers.filter((qa) =>
@@ -201,6 +201,7 @@ export const QuestionsAnswers = () => {
                             items={items.map((question) => ({
                                 label: question,
                             }))}
+                            onSelectionChange={handleSelectionChange}
                         />
                         <span className={style.buttonContainer}>
                             <ButtonComponent

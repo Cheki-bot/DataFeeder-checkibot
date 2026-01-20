@@ -32,6 +32,7 @@ export const SearchComponent = ({
         if (onResultsChange && query.length > 0) {
             onResultsChange(results);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [query]);
 
     return (

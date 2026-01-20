@@ -33,7 +33,8 @@ export const ListComponent = ({
             );
             onSelectionChange(selectedItems);
           }
-    }, [checkedItems, items, onSelectionChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [checkedItems, onSelectionChange]);
 
     return (
         <div className={style.container}>

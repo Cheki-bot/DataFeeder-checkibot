@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -24,8 +23,6 @@ import style from './CandidatesView.module.css';
 const CandidatesView = () => {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
     const [filteredCandidates, setFilteredCandidates] = useState(candidates);
-    const [candidates, setCandidates] = useState<Candidate[]>([]);
-    const [filteredCandidates, setFilteredCandidates] = useState(candidates);
     const [showForm, setShowForm] = useState(false);
     const {
         register,
@@ -38,7 +35,6 @@ const CandidatesView = () => {
     } = useForm<CandidateFormData>({
         resolver: zodResolver(candidateSchema),
         defaultValues: {
-            full_name: '',
             full_name: '',
             position: '',
             isActive: false,
@@ -58,7 +54,7 @@ const CandidatesView = () => {
             }
         };
         loadCandidates();
-    }, [partyId]);
+    }, [partyId, setCandidates]);
 
     const handleAddCandidate = (candidate: Candidate) => {
         console.log(`Adding candidate: ${candidate}`);
@@ -67,8 +63,7 @@ const CandidatesView = () => {
 
     const handleRemove = (candidates: Array<Candidate | string>) => {
         const names = candidates.map((c) =>
-            typeof c === 'string' ? c : c.full_name
-            typeof c === 'string' ? c : c.full_name
+            typeof c === 'string' ? c : c.full_name,
         );
         console.log(`Removing candidates: ${names.join(', ')}`);
     };
@@ -134,11 +129,7 @@ const CandidatesView = () => {
                         value={watch('full_name')}
                         validationProps={register('full_name')}
                         errors={errors.full_name}
-                        value={watch('full_name')}
-                        validationProps={register('full_name')}
-                        errors={errors.full_name}
                         onClear={() => {
-                            resetField('full_name');
                             resetField('full_name');
                         }}
                     />
