@@ -13,6 +13,7 @@ interface Category {
 
 export const Sidebar = () => {
     const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,8 +24,11 @@ export const Sidebar = () => {
         fetchCategories();
     }, []);
 
-    console.log(categories);
-
+    const handleCategorySelect = (category: Category) => {
+        setSelectedCategory(category.name);
+        navigate(`/${category.destination}`)
+    }
+    
     return (
         <div className={style.container}>
             <h2>Elige la categoría</h2>
@@ -32,8 +36,10 @@ export const Sidebar = () => {
                 {categories.map((category, index) => (
                     <div
                         key={index}
-                        className={style.optionCard}
-                        onClick={() => navigate(`/${category.destination}`)}
+                        className={selectedCategory === category.name ? style.optionCardSelected : style.optionCard}
+                        onClick={() => {
+                            handleCategorySelect(category);
+                        }}
                     >
                         <h4 className={style.optionCardTitle}>
                             {category.name}
