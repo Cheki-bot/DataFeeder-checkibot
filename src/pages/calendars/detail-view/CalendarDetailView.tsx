@@ -10,7 +10,7 @@ import styles from './CalendarDetailView.module.css';
 export const CalendarDetailView = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    
+
     const {
         calendar,
         loading,
@@ -26,7 +26,7 @@ export const CalendarDetailView = () => {
         updateEventField,
         submitEvent,
         deleteEvent,
-        setError
+        setError,
     } = useEventForm();
 
     useEffect(() => {
@@ -87,7 +87,9 @@ export const CalendarDetailView = () => {
         return (
             <div className={styles.container}>
                 <div className={styles.content}>
-                    <div className={styles.error}>{error || 'Calendario no encontrado'}</div>
+                    <div className={styles.error}>
+                        {error || 'Calendario no encontrado'}
+                    </div>
                 </div>
             </div>
         );
@@ -95,72 +97,125 @@ export const CalendarDetailView = () => {
 
     return (
         <div className={styles.container}>
+            <div
+                className={styles.addEventCard}
+                onClick={() => handleOpenEventModal()}
+            >
+                {/* <ButtonComponent
+                    onClick={() => handleOpenEventModal()}
+                >
+                    <div className={styles.addButtonContent}>
+                        <p>+</p>
+                        <p>Agregar Evento</p>
+                    </div>
+                </ButtonComponent> */}
+                {/** Actualmente no tenemos tablas para eventos, asi que no es necesario este boton, posible adicion */}
+            </div>
             <div className={styles.content}>
                 <h1 className={styles.title}>{calendar.title}</h1>
                 <div className={styles.metadata}>
-                    <p><strong>Resolución:</strong> {calendar.resolution}</p>
-                    <p><strong>Fecha:</strong> {new Date(calendar.date).toLocaleDateString()}</p>
+                    <p>
+                        <strong>Resolución:</strong> {calendar.resolution}
+                    </p>
+                    <p>
+                        <strong>Fecha:</strong>{' '}
+                        {new Date(calendar.date).toLocaleDateString()}
+                    </p>
                     {calendar.introduction && (
-                        <p className={styles.introduction}>{calendar.introduction}</p>
+                        <p className={styles.introduction}>
+                            {calendar.introduction}
+                        </p>
                     )}
                     {calendar.pdf_url && (
-                        <a href={calendar.pdf_url} target="_blank" rel="noopener noreferrer" className={styles.pdfLink}>
+                        <a
+                            href={calendar.pdf_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.pdfLink}
+                        >
                             Ver PDF
                         </a>
                     )}
                 </div>
 
                 <div className={styles.eventsGrid}>
-                    {calendar.events && calendar.events.map((event, index) => (
-                        <div key={event._id || index} className={styles.eventCardWrapper}>
-                            <div className={styles.eventCard}>
-                                <div className={styles.eventHeader}>
-                                    <div className={styles.avatar}>E</div>
-                                    <div className={styles.eventHeaderText}>
-                                        <h3>{event.scenery || 'Sin escenario'}</h3>
-                                        <p>Evento</p>
+                    {calendar.events &&
+                        calendar.events.map((event, index) => (
+                            <div
+                                key={event._id || index}
+                                className={styles.eventCardWrapper}
+                            >
+                                <div className={styles.eventCard}>
+                                    <div className={styles.eventHeader}>
+                                        <div className={styles.avatar}>E</div>
+                                        <div className={styles.eventHeaderText}>
+                                            <h3>
+                                                {event.scenery ||
+                                                    'Sin escenario'}
+                                            </h3>
+                                            <p>Evento</p>
+                                        </div>
+                                    </div>
+                                    <div className={styles.eventContent}>
+                                        <h4>
+                                            {event.activity || 'Sin actividad'}
+                                        </h4>
+                                        {event.from_date && (
+                                            <p>
+                                                <strong>Desde:</strong>{' '}
+                                                {new Date(
+                                                    event.from_date
+                                                ).toLocaleDateString()}
+                                            </p>
+                                        )}
+                                        {event.to_date && (
+                                            <p>
+                                                <strong>Hasta:</strong>{' '}
+                                                {new Date(
+                                                    event.to_date
+                                                ).toLocaleDateString()}
+                                            </p>
+                                        )}
+                                        {event.duration && (
+                                            <p>
+                                                <strong>Duración:</strong>{' '}
+                                                {event.duration} días
+                                            </p>
+                                        )}
+                                        {event.reference && (
+                                            <p>
+                                                <strong>Referencia:</strong>{' '}
+                                                {event.reference}
+                                            </p>
+                                        )}
+                                        {event.place && (
+                                            <p>
+                                                <strong>Lugar:</strong>{' '}
+                                                {event.place}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className={styles.eventActions}>
+                                        <ButtonComponent
+                                            label="Editar"
+                                            onClick={() =>
+                                                handleOpenEventModal(index)
+                                            }
+                                        />
+                                        <ButtonComponent
+                                            label="Eliminar"
+                                            onClick={() =>
+                                                handleDeleteEvent(index)
+                                            }
+                                            danger
+                                        />
                                     </div>
                                 </div>
-                                <div className={styles.eventContent}>
-                                    <h4>{event.activity || 'Sin actividad'}</h4>
-                                    {event.from_date && (
-                                        <p><strong>Desde:</strong> {new Date(event.from_date).toLocaleDateString()}</p>
-                                    )}
-                                    {event.to_date && (
-                                        <p><strong>Hasta:</strong> {new Date(event.to_date).toLocaleDateString()}</p>
-                                    )}
-                                    {event.duration && (
-                                        <p><strong>Duración:</strong> {event.duration} días</p>
-                                    )}
-                                    {event.reference && (
-                                        <p><strong>Referencia:</strong> {event.reference}</p>
-                                    )}
-                                    {event.place && (
-                                        <p><strong>Lugar:</strong> {event.place}</p>
-                                    )}
-                                </div>
-                                <div className={styles.eventActions}>
-                                    <ButtonComponent
-                                        label="Editar"
-                                        onClick={() => handleOpenEventModal(index)}
-                                    />
-                                    <ButtonComponent
-                                        label="Eliminar"
-                                        onClick={() => handleDeleteEvent(index)}
-                                        danger
-                                    />
-                                </div>
+                                {index < (calendar?.events.length ?? 0) - 1 && (
+                                    <div className={styles.arrow}>→</div>
+                                )}
                             </div>
-                            {index < (calendar?.events.length ?? 0) - 1 && (
-                                <div className={styles.arrow}>→</div>
-                            )}
-                        </div>
-                    ))}
-                    
-                    <div className={styles.addEventCard} onClick={() => handleOpenEventModal()}>
-                        <div className={styles.addEventIcon}>+</div>
-                        <p>Agregar Evento</p>
-                    </div>
+                        ))}
                 </div>
 
                 <div className={styles.buttonGroup}>
@@ -183,11 +238,17 @@ export const CalendarDetailView = () => {
                     isOpen={showEventModal}
                     onClose={closeEventModal}
                     Accept={handleSubmitEvent}
-                    acceptLabel={editingEventIndex !== null ? 'Guardar Cambios' : 'Agregar Evento'}
+                    acceptLabel={
+                        editingEventIndex !== null
+                            ? 'Guardar Cambios'
+                            : 'Agregar Evento'
+                    }
                     isLoading={savingEvent}
                 >
                     <h2 className={styles.modalTitle}>
-                        {editingEventIndex !== null ? 'Editar Evento' : 'Agregar Evento'}
+                        {editingEventIndex !== null
+                            ? 'Editar Evento'
+                            : 'Agregar Evento'}
                     </h2>
                     <EventForm
                         formData={eventForm}

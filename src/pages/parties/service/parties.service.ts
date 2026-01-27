@@ -8,7 +8,6 @@ interface data {
 export const getCandidacies = async (): Promise<data> => {
     try {
         const response = await api.get('/political-parties');
-        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error fetching candidacies:', error);

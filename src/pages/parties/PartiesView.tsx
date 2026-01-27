@@ -33,7 +33,6 @@ export const PartiesView = () => {
             return;
         }
         await deleteCandidacy(id);
-        console.log(`Delete party with id: ${id}`);
     };
 
     return (
