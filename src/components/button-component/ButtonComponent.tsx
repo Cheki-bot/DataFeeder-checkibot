@@ -7,6 +7,7 @@ interface ButtonComponentProps {
     type?: 'button' | 'submit' | 'reset';
     onlyIcon?: boolean;
     danger?: boolean;
+    light?: boolean;
 }
 export const ButtonComponent = ({
     label,
@@ -15,6 +16,7 @@ export const ButtonComponent = ({
     type = 'button',
     onlyIcon = false,
     danger = false,
+    light = false,
 }: ButtonComponentProps) => {
     return (
         <button
@@ -22,8 +24,10 @@ export const ButtonComponent = ({
                 danger
                     ? `${style.button} ${style.danger}`
                     : onlyIcon
-                    ? style.onlyIcon
-                    : style.button
+                      ? style.onlyIcon
+                      : light
+                        ? `${style.button} ${style.light}`
+                        : style.button
             }
             onClick={onClick}
             type={type}

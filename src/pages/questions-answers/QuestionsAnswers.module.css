@@ -12,6 +12,7 @@
     width: 100%;
     height: 100%;
     padding-top: 5em;
+    position: relative;
 }
 
 .content {
@@ -64,6 +65,15 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
+}
+
+.uploadButton {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
 }
 
 @media screen and (max-width: 768px) {

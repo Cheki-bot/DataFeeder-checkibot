@@ -67,9 +67,12 @@ export const QuestionsAnswers = () => {
         reset();
     };
 
-    const handleSelectionChange = useCallback((selectedItems: { label: string }[]) => {
-        setSelectedQuestions(selectedItems.map((item) => item.label));
-    }, []);
+    const handleSelectionChange = useCallback(
+        (selectedItems: { label: string }[]) => {
+            setSelectedQuestions(selectedItems.map((item) => item.label));
+        },
+        []
+    );
 
     const handleRemove = async () => {
         const questionsToDelete = questionsAnswers.filter((qa) =>
@@ -114,6 +117,10 @@ export const QuestionsAnswers = () => {
                         onClose={removeNotification}
                     />
                 ))}
+            </div>
+
+            <div className={style.uploadButton}>
+                <ButtonComponent light label="Subir Excel" />
             </div>
 
             {showForm && (
