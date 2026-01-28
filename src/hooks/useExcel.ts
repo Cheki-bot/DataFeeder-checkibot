@@ -1,40 +1,72 @@
-import { useState, type ChangeEvent } from 'react';
+import { type ChangeEvent, useState } from 'react';
 import * as XLSX from 'xlsx';
 
-export const useExcel = <T>() => {
-    const [data, setData] = useState<T[]>([]);
-    const [columns, setColumns] = useState<string[]>([]);
+interface ExcelOptions<T> {
+    requiredColumns: string[];
+    onSuccess?: (data: T[]) => Promise<void> | void;
+    onError?: (message: string) => void;
+}
+
+export const useExcel = <T>({
+    requiredColumns,
+    onSuccess,
+    onError,
+}: ExcelOptions<T>) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
         if (!file) return;
 
         setIsLoading(true);
         const reader = new FileReader();
 
-        reader.onload = (e) => {
+        reader.onload = async (event) => {
             try {
-                const buffer = e.target?.result;
-                const workbook = XLSX.read(buffer, { type: 'array' });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const data = new Uint8Array(
+                    event.target?.result as ArrayBuffer
+                );
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json<T>(sheet);
 
-                const jsonData = XLSX.utils.sheet_to_json<T>(worksheet);
+                if (json.length === 0) throw new Error('El archivo está vacío');
 
-                if (jsonData.length > 0) {
-                    setColumns(Object.keys(jsonData[0] as object));
-                }
+                // Validación y Normalización de columnas
+                const normalizedData = json.map((row) => {
+                    const obj: Partial<T> = {};
+                    requiredColumns.forEach((col) => {
+                        const key = Object.keys(
+                            row as Record<string, unknown>
+                        ).find((k) => k.toLowerCase() === col.toLowerCase());
+                        if (!key)
+                            throw new Error(
+                                `Columna requerida no encontrada: ${col}`
+                            );
+                        (obj as Record<string, unknown>)[col] =
+                            row[key as keyof typeof row];
+                    });
+                    return obj as T;
+                });
 
-                setData(jsonData);
-            } catch (error) {
-                console.error('Error procesando Excel:', error);
+                if (onSuccess) await onSuccess(normalizedData);
+            } catch (err: unknown) {
+                if (onError) onError((err as Error).message);
             } finally {
                 setIsLoading(false);
+                e.target.value = ''; // Reset para permitir subir el mismo archivo
             }
         };
-
         reader.readAsArrayBuffer(file);
     };
 
-    return { data, columns, handleFileUpload, isLoading, setData };
+    // El "Register" que inyecta props al input
+    const registerExcel = () => ({
+        type: 'file' as const,
+        accept: '.xlsx, .xls, .csv',
+        onChange: handleFile,
+        style: { display: 'none' as const }, // Lo mantenemos oculto por defecto
+    });
+
+    return { registerExcel, isLoading };
 };

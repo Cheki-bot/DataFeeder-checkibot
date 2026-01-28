@@ -21,6 +21,7 @@ import {
 import { NotificationComponent } from '@/components/notification-component/NotificationComponent';
 import { useNotification } from '@/hooks/useNotification';
 import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
+import { useExcel } from '@/hooks/useExcel';
 
 export const QuestionsAnswers = () => {
     const [showForm, setShowForm] = useState(false);
@@ -28,6 +29,28 @@ export const QuestionsAnswers = () => {
     const [questionsAnswers, setQuestionsAnswers] = useState<
         IQuestionsAndAnswers[]
     >([]);
+    const { registerExcel, isLoading } = useExcel<IQuestionsAndAnswers>({
+        requiredColumns: ['question', 'answer'],
+        onSuccess: async (data) => {
+            const newData = data.filter(
+                (newQA) =>
+                    !questionsAnswers.some(
+                        (existingQA) =>
+                            existingQA.question.toLowerCase() ===
+                            newQA.question.toLowerCase()
+                    )
+            );
+
+            for (const qa of newData) {
+                await createQuestionAnswer(qa.question, qa.answer);
+            }
+
+            setQuestionsAnswers((prev) => [...prev, ...newData]);
+        },
+        onError: (message) => {
+            console.error('Error al procesar el archivo Excel:', message);
+        },
+    });
 
     const { notifications, addNotification, removeNotification } =
         useNotification();
@@ -120,7 +143,7 @@ export const QuestionsAnswers = () => {
             </div>
 
             <div className={style.uploadButton}>
-                <ButtonComponent light label="Subir Excel" />
+                <ButtonComponent light label="Subir Excel" onClick={() => {}} />
             </div>
 
             {showForm && (
