@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { QuestionsAnswersSchema } from './schemas/questions-answers';
 
@@ -18,10 +18,11 @@ import {
     getQuestionsAnswers,
 } from './service/questions-answers.service';
 
+import { useExcel } from '@/hooks/useExcel';
 import { NotificationComponent } from '@/components/notification-component/NotificationComponent';
 import { useNotification } from '@/hooks/useNotification';
 import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
-import { useExcel } from '@/hooks/useExcel';
+import xlsx from 'xlsx';
 
 export const QuestionsAnswers = () => {
     const [showForm, setShowForm] = useState(false);
@@ -29,31 +30,15 @@ export const QuestionsAnswers = () => {
     const [questionsAnswers, setQuestionsAnswers] = useState<
         IQuestionsAndAnswers[]
     >([]);
-    const { registerExcel, isLoading } = useExcel<IQuestionsAndAnswers>({
-        requiredColumns: ['question', 'answer'],
-        onSuccess: async (data) => {
-            const newData = data.filter(
-                (newQA) =>
-                    !questionsAnswers.some(
-                        (existingQA) =>
-                            existingQA.question.toLowerCase() ===
-                            newQA.question.toLowerCase()
-                    )
-            );
-
-            for (const qa of newData) {
-                await createQuestionAnswer(qa.question, qa.answer);
-            }
-
-            setQuestionsAnswers((prev) => [...prev, ...newData]);
-        },
-        onError: (message) => {
-            console.error('Error al procesar el archivo Excel:', message);
-        },
-    });
+    const [sheet, setSheet] = useState<xlsx.WorkSheet | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { notifications, addNotification, removeNotification } =
         useNotification();
+
+    const { data } = useExcel(sheet, ['question', 'answer'], () => {
+        addNotification('Archivo Excel procesado correctamente', 'success');
+    });
 
     const {
         register,
@@ -124,6 +109,20 @@ export const QuestionsAnswers = () => {
             prev.filter((q) => !questionsToDelete.includes(q))
         );
     };
+
+    const handleUpload = (file: File) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target?.result as ArrayBuffer);
+            const workbook = xlsx.read(data, { type: 'array' });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            setSheet(worksheet);
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+
     return (
         <div className={style.container}>
             {/* 🔔 Contenedor de notificaciones */}
@@ -143,7 +142,23 @@ export const QuestionsAnswers = () => {
             </div>
 
             <div className={style.uploadButton}>
-                <ButtonComponent light label="Subir Excel" onClick={() => {}} />
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".xlsx,.xls"
+                    className={style.fileInput}
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUpload(file);
+                    }}
+                />
+                <ButtonComponent
+                    light
+                    label="Subir Excel"
+                    onClick={() => {
+                        fileInputRef.current?.click();
+                    }}
+                />
             </div>
 
             {showForm && (
