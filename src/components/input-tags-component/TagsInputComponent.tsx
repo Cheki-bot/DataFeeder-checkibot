@@ -154,14 +154,16 @@ export const TagsInputComponent = (props: TagsInputProps) => {
                     />
                 </div>
             </div>
-            <div className={styles.tagsArea}>
-                <TagsComponent
-                    tags={tags}
-                    onRemove={(index: number) =>
-                        setTags((s) => s.filter((_, i) => i !== index))
-                    }
-                />
-            </div>
+            {!tags && (
+                <div className={styles.tagsArea}>
+                    <TagsComponent
+                        tags={tags}
+                        onRemove={(index: number) =>
+                            setTags((s) => s.filter((_, i) => i !== index))
+                        }
+                    />
+                </div>
+            )}
         </div>
     );
 };

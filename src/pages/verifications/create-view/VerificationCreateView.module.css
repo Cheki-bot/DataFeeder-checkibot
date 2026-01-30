@@ -38,6 +38,7 @@
     align-items: stretch;
     width: 100%;
     padding: 0.5em 0.75em;
+    gap: 1em;
     box-sizing: border-box;
 }
 
@@ -169,6 +170,13 @@
     height: 1.2em;
     stroke: var(--white-color);
     stroke-width: 2;
+}
+
+.inputWrapper {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 100%;
 }
 
 @keyframes spin {

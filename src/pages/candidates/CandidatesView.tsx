@@ -19,10 +19,11 @@ import { getCandidatesByPartyId } from '@/services/candidates.service';
 import { useNavigate, useParams } from 'react-router';
 import style from './CandidatesView.module.css';
 
-
 const CandidatesView = () => {
     const [candidates, setCandidates] = useState<Candidate[]>([]);
-    const [filteredCandidates, setFilteredCandidates] = useState(candidates);
+    const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>(
+        []
+    );
     const [showForm, setShowForm] = useState(false);
     const {
         register,
@@ -40,7 +41,10 @@ const CandidatesView = () => {
             isActive: false,
         },
     });
-    const { partyId, partyName } = useParams<{ partyId: string, partyName: string }>();
+    const { partyId, partyName } = useParams<{
+        partyId: string;
+        partyName: string;
+    }>();
     const navigation = useNavigate();
 
     useEffect(() => {
@@ -56,6 +60,10 @@ const CandidatesView = () => {
         loadCandidates();
     }, [partyId, setCandidates]);
 
+    useEffect(() => {
+        setFilteredCandidates(candidates);
+    }, [candidates]);
+
     const handleAddCandidate = (candidate: Candidate) => {
         console.log(`Adding candidate: ${candidate}`);
         reset();
@@ -63,14 +71,16 @@ const CandidatesView = () => {
 
     const handleRemove = (candidates: Array<Candidate | string>) => {
         const names = candidates.map((c) =>
-            typeof c === 'string' ? c : c.full_name,
+            typeof c === 'string' ? c : c.full_name
         );
         console.log(`Removing candidates: ${names.join(', ')}`);
     };
 
     return (
         <div className={style.container}>
-            <p className={style.backButtonMain} onClick={() => navigation(-1)}>Volver</p>
+            <p className={style.backButtonMain} onClick={() => navigation(-1)}>
+                Volver
+            </p>
             {showForm && (
                 <div className={style.backButton}>
                     <ButtonComponent
@@ -156,7 +166,7 @@ const CandidatesView = () => {
 
                 {!showForm && (
                     <div className={style.listContainer}>
-                        <SearchComponent
+                        {/* <SearchComponent
                             data={candidates.map((candidate) => ({
                                 id: candidate.id
                                     ? Number(candidate.id)
@@ -178,7 +188,7 @@ const CandidatesView = () => {
                                 label: candidate.full_name,
                                 subLabel: candidate.position,
                             }))}
-                        />
+                        /> */}
                         <SearchComponent
                             data={candidates.map((candidate) => ({
                                 id: candidate.id

@@ -73,12 +73,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         <label htmlFor={inputId} className={styles.label}>
                             {label}
                         </label>
-                    )}
-                    {type !== 'date' && (
-                        <label htmlFor={inputId} className={styles.label}>
-                            {label}
-                        </label>
-                    )}
+                    )}  
                     <input
                         type={type}
                         id={inputId}

@@ -50,7 +50,7 @@ export const verificationSchema = z.object({
             },
             {
                 message:
-                    'La URL de la sección no es válida. Debe incluir https:// o un dominio como dominio.tld',
+                    'La URL debe incluir https:// o un dominio como dominio.tld',
             }
         ),
     url: z
@@ -70,7 +70,7 @@ export const verificationSchema = z.object({
             },
             {
                 message:
-                    'La URL no es válida. Debe incluir https:// o un dominio como dominio.tld',
+                    'La URL debe incluir https:// o un dominio como dominio.tld',
             }
         ),
     publicationDate: z

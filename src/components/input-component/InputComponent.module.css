@@ -16,7 +16,6 @@
     position: relative;
     flex-direction: column;
     width: 100%;
-    margin-bottom: 10px;
 }
 
 .label {
@@ -77,9 +76,9 @@
 }
 
 .error {
-    position: absolute;
+    /* position: absolute; */
     color: var(--red-color);
     font-size: 0.8rem;
-    top: 50px;
+    /* top: 40px; */
     margin-left: 10px;
 }

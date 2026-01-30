@@ -116,7 +116,7 @@ export const VerificationCreateView = () => {
         if (message) {
             addNotification(message, 'success');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [message]);
 
     const processedData = data.map((row) =>
@@ -546,18 +546,20 @@ export const VerificationCreateView = () => {
                         errors={errors.publicationDate}
                         onClear={() => resetField('publicationDate')}
                     />
-                    <TagsInputComponent
-                        key={tagsInputKey}
-                        label="Etiquetas"
-                        nameLabel="Nombre etiqueta"
-                        urlLabel="URL etiqueta"
-                        onAdd={handleTagAdd}
-                    />
-                    {errors.tags ? (
-                        <span className={styles.validationMessage}>
-                            {errors.tags.message as string}
-                        </span>
-                    ) : null}
+                    <div className={styles.inputWrapper}>
+                        <TagsInputComponent
+                            key={tagsInputKey}
+                            label="Etiquetas"
+                            nameLabel="Nombre etiqueta"
+                            urlLabel="URL etiqueta"
+                            onAdd={handleTagAdd}
+                        />
+                        {errors.tags ? (
+                            <span className={styles.validationMessage}>
+                                {errors.tags.message as string}
+                            </span>
+                        ) : null}
+                    </div>
                     <span className={styles.buttonContainer}>
                         <ButtonComponent
                             label={
