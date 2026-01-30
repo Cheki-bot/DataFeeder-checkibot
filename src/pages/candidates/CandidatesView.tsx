@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router';
 import style from './CandidatesView.module.css';
 
 const CandidatesView = () => {
+    const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
     const [candidates, setCandidates] = useState<Candidate[]>([]);
     const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>(
         []
@@ -96,18 +97,19 @@ const CandidatesView = () => {
     };
 
     const handleRemove = async (
-        selectedCandidates: Array<Candidate | string>
+        candidatesToRemove: Array<Candidate | string>
     ) => {
-        if (!partyId) return;
+        if (!partyId || candidatesToRemove.length === 0) return;
 
         try {
-            const promises = selectedCandidates.map((c) => {
+            const promises = candidatesToRemove.map((c) => {
                 const candidateName = typeof c === 'string' ? c : c.full_name;
                 return deleteCandidate(partyId, candidateName);
             });
 
             await Promise.all(promises);
             await loadCandidates();
+            setSelectedCandidates([]);
         } catch (error) {
             console.error('Error removing candidates:', error);
         }
@@ -248,13 +250,18 @@ const CandidatesView = () => {
                                 label: candidate.full_name,
                                 subLabel: candidate.position,
                             }))}
+                            onSelectionChange={(selected) => {
+                                setSelectedCandidates(
+                                    selected.map((s) => s.label)
+                                );
+                            }}
                         />
                         <span className={style.buttonContainer}>
                             <ButtonComponent
                                 label="Eliminar"
                                 type="button"
                                 danger
-                                onClick={() => handleRemove(candidates)}
+                                onClick={() => handleRemove(selectedCandidates)}
                             />
                         </span>
                     </div>
