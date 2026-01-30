@@ -15,7 +15,11 @@ import {
 import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import type { Candidate } from '@/interfaces/Candidacies';
-import { getCandidatesByPartyId } from '@/services/candidates.service';
+import {
+    createCandidate,
+    deleteCandidate,
+    getCandidatesByPartyId,
+} from '@/services/candidates.service';
 import { useNavigate, useParams } from 'react-router';
 import style from './CandidatesView.module.css';
 
@@ -64,16 +68,49 @@ const CandidatesView = () => {
         setFilteredCandidates(candidates);
     }, [candidates]);
 
-    const handleAddCandidate = (candidate: Candidate) => {
-        console.log(`Adding candidate: ${candidate}`);
-        reset();
+    const loadCandidates = async () => {
+        if (!partyId) return;
+        try {
+            const candidates = await getCandidatesByPartyId(partyId);
+            setCandidates(candidates.data);
+        } catch (error) {
+            console.error('Error loading candidates:', error);
+        }
     };
 
-    const handleRemove = (candidates: Array<Candidate | string>) => {
-        const names = candidates.map((c) =>
-            typeof c === 'string' ? c : c.full_name
-        );
-        console.log(`Removing candidates: ${names.join(', ')}`);
+    const handleAddCandidate = async (candidate: CandidateFormData) => {
+        if (!partyId) return;
+
+        try {
+            await createCandidate({
+                ...candidate,
+                is_active: candidate.isActive,
+                candidacyId: partyId,
+            });
+            await loadCandidates();
+            reset();
+            setShowForm(false);
+        } catch (error) {
+            console.error('Error adding candidate:', error);
+        }
+    };
+
+    const handleRemove = async (
+        selectedCandidates: Array<Candidate | string>
+    ) => {
+        if (!partyId) return;
+
+        try {
+            const promises = selectedCandidates.map((c) => {
+                const candidateName = typeof c === 'string' ? c : c.full_name;
+                return deleteCandidate(partyId, candidateName);
+            });
+
+            await Promise.all(promises);
+            await loadCandidates();
+        } catch (error) {
+            console.error('Error removing candidates:', error);
+        }
     };
 
     return (
