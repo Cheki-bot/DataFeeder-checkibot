@@ -43,7 +43,7 @@ const CandidatesView = () => {
         defaultValues: {
             full_name: '',
             position: '',
-            isActive: false,
+            is_active: false,
         },
     });
     const { partyId, partyName } = useParams<{
@@ -85,7 +85,6 @@ const CandidatesView = () => {
         try {
             await createCandidate({
                 ...candidate,
-                is_active: candidate.isActive,
                 candidacyId: partyId,
             });
             await loadCandidates();
@@ -166,9 +165,9 @@ const CandidatesView = () => {
                     <div className={style.checkboxField}>
                         <p>Esta activo</p>
                         <CustomCheckbox
-                            checked={watch('isActive')}
+                            checked={watch('is_active')}
                             onChange={(checked: boolean) => {
-                                setValue('isActive', checked);
+                                setValue('is_active', checked);
                             }}
                         />
                     </div>
