@@ -58,3 +58,18 @@ export const updateQuestionAnswer = async (
         throw error;
     }
 };
+
+export const createMultipleQuestionsAnswers = async (
+    questionsAnswers: IQuestionsAndAnswers[]
+): Promise<IQuestionsAndAnswers[]> => {
+    try {
+        const response = await api.post<IQuestionsAndAnswers[]>(
+            '/questions-answers/submit-multiple',
+            { questionsAnswers }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error creating multiple questions and answers:', error);
+        throw error;
+    }
+};

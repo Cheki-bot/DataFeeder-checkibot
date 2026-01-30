@@ -37,3 +37,12 @@ export const createVerification = async (
 export const deleteVerification = async (id: string): Promise<void> => {
     await api.delete(`/verifications/${id}`);
 };
+
+export const createMultipleVerifications = async (
+    verifications: Verification[]
+): Promise<Verification[]> => {
+    const { data } = await api.post('/verifications/submit-multiple', {
+        verifications,
+    });
+    return data as Verification[];
+}

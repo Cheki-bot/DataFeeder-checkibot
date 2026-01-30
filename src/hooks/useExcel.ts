@@ -1,58 +1,75 @@
-import { useEffect, useMemo } from 'react';
+import { normalizeKey } from '@/pages/verifications/utils/normalize-text';
+import { useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
+
+interface UseExcelResult {
+    data: Record<string, string>[];
+    columns: string[];
+    message?: string; // Mensaje que se puede mostrar en notificaciones
+}
 
 export const useExcel = (
     sheet: XLSX.WorkSheet | null,
-    expectedColumns: string[],
-    onSuccess?: () => void
-) => {
+    expectedColumns: Record<string, string>
+): UseExcelResult => {
+    const [message, setMessage] = useState<string | undefined>();
+
     const result = useMemo(() => {
-        if (!sheet) {
+        if (!sheet || Object.keys(sheet).length === 0) {
             return { data: [], columns: [] };
         }
 
-        const [headerRow] = XLSX.utils.sheet_to_json(sheet, {
+        const rows = XLSX.utils.sheet_to_json(sheet, {
             header: 1,
             blankrows: false,
         }) as string[][];
+
+        const [headerRow, ...dataRows] = rows;
 
         if (!headerRow || headerRow.length === 0) {
             throw new Error('El archivo Excel no tiene encabezados');
         }
 
-        const normalizedExcelColumns = headerRow.map((col) =>
-            col?.toString().trim().toLowerCase()
+        const normalizedExcelHeaders = headerRow.map(normalizeKey);
+        const normalizedExpected =
+            Object.values(expectedColumns).map(normalizeKey);
+
+        const missingColumns = normalizedExpected.filter(
+            (col) => !normalizedExcelHeaders.includes(col)
         );
 
-        const normalizedExpectedColumns = expectedColumns.map((col) =>
-            col.trim().toLowerCase()
-        );
-
-        const columnsAreValid =
-            normalizedExcelColumns.length ===
-                normalizedExpectedColumns.length &&
-            normalizedExcelColumns.every(
-                (col, index) => col === normalizedExpectedColumns[index]
-            );
-
-        if (!columnsAreValid) {
+        if (missingColumns.length > 0) {
             throw new Error(
-                'Columnas incorrectas. Revisa que el Excel tenga las columnas esperadas.'
+                `Faltan columnas requeridas en el Excel: ${missingColumns.join(', ')}`
             );
         }
 
+        const columnIndexMap: Record<number, string> = {};
+        normalizedExcelHeaders.forEach((excelCol, index) => {
+            const expectedEntry = Object.entries(expectedColumns).find(
+                ([, expectedValue]) => normalizeKey(expectedValue) === excelCol
+            );
+
+            if (expectedEntry) {
+                columnIndexMap[index] = expectedEntry[1];
+            }
+        });
+
+        const data = dataRows.map((row) => {
+            const obj: Record<string, string> = {};
+            Object.entries(columnIndexMap).forEach(([index, key]) => {
+                obj[key] = row[Number(index)] ?? '';
+            });
+            return obj;
+        });
+
+        setMessage('Archivo Excel procesado correctamente');
+
         return {
-            data: XLSX.utils.sheet_to_json(sheet),
+            data,
             columns: headerRow,
         };
     }, [sheet, expectedColumns]);
 
-    useEffect(() => {
-        if (sheet) {
-            onSuccess?.();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sheet]);
-
-    return result;
+    return { ...result, message };
 };

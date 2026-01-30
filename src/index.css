@@ -27,6 +27,8 @@
     --text-color-dark: #141414;
     --transparent-color: transparent;
     --hover-color: #2a2a2a;
+    --question-color: #7ba5ff;
+    --answer-color: #6cffa2;
 }
 
 * {

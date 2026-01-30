@@ -1,29 +1,40 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isAxiosError } from 'axios';
-import {
-    ButtonComponent,
-    InputComponent,
-    TagsInputComponent,
-} from '@components/index';
-import { AddButton } from '@components/add-button-component/AddButton';
-import { ListComponent } from '@components/list-component/ListComponent';
-import { SearchComponent } from '@components/search-component/SearchComponent';
-import { NotificationContainer } from '@components/notification-container/NotificationContainer';
-import styles from './VerificationCreateView.module.css';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-    verificationSchema,
-    type VerificationFormData,
-} from '../schemas/verificationSchema';
-import type { Tag } from '@components/input-tags-component/TagsInputComponent';
+import { useExcel } from '@/hooks/useExcel';
 import { useNotification } from '@/hooks/useNotification';
+import type { Verification } from '@/interfaces/Verification';
 import {
+    createMultipleVerifications,
     createVerification,
     deleteVerification,
     getVerifications,
 } from '@/pages/verifications/service/verifications.service';
-import type { Verification } from '@/interfaces/Verification';
+import { AddButton } from '@components/add-button-component/AddButton';
+import {
+    ButtonComponent,
+    InputComponent,
+    ModalComponent,
+    TagsInputComponent,
+} from '@components/index';
+import type { Tag } from '@components/input-tags-component/TagsInputComponent';
+import { ListComponent } from '@components/list-component/ListComponent';
+import { NotificationContainer } from '@components/notification-container/NotificationContainer';
+import { SearchComponent } from '@components/search-component/SearchComponent';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { isAxiosError } from 'axios';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import xlsx from 'xlsx';
+import {
+    verificationSchema,
+    type VerificationFormData,
+} from '../schemas/verificationSchema';
+import styles from './VerificationCreateView.module.css';
+import { normalizeRow } from '../utils/normalize-text';
+import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
+
+interface CustomSheet {
+    sheet: xlsx.WorkSheet;
+    file: File;
+}
 
 const getErrorMessage = (error: unknown): string => {
     if (isAxiosError(error)) {
@@ -69,17 +80,48 @@ export const VerificationCreateView = () => {
     const [verifications, setVerifications] = useState<Verification[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [modal, setModal] = useState<boolean>(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [selectedVerificationId, setSelectedVerificationId] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [tagsInputKey, setTagsInputKey] = useState(0);
+    const [isReloading, setIsReloading] = useState(false);
     const [isMobile, setIsMobile] = useState<boolean>(() => {
         if (typeof window === 'undefined') {
             return false;
         }
         return window.innerWidth <= 768;
     });
+    const [sheet, setSheet] = useState<CustomSheet>({
+        sheet: {} as xlsx.WorkSheet,
+        file: {} as File,
+    });
     const searchWrapperRef = useRef<HTMLDivElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const columns = {
+        title: 'Titulo',
+        summary: 'Resumen',
+        body: 'Cuerpo',
+        classified_as: 'Clasificación',
+        section_url: 'URL de la Sección',
+        url: 'URL de la Fuente',
+        publication_date: 'Fecha de Publicación',
+        tags: 'Etiquetas',
+    };
+
+    const { data, message } = useExcel(sheet.sheet, columns);
+
+    useEffect(() => {
+        if (message) {
+            addNotification(message, 'success');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [message]);
+
+    const processedData = data.map((row) =>
+        normalizeRow(row as Record<string, string>)
+    );
 
     const { notifications, addNotification, removeNotification } =
         useNotification();
@@ -228,6 +270,69 @@ export const VerificationCreateView = () => {
         }
     };
 
+    const handleUpload = (file: File) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target?.result as ArrayBuffer);
+            const workbook = xlsx.read(data, { type: 'array' });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            setSheet({ sheet: worksheet, file });
+        };
+
+        reader.readAsArrayBuffer(file);
+        setModal(true);
+    };
+
+    const uploadData = async () => {
+        if (!data || data.length === 0) return;
+        try {
+            const mappedData = (data as Record<string, string>[]).map(
+                (row) => ({
+                    title: row['Titulo'] || '',
+                    summary: row['Resumen'] || '',
+                    body: row['Cuerpo'] || '',
+                    classified_as: row['Clasificación'] || '',
+                    section_url: row['URL de la Sección'] || '',
+                    url: row['URL de la Fuente'] || '',
+                    publication_date: row['Fecha de Publicación'] || '',
+                    tags: row['Etiquetas']
+                        ? row['Etiquetas']
+                              .split(/\s*,\s*/)
+                              .map((chunk: string) => {
+                                  const [name, rawUrl] = chunk
+                                      .split('|')
+                                      .map((v) => v.trim());
+                                  if (!name) return null;
+                                  const url =
+                                      rawUrl && !rawUrl.startsWith('http')
+                                          ? `https://${rawUrl}`
+                                          : rawUrl;
+                                  return { name, ...(url ? { url } : {}) };
+                              })
+                              .filter(Boolean)
+                        : [],
+                })
+            );
+            await createMultipleVerifications(
+                mappedData as unknown as Verification[]
+            );
+            addNotification(
+                'Verificaciones agregadas desde Excel correctamente',
+                'success'
+            );
+        } catch (error) {
+            addNotification(
+                'Error al agregar verificaciones desde Excel',
+                'error'
+            );
+            console.error(error);
+        } finally {
+            setSheet({ sheet: {} as xlsx.WorkSheet, file: {} as File });
+            setModal(false);
+        }
+    };
+
     const handleDelete = async () => {
         if (!selectedVerificationId) {
             addNotification(
@@ -257,10 +362,91 @@ export const VerificationCreateView = () => {
         }
     };
 
+    const reloadVerifications = async () => {
+        try {
+            setIsReloading(true);
+            const response = await getVerifications();
+            setVerifications(response);
+        } finally {
+            setIsReloading(false);
+        }
+    };
+
     const shouldShowForm = isMobile ? showForm : true;
 
     return (
         <div className={styles.container}>
+            <div className={styles.uploadButton}>
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".xlsx,.xls,.csv"
+                    className={styles.fileInput}
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUpload(file);
+                    }}
+                />
+                <ButtonComponent
+                    light
+                    label="Subir Excel"
+                    onClick={() => {
+                        fileInputRef.current?.click();
+                    }}
+                />
+            </div>
+            {modal && (
+                <ModalComponent
+                    isOpen={modal}
+                    Accept={() => uploadData()}
+                    children={
+                        <div>
+                            <h2>Confirmar subida de archivo</h2>
+                            <p>
+                                ¿Estás seguro de que deseas subir el archivo{' '}
+                                <span className={styles.fileName}>
+                                    {sheet?.file.name}
+                                </span>{' '}
+                                al sistema desde Excel? Se agregarán las
+                                siguientes verificaciones:{' '}
+                            </p>
+                            <ol className={styles.previewList}>
+                                {processedData.map((row, index) => (
+                                    <li key={index}>
+                                        <strong
+                                            className={styles.previewLabelTitle}
+                                        >
+                                            Título:
+                                        </strong>{' '}
+                                        {
+                                            (row as Record<string, string>)[
+                                                'Titulo'
+                                            ]
+                                        }{' '}
+                                        <br />
+                                        <strong
+                                            className={
+                                                styles.previewLabelAnswer
+                                            }
+                                        >
+                                            Resumen:
+                                        </strong>{' '}
+                                        {
+                                            (row as Record<string, string>)[
+                                                'Resumen'
+                                            ]
+                                        }{' '}
+                                        <hr className={styles.QuestionLine} />
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    }
+                    onClose={() => {
+                        setModal(false);
+                    }}
+                />
+            )}
             <NotificationContainer
                 notifications={notifications}
                 onClose={removeNotification}
@@ -387,13 +573,26 @@ export const VerificationCreateView = () => {
                 {!showForm && (
                     <div className={styles.listContainer}>
                         <div ref={searchWrapperRef}>
-                            <SearchComponent
-                                data={filteredVerifications.map((v) => ({
-                                    name: `${v.title} - ${v.classified_as}`,
-                                }))}
-                                searchKeys={['name']}
-                                hasDropdown={true}
-                            />
+                            <div className={styles.listHeader}>
+                                <SearchComponent
+                                    data={filteredVerifications.map((v) => ({
+                                        name: `${v.title} - ${v.classified_as}`,
+                                    }))}
+                                    searchKeys={['name']}
+                                    hasDropdown={true}
+                                />
+                                <ButtonComponent
+                                    onlyIcon
+                                    onClick={reloadVerifications}
+                                    children={
+                                        <ReloadIcon
+                                            className={`${styles.reloadIcon} ${
+                                                isReloading ? styles.spin : ''
+                                            }`}
+                                        />
+                                    }
+                                />
+                            </div>
                         </div>
                         <div className={styles.listActions}>
                             <label className={styles.selectLabel}>

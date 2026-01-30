@@ -8,11 +8,13 @@ import {
     ButtonComponent,
     InputComponent,
     ListComponent,
+    ModalComponent,
     SearchComponent,
 } from '@/components';
 
 import style from './QuestionsAnswers.module.css';
 import {
+    createMultipleQuestionsAnswers,
     createQuestionAnswer,
     deleteQuestionAnswer,
     getQuestionsAnswers,
@@ -23,6 +25,13 @@ import { NotificationComponent } from '@/components/notification-component/Notif
 import { useNotification } from '@/hooks/useNotification';
 import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
 import xlsx from 'xlsx';
+import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
+import { normalizeRow } from '../verifications/utils/normalize-text';
+
+interface CustomSheet {
+    sheet: xlsx.WorkSheet;
+    file: File;
+}
 
 export const QuestionsAnswers = () => {
     const [showForm, setShowForm] = useState(false);
@@ -30,15 +39,69 @@ export const QuestionsAnswers = () => {
     const [questionsAnswers, setQuestionsAnswers] = useState<
         IQuestionsAndAnswers[]
     >([]);
-    const [sheet, setSheet] = useState<xlsx.WorkSheet | null>(null);
+    const [sheet, setSheet] = useState<CustomSheet>({
+        sheet: {} as xlsx.WorkSheet,
+        file: {} as File,
+    });
+    const [modal, setModal] = useState<boolean>(false);
+    const [isReloading, setIsReloading] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { notifications, addNotification, removeNotification } =
         useNotification();
 
-    const { data } = useExcel(sheet, ['question', 'answer'], () => {
-        addNotification('Archivo Excel procesado correctamente', 'success');
-    });
+    const columns = {
+        question: 'preguntas',
+        answer: 'respuestas',
+    };
+    const { data, message } = useExcel(sheet.sheet, columns);
+
+    useEffect(() => {
+        if (message) {
+            addNotification(message, 'success');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [message]);
+
+    const processedData = data.map((row) =>
+        normalizeRow(row as Record<string, string>)
+    );
+
+    const uploadData = async () => {
+        if (!data || data.length === 0) return;
+        try {
+            const transformedData: IQuestionsAndAnswers[] = data.map(
+                (row: Record<string, string>) => ({
+                    question: row['preguntas'],
+                    answer: row['respuestas'],
+                })
+            );
+            await createMultipleQuestionsAnswers(transformedData);
+            addNotification(
+                'Preguntas y respuestas agregadas desde Excel correctamente',
+                'success'
+            );
+        } catch (error) {
+            addNotification(
+                'Error al agregar preguntas y respuestas desde Excel',
+                'error'
+            );
+            console.error(error);
+        } finally {
+            setSheet({ sheet: {} as xlsx.WorkSheet, file: {} as File });
+            setModal(false);
+        }
+    };
+
+    const reloadQuestions = async () => {
+        try {
+            setIsReloading(true);
+            const response = await getQuestionsAnswers();
+            setQuestionsAnswers(response);
+        } finally {
+            setIsReloading(false);
+        }
+    };
 
     const {
         register,
@@ -61,11 +124,7 @@ export const QuestionsAnswers = () => {
     );
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await getQuestionsAnswers();
-            setQuestionsAnswers(response);
-        };
-        fetchData();
+        reloadQuestions();
     }, []);
 
     const handleAddCandidate = async (question: IQuestionsAndAnswers) => {
@@ -117,14 +176,67 @@ export const QuestionsAnswers = () => {
             const data = new Uint8Array(e.target?.result as ArrayBuffer);
             const workbook = xlsx.read(data, { type: 'array' });
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            setSheet(worksheet);
+            setSheet({ sheet: worksheet, file });
         };
 
         reader.readAsArrayBuffer(file);
+        setModal(true);
     };
 
     return (
         <div className={style.container}>
+            {modal && (
+                <ModalComponent
+                    isOpen={modal}
+                    Accept={() => uploadData()}
+                    children={
+                        <div>
+                            <h2>Confirmar subida de archivo</h2>
+                            <p>
+                                ¿Estás seguro de que deseas subir el archivo{' '}
+                                <span className={style.fileName}>
+                                    {sheet?.file.name}
+                                </span>{' '}
+                                al sistema desde Excel? Se agregarán las
+                                siguientes preguntas y respuestas:{' '}
+                            </p>
+                            <ol className={style.previewList}>
+                                {processedData.map((row, index) => (
+                                    <li key={index}>
+                                        <strong
+                                            className={
+                                                style.previewLabelQuestion
+                                            }
+                                        >
+                                            Pregunta:
+                                        </strong>{' '}
+                                        {
+                                            (row as Record<string, string>)[
+                                                'preguntas'
+                                            ]
+                                        }{' '}
+                                        <br />
+                                        <strong
+                                            className={style.previewLabelAnswer}
+                                        >
+                                            Respuesta:
+                                        </strong>{' '}
+                                        {
+                                            (row as Record<string, string>)[
+                                                'respuestas'
+                                            ]
+                                        }{' '}
+                                        <hr className={style.QuestionLine} />
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    }
+                    onClose={() => {
+                        setModal(false);
+                    }}
+                />
+            )}
             {/* 🔔 Contenedor de notificaciones */}
             <div
                 style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999 }}
@@ -145,7 +257,7 @@ export const QuestionsAnswers = () => {
                 <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".xlsx,.xls"
+                    accept=".xlsx,.xls,.csv"
                     className={style.fileInput}
                     onChange={(e) => {
                         const file = e.target.files?.[0];
@@ -235,13 +347,26 @@ export const QuestionsAnswers = () => {
 
                 {!showForm && (
                     <div className={style.listContainer}>
-                        <SearchComponent
-                            data={items.map((question) => ({
-                                label: question,
-                            }))}
-                            searchKeys={['label']}
-                            hasDropdown
-                        />
+                        <div className={style.listHeader}>
+                            <SearchComponent
+                                data={items.map((question) => ({
+                                    label: question,
+                                }))}
+                                searchKeys={['label']}
+                                hasDropdown
+                            />
+                            <ButtonComponent
+                                onlyIcon
+                                onClick={reloadQuestions}
+                                children={
+                                    <ReloadIcon
+                                        className={`${style.reloadIcon} ${
+                                            isReloading ? style.spin : ''
+                                        }`}
+                                    />
+                                }
+                            />
+                        </div>
                         <ListComponent
                             items={items.map((question) => ({
                                 label: question,
