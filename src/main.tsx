@@ -5,6 +5,7 @@ import {
     PartiesView,
     VerificationCreateView,
 } from '@pages/index';
+import { PartiesCreateView } from './pages/parties/create-view/PartiesCreateView';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
                         children: [
                             { index: true, element: <EmptyComponent /> },
                             { path: 'candidacies', element: <PartiesView /> },
+                            {
+                                path: 'candidacies/create',
+                                element: <PartiesCreateView />,
+                            },
                             {
                                 path: 'candidacies/candidates/:partyName/:partyId',
                                 element: <CandidatesView />,
