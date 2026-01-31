@@ -37,6 +37,14 @@ const getErrorMessage = (error: unknown): string => {
     return error instanceof Error ? error.message : 'Error inesperado';
 };
 
+const generateObjectId = () => {
+    const timestamp = Math.floor(Date.now() / 1000).toString(16);
+    const random = 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
+        ((Math.random() * 16) | 0).toString(16)
+    );
+    return (timestamp + random).toLowerCase();
+};
+
 export const PartiesCreateView = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,7 +107,7 @@ export const PartiesCreateView = () => {
                 },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: data.government_plan,
-                election_id: data.election_id || crypto.randomUUID(),
+                election_id: data.election_id || generateObjectId(),
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
@@ -133,7 +141,7 @@ export const PartiesCreateView = () => {
         if (!excelData || excelData.length === 0) return;
         try {
 
-            const batchElectionId = crypto.randomUUID();
+            const batchElectionId = generateObjectId();
             const payloads = excelData.map((row) => ({
                 party: {
                     name: row['Nombre'],
