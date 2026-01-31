@@ -1,6 +1,6 @@
 import { useExcel } from '@/hooks/useExcel';
 import { useNotification } from '@/hooks/useNotification';
-import { CandidacyStatus, type IPoliticalParty } from '@/interfaces/Candidacies';
+import { CandidacyStatus } from '@/interfaces/Candidacies';
 import {
     ButtonComponent,
     InputComponent,
@@ -100,7 +100,11 @@ export const PartiesCreateView = () => {
                 status: CandidacyStatus.ACTIVE,
                 government_plan: data.government_plan,
                 election_id: data.election_id,
-                candidates: [],
+                candidates: [{
+                    full_name: 'Representante',
+                    position: 'Por definir',
+                    isActive: true
+                }],
             };
             await createCandidacy(payload);
             addNotification('Partido creado correctamente.', 'success');
@@ -128,157 +132,148 @@ export const PartiesCreateView = () => {
     const uploadData = async () => {
         if (!excelData || excelData.length === 0) return;
         try {
-            const mappedData = excelData.map((row) => ({
-                name: row['Nombre'],
-                sigla: row['Sigla'],
-                description: row['Descripción'],
-                logoUrl: row['Logo URL'],
-                founded: row['Fundación'],
-            }),
+
+            const payloads = excelData.map((row) => ({
+                party: {
+                    name: row['Nombre'],
+                    sigla: row['Sigla'],
+                    description: row['Descripción'],
+                    logoUrl: row['Logo URL'],
+                    founded: row['Fundación'],
+                },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: row['Plan de Gobierno'] || '',
                 election_id: row['ID Elección'] || '',
-                candidates: [],
-            };
+                candidates: [{
+                    full_name: 'Representante',
+                    position: 'Por definir',
+                    isActive: true
+                }],
+            }));
 
-        const payloads = excelData.map((row) => ({
-            party: {
-                name: row['Nombre'],
-                sigla: row['Sigla'],
-                description: row['Descripción'],
-                logoUrl: row['Logo URL'],
-                founded: row['Fundación'],
-            },
-            status: CandidacyStatus.ACTIVE,
-            government_plan: row['Plan de Gobierno'] || '',
-            election_id: row['ID Elección'] || '',
-            candidates: [],
-        }));
+            await createMultipleCandidacies(payloads);
+            addNotification('Partidos cargados desde Excel correctamente', 'success');
+            setModal(false);
+            setSheet({ sheet: {} as xlsx.WorkSheet, file: {} as File });
+            navigate(-1);
+        } catch (error) {
+            addNotification('Error al cargar Excel', 'error');
+            console.error(error);
+        }
+    };
 
-        // Filter out rows without election_id if strict, or let backend error
-        await createMultipleCandidacies(payloads);
-        addNotification('Partidos cargados desde Excel correctamente', 'success');
-        setModal(false);
-        setSheet({ sheet: {} as xlsx.WorkSheet, file: {} as File });
-        navigate(-1);
-    } catch (error) {
-        addNotification('Error al cargar Excel', 'error');
-        console.error(error);
-    }
-};
-
-return (
-    <div className={style.container}>
-        <ButtonComponent onClick={() => navigate(-1)} type="button" onlyIcon>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <p>Volver</p>
-            </div>
-        </ButtonComponent>
-        <div className={style.header}>
-            <h1>Crear Nuevo Partido</h1>
-            <div className={style.uploadButton}>
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".xlsx,.xls,.csv"
-                    className={style.fileInput}
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleUpload(file);
-                    }}
-                />
-                <ButtonComponent
-                    light
-                    label="Subir Excel"
-                    onClick={() => fileInputRef.current?.click()}
-                />
-            </div>
-        </div>
-
-        {modal && (
-            <ModalComponent
-                isOpen={modal}
-                Accept={uploadData}
-                onClose={() => setModal(false)}
-            >
-                <div>
-                    <h2>Confirmar carga</h2>
-                    <p>Se cargarán {excelData.length} partidos desde {sheet.file.name}</p>
+    return (
+        <div className={style.container}>
+            <ButtonComponent onClick={() => navigate(-1)} type="button" onlyIcon>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <p>Volver</p>
                 </div>
-            </ModalComponent>
-        )}
-
-        <NotificationContainer
-            notifications={notifications}
-            onClose={removeNotification}
-        />
-
-        <form className={style.form}>
-            <InputComponent
-                label="Nombre"
-                type="text"
-                value={watch('name') || ''}
-                validationProps={register('name')}
-                onClear={() => resetField('name')}
-                errors={errors.name}
-            />
-            <InputComponent
-                label="Sigla"
-                type="text"
-                value={watch('sigla') || ''}
-                validationProps={register('sigla')}
-                onClear={() => resetField('sigla')}
-                errors={errors.sigla}
-            />
-            <InputComponent
-                label="Descripción"
-                type="text"
-                value={watch('description') || ''}
-                validationProps={register('description')}
-                onClear={() => resetField('description')}
-                errors={errors.description}
-            />
-            <InputComponent
-                label="Logo URL"
-                type="text"
-                value={watch('logoUrl') || ''}
-                validationProps={register('logoUrl')}
-                onClear={() => resetField('logoUrl')}
-                errors={errors.logoUrl}
-            />
-            <InputComponent
-                label="Fundación"
-                type="text"
-                value={watch('founded') || ''}
-                validationProps={register('founded')}
-                onClear={() => resetField('founded')}
-                errors={errors.founded}
-            />
-            <InputComponent
-                label="ID Elección"
-                type="text"
-                value={watch('election_id') || ''}
-                validationProps={register('election_id')}
-                onClear={() => resetField('election_id')}
-                errors={errors.election_id}
-            />
-            <InputComponent
-                label="Plan de Gobierno"
-                type="text"
-                value={watch('government_plan') || ''}
-                validationProps={register('government_plan')}
-                onClear={() => resetField('government_plan')}
-                errors={errors.government_plan}
-            />
-
-            <div className={style.buttonContainer}>
-                <ButtonComponent
-                    label={isSubmitting ? 'Guardando...' : 'Guardar Partido'}
-                    onClick={handleSubmit(onSubmit)}
-                />
+            </ButtonComponent>
+            <div className={style.header}>
+                <h1>Crear Nuevo Partido</h1>
+                <div className={style.uploadButton}>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".xlsx,.xls,.csv"
+                        className={style.fileInput}
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleUpload(file);
+                        }}
+                    />
+                    <ButtonComponent
+                        light
+                        label="Subir Excel"
+                        onClick={() => fileInputRef.current?.click()}
+                    />
+                </div>
             </div>
-        </form>
-    </div>
-);
+
+            {modal && (
+                <ModalComponent
+                    isOpen={modal}
+                    Accept={uploadData}
+                    onClose={() => setModal(false)}
+                >
+                    <div>
+                        <h2>Confirmar carga</h2>
+                        <p>Se cargarán {excelData.length} partidos desde {sheet.file.name}</p>
+                    </div>
+                </ModalComponent>
+            )}
+
+            <NotificationContainer
+                notifications={notifications}
+                onClose={removeNotification}
+            />
+
+            <form className={style.form}>
+                <InputComponent
+                    label="Nombre"
+                    type="text"
+                    value={watch('name') || ''}
+                    validationProps={register('name')}
+                    onClear={() => resetField('name')}
+                    errors={errors.name}
+                />
+                <InputComponent
+                    label="Sigla"
+                    type="text"
+                    value={watch('sigla') || ''}
+                    validationProps={register('sigla')}
+                    onClear={() => resetField('sigla')}
+                    errors={errors.sigla}
+                />
+                <InputComponent
+                    label="Descripción"
+                    type="text"
+                    value={watch('description') || ''}
+                    validationProps={register('description')}
+                    onClear={() => resetField('description')}
+                    errors={errors.description}
+                />
+                <InputComponent
+                    label="Logo URL"
+                    type="text"
+                    value={watch('logoUrl') || ''}
+                    validationProps={register('logoUrl')}
+                    onClear={() => resetField('logoUrl')}
+                    errors={errors.logoUrl}
+                />
+                <InputComponent
+                    label="Fundación"
+                    type="text"
+                    value={watch('founded') || ''}
+                    validationProps={register('founded')}
+                    onClear={() => resetField('founded')}
+                    errors={errors.founded}
+                />
+                <InputComponent
+                    label="ID Elección"
+                    type="text"
+                    value={watch('election_id') || ''}
+                    validationProps={register('election_id')}
+                    onClear={() => resetField('election_id')}
+                    errors={errors.election_id}
+                />
+                <InputComponent
+                    label="Plan de Gobierno"
+                    type="text"
+                    value={watch('government_plan') || ''}
+                    validationProps={register('government_plan')}
+                    onClear={() => resetField('government_plan')}
+                    errors={errors.government_plan}
+                />
+
+                <div className={style.buttonContainer}>
+                    <ButtonComponent
+                        label={isSubmitting ? 'Guardando...' : 'Guardar Partido'}
+                        onClick={handleSubmit(onSubmit)}
+                    />
+                </div>
+            </form>
+        </div>
+    );
 };
