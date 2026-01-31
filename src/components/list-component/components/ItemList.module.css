@@ -1,7 +1,7 @@
 .item {
-    padding: 10px 20px;
+    padding: var(--theme-spacing-md) var(--theme-spacing-lg);
     display: flex;
-    gap: 1em;
+    gap: var(--theme-spacing-md);
     justify-content: space-between;
-    background-color: var(--white-color);
+    background-color: var(--surface-color);
 }

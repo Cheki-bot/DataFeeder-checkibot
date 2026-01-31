@@ -15,19 +15,19 @@
 .modal {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--theme-spacing-md);
     position: relative;
-    background-color: #2a2a2a;
-    color: var(--white-color);
-    border-radius: 1rem;
-    padding: 2.5rem;
+    background-color: var(--surface-color);
+    color: var(--text-color-light);
+    border-radius: var(--theme-border-radius-lg);
+    padding: var(--theme-spacing-xl);
     max-width: 64rem;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     scrollbar-width: thin;
-    scrollbar-color: #00cfaf #1e1e1e;
+    scrollbar-color: var(--primary-color) var(--surface-color);
 }
 
 .modal::-webkit-scrollbar {
@@ -35,32 +35,32 @@
 }
 
 .modal::-webkit-scrollbar-track {
-    background: #1e1e1e;
-    border-radius: 4px;
+    background: var(--surface-color);
+    border-radius: var(--theme-border-radius-sm);
 }
 
 .modal::-webkit-scrollbar-thumb {
-    background: #00cfaf;
-    border-radius: 4px;
+    background: var(--primary-color);
+    border-radius: var(--theme-border-radius-sm);
 }
 
 .modal::-webkit-scrollbar-thumb:hover {
-    background: #00b39f;
+    background: var(--primary-color-hover);
 }
 
 .closeButton {
     position: absolute;
-    top: 5%;
-    right: 5%;
-    color: var(--white-color);
+    top: var(--theme-spacing-md);
+    right: var(--theme-spacing-md);
+    color: var(--text-color-light);
     font-weight: bold;
     font-size: 1.25rem;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color var(--theme-transitions-normal);
 }
 
 .closeButton:hover {
-    color: #00cfaf;
+    color: var(--primary-color);
 }

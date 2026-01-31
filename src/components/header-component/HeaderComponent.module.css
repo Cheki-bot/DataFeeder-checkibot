@@ -7,11 +7,11 @@
     height: 10vh;
     z-index: 10;
     background-color: var(--background-color);
-    padding: 15px 20px;
+    padding: var(--theme-spacing-md) var(--theme-spacing-lg);
     align-items: center;
     justify-content: space-between;
-    font-size: small;
-    border-bottom: 1px solid var(--gray-color);
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border, var(--gray-color));
 }
 
 .simpleHeader {
@@ -22,35 +22,36 @@
     width: 100%;
     z-index: 10;
     background-color: var(--background-color);
-    border-bottom: solid 1px var(--light-gray-color);
-    padding: 15px 20px;
+    border-bottom: solid 1px var(--border, var(--gray-color));
+    padding: var(--theme-spacing-md) var(--theme-spacing-lg);
     display: flex;
     align-items: center;
-    font-size: small;
+    font-size: 0.875rem;
 }
 
 .title {
     color: var(--primary-color);
-    font-size: 1.5em;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .nav {
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap: 15px;
+    gap: var(--theme-spacing-md);
 }
 
 @media screen and (max-width: 768px) {
     .title {
-        font-size: 1.2em;
+        font-size: 1.25rem;
     }
 
     .simpleHeader {
-        padding: 10px 15px;
+        padding: var(--theme-spacing-sm) var(--theme-spacing-md);
     }
 
     .header {
-        padding: 10px 15px;
+        padding: var(--theme-spacing-sm) var(--theme-spacing-md);
     }
 }

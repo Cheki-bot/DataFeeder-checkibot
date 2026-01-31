@@ -3,47 +3,156 @@
     flex-direction: column;
     flex-wrap: wrap;
     width: 25vw;
-    height: 100%;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 20px;
-    gap: 20px;
+    height: calc(100vh - 10vh);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    gap: var(--theme-spacing-xl);
     border-right: 1px solid var(--gray-color);
+    background-color: var(--background-color);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scrollbar personalizada */
+.container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: var(--gray-color);
+    border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
 }
 
 .cardContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding-left: 20px;
+    gap: var(--theme-spacing-md);
+    padding-left: var(--theme-spacing-md);
     cursor: pointer;
 }
 
-.optionCard:hover {
-    background-color: var(--hover-color);
+/* Título de sección */
+.container h2 {
+    color: var(--text-color-light);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: var(--theme-spacing-md);
+    border-bottom: 1px solid var(--gray-color);
+    margin-bottom: var(--theme-spacing-lg);
 }
 
+/* Tarjetas de categorías */
 .optionCard {
-    padding: 10px;
-    border: 0.5px solid var(--gray-color-20);
-    border-left: 2px solid var(--white-color);
-    border-radius: 8px;
+    padding: var(--theme-spacing-lg);
+    border: 1px solid var(--gray-color-20);
+    border-left: 3px solid var(--white-color);
+    border-radius: var(--theme-border-radius-lg);
+    background-color: var(--surface-color, var(--background-color));
+    transition: all var(--theme-transitions-normal);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.optionCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-color);
+    opacity: 0;
+    transition: opacity var(--theme-transitions-normal);
 }
 
 .optionCard:hover {
-    border-left: 2px solid var(--primary-color);
     background-color: var(--hover-color);
+    border-color: var(--primary-color);
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
+}
+
+.optionCard:hover::before {
+    opacity: 1;
 }
 
 .optionCard:active {
-    transform: translate(2px, 0px);
+    transform: translateX(2px);
 }
 
-
+/* Estado seleccionado */
 .optionCardSelected {
-    padding: 10px;
-    border: 0.5px solid var(--gray-color-20);
-    border-left: 2px solid var(--primary-color);
-    border-radius: 8px;
+    padding: var(--theme-spacing-lg);
+    border: 1px solid var(--gray-color-20);
+    border-left: 3px solid var(--primary-color);
+    border-radius: var(--theme-border-radius-lg);
     background-color: var(--hover-color);
+    box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
+    transition: all var(--theme-transitions-normal);
+}
+
+.optionCardSelected::before {
+    opacity: 1;
+}
+
+/* Títulos y descripciones */
+.optionCardTitle {
+    color: var(--text-color-light);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 var(--theme-spacing-sm) 0;
+    transition: color var(--theme-transitions-fast);
+}
+
+.optionCardDescription {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+    transition: color var(--theme-transitions-fast);
+}
+
+/* Hover en elementos seleccionados */
+.optionCardSelected .optionCardTitle,
+.optionCardSelected .optionCardDescription {
+    color: var(--text-color-light);
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 20vw;
+        padding: var(--theme-spacing-md) var(--theme-spacing-lg);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-color);
+        padding: var(--theme-spacing-md);
+    }
+
+    .cardContainer {
+        padding-left: 0;
+    }
+
+    .container h2 {
+        display: none;
+    }
+
+    .optionCard {
+        padding: var(--theme-spacing-md);
+    }
 }

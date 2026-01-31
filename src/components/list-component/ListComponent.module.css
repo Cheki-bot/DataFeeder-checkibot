@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: var(--theme-spacing-md);
     width: 100%;
     box-sizing: border-box;
 }
@@ -13,10 +13,10 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    border: 1px solid #ccc;
-    background-color: var(--light-gray-color);
-    color: var(--text-color-dark);
-    gap: 1px;
+    border: 1px solid var(--border, var(--gray-color-20));
+    background-color: var(--surface-color);
+    color: var(--text-color-light);
+    gap: var(--theme-spacing-xs);
     width: 100%;
     overflow-y: auto;
     max-height: 300px;
