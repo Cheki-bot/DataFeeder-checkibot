@@ -3,9 +3,9 @@ import {
     CalendarListView,
     LoginView,
     PartiesView,
+    PartiesCreateView,
     VerificationCreateView,
 } from '@pages/index';
-import { PartiesCreateView } from './pages/parties/create-view/PartiesCreateView';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';

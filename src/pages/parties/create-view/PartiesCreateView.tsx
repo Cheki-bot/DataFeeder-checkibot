@@ -1,7 +1,6 @@
 import { useExcel } from '@/hooks/useExcel';
 import { useNotification } from '@/hooks/useNotification';
 import type { IPoliticalParty } from '@/interfaces/Candidacies';
-import { AddButton } from '@/components/add-button-component/AddButton';
 import {
     ButtonComponent,
     InputComponent,

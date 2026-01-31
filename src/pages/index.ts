@@ -2,6 +2,7 @@ export * from './auth/login-view/LoginView';
 export * from './auth/register-view/SignUpView';
 export * from './verifications/create-view/VerificationCreateView';
 export * from './parties/PartiesView';
+export * from './parties/create-view/PartiesCreateView';
 export * from './calendars/list-view/CalendarListView';
 export * from './calendars/detail-view/CalendarDetailView';
 export * from './calendar-events/CalendarEventsView';
