@@ -11,7 +11,7 @@
 
 .arrow {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--text-secondary, var(--gray-color));
 }
 
 .disabled {
@@ -22,51 +22,51 @@
 
 .label {
     position: absolute;
-    left: 1rem;
+    left: var(--theme-spacing-md);
     top: 50%;
     transform: translateY(-50%);
     font-size: 1rem;
-    color: var(--gray-color, #888);
+    color: var(--text-secondary, var(--gray-color));
     pointer-events: none;
-    transition: all 0.2s ease;
+    transition: all var(--theme-transitions-fast);
 }
 
 .label:focus {
     outline: none;
-    background-color: aqua;
+    background-color: var(--primary-color);
     transform: translate(0, -2px);
-    transition: all 0.3s ease;
+    transition: all var(--theme-transitions-normal);
 }
 
 .menu {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + var(--theme-spacing-xs));
     left: 0;
     width: 100%;
-    background-color: var(--white-color, #fff);
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: var(--surface-color);
+    border: 1px solid var(--border, var(--gray-color-20));
+    border-radius: var(--theme-border-radius-md);
+    box-shadow: 0 8px 16px var(--shadow-color);
     list-style: none;
     margin: 0;
     padding: 0;
     z-index: 10;
-    animation: fadeIn 0.15s ease-out;
+    animation: fadeIn var(--theme-transitions-fast);
 }
 
 .option {
-    padding: 0.5rem 0.75rem;
+    padding: var(--theme-spacing-sm) var(--theme-spacing-md);
     font-size: 1rem;
-    color: var(--text-color-dark, #333);
-    border-bottom: 1px solid var(--border-color, #eee);
+    color: var(--text-color-light);
+    border-bottom: 1px solid var(--border, var(--gray-color-20));
     cursor: pointer;
     transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
+        background-color var(--theme-transitions-fast),
+        color var(--theme-transitions-fast);
 }
 
 .option:hover {
-    background-color: #f2f2f2;
+    background-color: var(--hover-color);
 }
 
 .option:last-child {
@@ -77,20 +77,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 var(--theme-spacing-md);
     width: 100%;
     height: 100%;
     min-height: 50px;
     cursor: pointer;
     transition:
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
+        border-color var(--theme-transitions-normal),
+        box-shadow var(--theme-transitions-normal);
     border: none;
     outline: none;
     font-size: 1rem;
-    border-radius: 8px;
-    background-color: var(--white-color);
-    color: var(--text-color-dark);
+    border-radius: var(--theme-border-radius-md);
+    background-color: var(--surface-color);
+    color: var(--text-color-light);
 }
 
 .selected {
@@ -98,16 +98,16 @@
 }
 
 .select option:hover {
-    background-color: #f2f2f2;
+    background-color: var(--hover-color);
 }
 
 .select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 207, 175, 0.2);
 }
 
 .select:hover {
-    border-color: #888;
+    border-color: var(--gray-color);
 }
 
 .selectComponent {
@@ -118,9 +118,9 @@
 
 .selectComponent::after {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--text-secondary, var(--gray-color));
     position: absolute;
-    right: 12px;
+    right: var(--theme-spacing-md);
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
@@ -128,10 +128,10 @@
 
 .selectWrapper {
     position: relative;
-    background-color: var(--white-color);
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border, var(--gray-color-20));
+    border-radius: var(--theme-border-radius-md);
+    transition: all var(--theme-transitions-normal);
     min-height: 50px;
     display: flex;
     align-items: center;

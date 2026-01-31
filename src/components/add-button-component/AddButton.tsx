@@ -11,7 +11,7 @@ export const AddButton = ({ onClick }: AddButtonProps) => {
     return (
         <div className={style.addButton} onClick={onClick}>
             <ButtonComponent onlyIcon>
-                <PlusIcon stroke='white'/>
+                <PlusIcon stroke="white" />
             </ButtonComponent>
         </div>
     );

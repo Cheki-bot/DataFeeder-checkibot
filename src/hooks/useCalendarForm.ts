@@ -1,6 +1,13 @@
 import { useReducer, useCallback } from 'react';
-import type { CreateElectoralCalendarData, UpdateElectoralCalendarData } from '@/interfaces/Calendar';
-import { createCalendar, updateCalendar, getCalendarById } from '@/services/calendar.service';
+import type {
+    CreateElectoralCalendarData,
+    UpdateElectoralCalendarData,
+} from '@/interfaces/Calendar';
+import {
+    createCalendar,
+    updateCalendar,
+    getCalendarById,
+} from '@/services/calendar.service';
 
 interface CalendarFormData {
     title: string;
@@ -23,9 +30,15 @@ interface CalendarFormState {
 
 type CalendarFormAction =
     | { type: 'OPEN_CREATE_MODAL' }
-    | { type: 'OPEN_EDIT_MODAL'; payload: { id: string; data: CalendarFormData } }
+    | {
+          type: 'OPEN_EDIT_MODAL';
+          payload: { id: string; data: CalendarFormData };
+      }
     | { type: 'CLOSE_MODAL' }
-    | { type: 'UPDATE_FIELD'; payload: { field: keyof CalendarFormData; value: string } }
+    | {
+          type: 'UPDATE_FIELD';
+          payload: { field: keyof CalendarFormData; value: string };
+      }
     | { type: 'SET_CREATING'; payload: boolean }
     | { type: 'SET_UPDATING'; payload: boolean }
     | { type: 'SET_ERROR'; payload: string | null }
@@ -39,7 +52,7 @@ interface UseCalendarFormReturn {
     updating: boolean;
     editingCalendarId: string | null;
     error: string | null;
-    
+
     openCreateModal: () => void;
     openEditModal: (calendarId: string) => Promise<void>;
     closeModal: () => void;
@@ -68,7 +81,10 @@ const initialState: CalendarFormState = {
     error: null,
 };
 
-function calendarFormReducer(state: CalendarFormState, action: CalendarFormAction): CalendarFormState {
+function calendarFormReducer(
+    state: CalendarFormState,
+    action: CalendarFormAction
+): CalendarFormState {
     switch (action.type) {
         case 'OPEN_CREATE_MODAL':
             return {
@@ -78,7 +94,7 @@ function calendarFormReducer(state: CalendarFormState, action: CalendarFormActio
                 showEditModal: false,
                 error: null,
             };
-        
+
         case 'OPEN_EDIT_MODAL':
             return {
                 ...state,
@@ -88,7 +104,7 @@ function calendarFormReducer(state: CalendarFormState, action: CalendarFormActio
                 showEditModal: true,
                 error: null,
             };
-        
+
         case 'CLOSE_MODAL':
             return {
                 ...state,
@@ -98,7 +114,7 @@ function calendarFormReducer(state: CalendarFormState, action: CalendarFormActio
                 editingCalendarId: null,
                 error: null,
             };
-        
+
         case 'UPDATE_FIELD':
             return {
                 ...state,
@@ -107,43 +123,48 @@ function calendarFormReducer(state: CalendarFormState, action: CalendarFormActio
                     [action.payload.field]: action.payload.value,
                 },
             };
-        
+
         case 'SET_CREATING':
             return {
                 ...state,
                 creating: action.payload,
             };
-        
+
         case 'SET_UPDATING':
             return {
                 ...state,
                 updating: action.payload,
             };
-        
+
         case 'SET_ERROR':
             return {
                 ...state,
                 error: action.payload,
             };
-        
+
         case 'RESET_FORM':
             return {
                 ...state,
                 data: initialFormData,
                 error: null,
             };
-        
+
         default:
             return state;
     }
 }
 
-export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn => {
+export const useCalendarForm = (
+    onSuccess?: () => void
+): UseCalendarFormReturn => {
     const [state, dispatch] = useReducer(calendarFormReducer, initialState);
 
-    const updateFormField = useCallback((field: keyof CalendarFormData, value: string) => {
-        dispatch({ type: 'UPDATE_FIELD', payload: { field, value } });
-    }, []);
+    const updateFormField = useCallback(
+        (field: keyof CalendarFormData, value: string) => {
+            dispatch({ type: 'UPDATE_FIELD', payload: { field, value } });
+        },
+        []
+    );
 
     const openCreateModal = useCallback(() => {
         dispatch({ type: 'OPEN_CREATE_MODAL' });
@@ -154,7 +175,7 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
             dispatch({ type: 'SET_ERROR', payload: null });
             const response = await getCalendarById(calendarId);
             const calendar = response.data;
-            
+
             const formData: CalendarFormData = {
                 title: calendar.title,
                 resolution: calendar.resolution,
@@ -163,14 +184,17 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
                 introduction: calendar.introduction || '',
                 electionId: calendar.election_id,
             };
-            
-            dispatch({ 
-                type: 'OPEN_EDIT_MODAL', 
-                payload: { id: calendarId, data: formData } 
+
+            dispatch({
+                type: 'OPEN_EDIT_MODAL',
+                payload: { id: calendarId, data: formData },
             });
         } catch (err) {
             console.error('Error loading calendar:', err);
-            dispatch({ type: 'SET_ERROR', payload: 'Error al cargar el calendario' });
+            dispatch({
+                type: 'SET_ERROR',
+                payload: 'Error al cargar el calendario',
+            });
         }
     }, []);
 
@@ -182,7 +206,7 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
         try {
             dispatch({ type: 'SET_CREATING', payload: true });
             dispatch({ type: 'SET_ERROR', payload: null });
-            
+
             const calendarData: CreateElectoralCalendarData = {
                 title: state.data.title,
                 resolution: state.data.resolution,
@@ -196,13 +220,16 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
 
             await createCalendar(calendarData);
             dispatch({ type: 'CLOSE_MODAL' });
-            
+
             if (onSuccess) {
                 onSuccess();
             }
         } catch (err) {
             console.error('Error creating calendar:', err);
-            dispatch({ type: 'SET_ERROR', payload: 'Error al crear el calendario' });
+            dispatch({
+                type: 'SET_ERROR',
+                payload: 'Error al crear el calendario',
+            });
         } finally {
             dispatch({ type: 'SET_CREATING', payload: false });
         }
@@ -210,11 +237,11 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
 
     const submitEdit = useCallback(async () => {
         if (!state.editingCalendarId) return;
-        
+
         try {
             dispatch({ type: 'SET_UPDATING', payload: true });
             dispatch({ type: 'SET_ERROR', payload: null });
-            
+
             const updateData: UpdateElectoralCalendarData = {
                 title: state.data.title,
                 resolution: state.data.resolution,
@@ -226,13 +253,16 @@ export const useCalendarForm = (onSuccess?: () => void): UseCalendarFormReturn =
 
             await updateCalendar(state.editingCalendarId, updateData);
             dispatch({ type: 'CLOSE_MODAL' });
-            
+
             if (onSuccess) {
                 onSuccess();
             }
         } catch (err) {
             console.error('Error updating calendar:', err);
-            dispatch({ type: 'SET_ERROR', payload: 'Error al actualizar el calendario' });
+            dispatch({
+                type: 'SET_ERROR',
+                payload: 'Error al actualizar el calendario',
+            });
         } finally {
             dispatch({ type: 'SET_UPDATING', payload: false });
         }

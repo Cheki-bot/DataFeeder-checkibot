@@ -32,4 +32,11 @@
     display: flex;
     justify-content: center;
     gap: 1em;
+    color: var(--text-color-light);
+}
+
+.title h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
 }

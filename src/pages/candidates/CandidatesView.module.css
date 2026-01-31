@@ -1,7 +1,7 @@
 .checkboxField {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: var(--theme-spacing-xs);
 }
 
 .container {
@@ -10,30 +10,38 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2em;
-    padding-top: 2em;
+    gap: var(--theme-spacing-xl);
+    padding-top: var(--theme-spacing-xl);
+    color: var(--text-color-light);
 }
 
 .content {
     display: flex;
     align-items: center;
-    gap: 2em;
+    gap: var(--theme-spacing-xl);
     width: 100%;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
+    gap: var(--theme-spacing-lg);
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
+.form h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color-light);
+}
+
 .listContainer {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--theme-spacing-lg);
     width: 100%;
 }
 
@@ -46,27 +54,26 @@
 
 .backButton {
     position: absolute;
-    top: 1em;
+    top: var(--theme-spacing-md);
     display: none;
     flex-direction: column;
     align-self: flex-start;
     background: none;
     border: none;
     color: var(--white-color);
-    font-size: 1em;
+    font-size: 1rem;
     cursor: pointer;
-    margin-bottom: 1em;
-    font-size: 1em;
+    margin-bottom: var(--theme-spacing-md);
 }
 
 .backContent {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: var(--theme-spacing-xs);
 }
 
-.backButtonMain{
-    color: #00cfaf;
+.backButtonMain {
+    color: var(--primary-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -76,8 +83,8 @@
     .content {
         flex-direction: column;
         width: 100%;
-        padding: 1em;
-        font-size: 0.9em;
+        padding: var(--theme-spacing-md);
+        font-size: 0.9rem;
     }
 
     .form {
@@ -85,7 +92,7 @@
     }
 
     .listContainer {
-        padding-inline: 1em;
+        padding-inline: var(--theme-spacing-md);
     }
 
     .backButton {

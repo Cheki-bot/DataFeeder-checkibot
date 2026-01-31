@@ -40,7 +40,7 @@ export const ProfileComponent = () => {
     const handleLogout = () => {
         logout();
     };
-    
+
     return (
         <div className={style.profileComponent}>
             <span onClick={() => setIsMenuOpen(!isMenuOpen)}>Perfil</span>

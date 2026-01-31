@@ -5,10 +5,7 @@ type CustomCheckboxProps = {
     onChange?: (checked: boolean) => void;
 };
 
-export const CustomCheckbox = ({
-    checked,
-    onChange,
-}: CustomCheckboxProps) => {
+export const CustomCheckbox = ({ checked, onChange }: CustomCheckboxProps) => {
     return (
         <label className={style.checkboxContainer}>
             <input

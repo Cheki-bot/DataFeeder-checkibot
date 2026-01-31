@@ -40,7 +40,7 @@ export const CalendarListView = () => {
         openEditModal,
         updateFormField,
         submitCreate,
-        submitEdit
+        submitEdit,
     } = useCalendarForm(fetchCalendars);
 
     useEffect(() => {
@@ -55,31 +55,47 @@ export const CalendarListView = () => {
         }
     }, [location.state, location.pathname, navigate, openEditModal]);
 
-    const handleDelete = useCallback(async (calendarId: string) => {
-        if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
-            return;
-        }
+    const handleDelete = useCallback(
+        async (calendarId: string) => {
+            if (
+                !confirm(
+                    '¿Estás seguro de que deseas eliminar este calendario?'
+                )
+            ) {
+                return;
+            }
 
-        try {
-            await deleteCalendar(calendarId);
-            await fetchCalendars();
-        } catch (err) {
-            console.error('Error deleting calendar:', err);
-            setListError('Error al eliminar el calendario');
-        }
-    }, [fetchCalendars]);
+            try {
+                await deleteCalendar(calendarId);
+                await fetchCalendars();
+            } catch (err) {
+                console.error('Error deleting calendar:', err);
+                setListError('Error al eliminar el calendario');
+            }
+        },
+        [fetchCalendars]
+    );
 
-    const handleNavigateToDetail = useCallback((calendarId: string) => {
-        navigate(`/calendars/${calendarId}`);
-    }, [navigate]);
+    const handleNavigateToDetail = useCallback(
+        (calendarId: string) => {
+            navigate(`/calendars/${calendarId}`);
+        },
+        [navigate]
+    );
 
-    const handleEditCalendar = useCallback((calendarId: string) => {
-        openEditModal(calendarId);
-    }, [openEditModal]);
+    const handleEditCalendar = useCallback(
+        (calendarId: string) => {
+            openEditModal(calendarId);
+        },
+        [openEditModal]
+    );
 
-    const handleDeleteCalendar = useCallback((calendarId: string) => {
-        handleDelete(calendarId);
-    }, [handleDelete]);
+    const handleDeleteCalendar = useCallback(
+        (calendarId: string) => {
+            handleDelete(calendarId);
+        },
+        [handleDelete]
+    );
 
     const handleSubmitCreate = () => {
         submitCreate();
@@ -117,7 +133,9 @@ export const CalendarListView = () => {
     const renderEmptyState = (message: string, isError = false) => (
         <div className={styles.container}>
             <div className={styles.content}>
-                <div className={isError ? styles.error : styles.loading}>{message}</div>
+                <div className={isError ? styles.error : styles.loading}>
+                    {message}
+                </div>
             </div>
         </div>
     );
@@ -140,16 +158,17 @@ export const CalendarListView = () => {
                             key={calendar._id}
                             title={calendar.title}
                             subtitle={calendar.resolution}
-                            description={calendar.introduction || 'Sin descripción'}
-                            detailsModal={() => handleNavigateToDetail(calendar._id)}
+                            description={
+                                calendar.introduction || 'Sin descripción'
+                            }
+                            detailsModal={() =>
+                                handleNavigateToDetail(calendar._id)
+                            }
                             onEdit={() => handleEditCalendar(calendar._id)}
                             onDelete={() => handleDeleteCalendar(calendar._id)}
                         />
                     ))}
-                    <CardComponent
-                        forAddCard
-                        detailsModal={openCreateModal}
-                    />
+                    <CardComponent forAddCard detailsModal={openCreateModal} />
                 </div>
             </div>
 

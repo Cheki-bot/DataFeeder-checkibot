@@ -5,7 +5,7 @@ import { ItemList } from './components/ItemList';
 type Item = {
     label: string;
     subLabel?: string;
-}
+};
 
 type ListComponentProps = {
     items: Item[];
@@ -32,8 +32,8 @@ export const ListComponent = ({
                 (_, index) => checkedItems[index]
             );
             onSelectionChange(selectedItems);
-          }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checkedItems, onSelectionChange]);
 
     return (

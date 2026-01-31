@@ -4,36 +4,37 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2em;
+    gap: var(--theme-spacing-xl);
     height: 100%;
-    color: var(--primary-color);
-    opacity: 0.3;
+    color: var(--text-secondary, var(--gray-color));
+    opacity: 1;
 }
 
 .title {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: var(--theme-spacing-md);
+    color: var(--text-color-light);
 }
 
 .content {
     display: flex;
     align-items: center;
-    gap: 2em;
-    /* width: 100%; */
+    gap: var(--theme-spacing-xl);
 }
 
 .icon {
     position: absolute;
     left: 5%;
     font-size: 4rem;
-    color: var(--secondary-color);
+    color: var(--secondary-color, var(--auxiliary-color));
     opacity: 0.3;
     animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateX(0);
     }
     50% {

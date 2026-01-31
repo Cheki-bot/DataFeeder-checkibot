@@ -54,7 +54,11 @@ const SelectComponent = ({
                 {label && <label className={style.label}>{label}</label>}
 
                 <div className={style.select}>
-                    <span className={!selected ? style.placeholder : style.selected}>
+                    <span
+                        className={
+                            !selected ? style.placeholder : style.selected
+                        }
+                    >
                         {selected}
                     </span>
                     <span className={style.arrow}>{open ? '▲' : '▼'}</span>

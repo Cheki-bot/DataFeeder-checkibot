@@ -51,8 +51,8 @@ export const LoginView = () => {
                         alt="Logo Chequea Bolivia"
                     />
                     <p className={style.imageText}>
-                        Plataforma para la verificación y actualización de datos en
-                        tiempo real para el sistema CheckiBot
+                        Plataforma para la verificación y actualización de datos
+                        en tiempo real para el sistema CheckiBot
                     </p>
                 </span>
             </section>
@@ -79,10 +79,7 @@ export const LoginView = () => {
                             resetField('password');
                         }}
                     />
-                    <ButtonComponent
-                        label="Ingresar"
-                        type='submit'
-                    />
+                    <ButtonComponent label="Ingresar" type="submit" />
                 </form>
             </section>
         </div>

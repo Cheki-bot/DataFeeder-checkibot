@@ -1,43 +1,43 @@
 .error {
-    background-color: #ff6b6b;
-    color: #ffffff;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 16px;
+    background-color: var(--red-color);
+    color: var(--white-color);
+    padding: var(--theme-spacing-md);
+    border-radius: var(--theme-border-radius-sm);
+    margin-bottom: var(--theme-spacing-lg);
     font-size: 14px;
 }
 
 .inputGroup {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: var(--theme-spacing-sm);
+    margin-bottom: var(--theme-spacing-lg);
 }
 
 .inputGroup label {
     font-size: 14px;
     font-weight: 600;
-    color: #b0b0b0;
+    color: var(--text-secondary, var(--gray-color));
 }
 
 .inputGroup input,
 .inputGroup textarea {
-    padding: 12px;
-    border: 1px solid #444;
-    border-radius: 6px;
+    padding: var(--theme-spacing-md);
+    border: 1px solid var(--border, var(--gray-color-20));
+    border-radius: var(--theme-border-radius-sm);
     font-size: 14px;
     font-family: inherit;
-    transition: all 0.2s;
+    transition: all var(--theme-transitions-fast);
     width: 100%;
     box-sizing: border-box;
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: var(--surface-color);
+    color: var(--text-color-light);
 }
 
 .inputGroup input:focus,
 .inputGroup textarea:focus {
     outline: none;
-    border-color: #00cfaf;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 207, 175, 0.1);
 }
 
@@ -47,13 +47,13 @@
 }
 
 .note {
-    background-color: #3a3a3a;
-    padding: 16px;
-    border-radius: 6px;
-    margin-top: 16px;
+    background-color: var(--hover-color);
+    padding: var(--theme-spacing-md);
+    border-radius: var(--theme-border-radius-sm);
+    margin-top: var(--theme-spacing-md);
     font-size: 13px;
-    color: #b0b0b0;
-    border-left: 4px solid #00cfaf;
+    color: var(--text-secondary, var(--gray-color));
+    border-left: 4px solid var(--primary-color);
 }
 
 .note p {

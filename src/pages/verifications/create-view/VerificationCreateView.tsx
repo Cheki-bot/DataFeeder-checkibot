@@ -467,8 +467,8 @@ export const VerificationCreateView = () => {
                                 viewBox="0 0 20 20"
                             >
                                 <path
-                                    fill="#ffff"
-                                    fillOpacity=".8"
+                                    fill="currentColor"
+                                    fillOpacity="0.8"
                                     fillRule="evenodd"
                                     d="M6.293 9.657 11.95 4l1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-5.657-5.657a1 1 0 0 1 0-1.414Z"
                                     clipRule="evenodd"

@@ -26,9 +26,9 @@ export const Sidebar = () => {
 
     const handleCategorySelect = (category: Category) => {
         setSelectedCategory(category.name);
-        navigate(`/${category.destination}`)
-    }
-    
+        navigate(`/${category.destination}`);
+    };
+
     return (
         <div className={style.container}>
             <h2>Elige la categoría</h2>
@@ -36,7 +36,11 @@ export const Sidebar = () => {
                 {categories.map((category, index) => (
                     <div
                         key={index}
-                        className={selectedCategory === category.name ? style.optionCardSelected : style.optionCard}
+                        className={
+                            selectedCategory === category.name
+                                ? style.optionCardSelected
+                                : style.optionCard
+                        }
                         onClick={() => {
                             handleCategorySelect(category);
                         }}

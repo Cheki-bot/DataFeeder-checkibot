@@ -1,17 +1,17 @@
 .addButton {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: var(--theme-spacing-lg);
+    right: var(--theme-spacing-lg);
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    background-color: #007bff;
+    border-radius: var(--theme-border-radius-full);
+    background-color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px var(--shadow-color);
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--theme-transitions-normal);
 }
 
 @media screen and (min-width: 769px) {

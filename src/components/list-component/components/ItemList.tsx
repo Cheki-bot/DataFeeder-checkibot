@@ -15,10 +15,7 @@ export const ItemList = ({
     return (
         <li className={style.item}>
             <p className={style.itemText}>{label}</p>
-            <CustomCheckbox
-                checked={checked}
-                onChange={onChange}
-            />
+            <CustomCheckbox checked={checked} onChange={onChange} />
         </li>
     );
 };

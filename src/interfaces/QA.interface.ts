@@ -1,5 +1,5 @@
 export interface IQuestionsAndAnswers {
-  _id?: string;
-  question: string;
-  answer: string;
+    _id?: string;
+    question: string;
+    answer: string;
 }

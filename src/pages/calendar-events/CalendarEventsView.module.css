@@ -17,12 +17,21 @@
     max-width: 720px;
     border-radius: 12px;
     padding: 24px;
+    background-color: var(--surface-color);
+    color: var(--text-color-light);
 }
 
 .cardHeader {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.cardHeader h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-color-light);
 }
 
 .form {

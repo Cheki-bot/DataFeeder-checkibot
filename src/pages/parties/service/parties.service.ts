@@ -19,7 +19,10 @@ export const createCandidacy = async (
     candidacy: ICandidacy
 ): Promise<ICandidacy> => {
     try {
-        const response = await api.post<ICandidacy>('/political-parties', candidacy);
+        const response = await api.post<ICandidacy>(
+            '/political-parties',
+            candidacy
+        );
         return response.data;
     } catch (error) {
         console.error('Error creating candidacy:', error);

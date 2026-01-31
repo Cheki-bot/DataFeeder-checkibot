@@ -36,8 +36,8 @@ export const ModalComponent = ({
                     ×
                 </button>
                 {children}
-                <ButtonComponent 
-                    label={isLoading ? 'Guardando...' : acceptLabel} 
+                <ButtonComponent
+                    label={isLoading ? 'Guardando...' : acceptLabel}
                     onClick={Accept}
                 />
             </div>

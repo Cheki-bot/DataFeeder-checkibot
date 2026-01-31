@@ -7,7 +7,6 @@ interface HeaderComponentProps {
 }
 
 export const HeaderComponent = (props: HeaderComponentProps) => {
-
     return (
         <>
             {props.type === 'simple' ? (

@@ -28,9 +28,21 @@ interface FormFieldProps {
     rows?: number;
 }
 
-const FormField = ({ id, label, type, value, onChange, required, pattern, placeholder, rows }: FormFieldProps) => (
+const FormField = ({
+    id,
+    label,
+    type,
+    value,
+    onChange,
+    required,
+    pattern,
+    placeholder,
+    rows,
+}: FormFieldProps) => (
     <div className={styles.inputGroup}>
-        <label htmlFor={id}>{label} {required && '*'}</label>
+        <label htmlFor={id}>
+            {label} {required && '*'}
+        </label>
         {type === 'textarea' ? (
             <textarea
                 id={id}
@@ -53,11 +65,16 @@ const FormField = ({ id, label, type, value, onChange, required, pattern, placeh
     </div>
 );
 
-export const CalendarForm = ({ formData, onFieldChange, error, idPrefix = '' }: CalendarFormProps) => {
+export const CalendarForm = ({
+    formData,
+    onFieldChange,
+    error,
+    idPrefix = '',
+}: CalendarFormProps) => {
     return (
         <>
             {error && <div className={styles.error}>{error}</div>}
-            
+
             <FormField
                 id={`${idPrefix}title`}
                 label="Título"
@@ -116,7 +133,10 @@ export const CalendarForm = ({ formData, onFieldChange, error, idPrefix = '' }: 
             />
 
             <div className={styles.note}>
-                <p>Nota: Los campos de firmas y eventos se pueden agregar después de crear el calendario.</p>
+                <p>
+                    Nota: Los campos de firmas y eventos se pueden agregar
+                    después de crear el calendario.
+                </p>
             </div>
         </>
     );

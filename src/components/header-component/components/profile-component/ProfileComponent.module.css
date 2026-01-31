@@ -13,7 +13,7 @@
 .menuItem {
     padding: 10px 15px;
     cursor: pointer;
-    color: var(--black-color);
+    color: var(--text-color-light);
     border: none;
     width: 100%;
     background-color: transparent;

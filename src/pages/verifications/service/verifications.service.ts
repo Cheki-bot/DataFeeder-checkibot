@@ -45,4 +45,4 @@ export const createMultipleVerifications = async (
         verifications,
     });
     return data as Verification[];
-}
+};

@@ -1,8 +1,7 @@
-
 export enum CandidacyStatus {
-  ACTIVE = 'habilitado',
-  INACTIVE = 'inhabilitado',
-  WITHDRAWN = 'se retiró',
+    ACTIVE = 'habilitado',
+    INACTIVE = 'inhabilitado',
+    WITHDRAWN = 'se retiró',
 }
 
 export interface Candidate {
@@ -12,21 +11,20 @@ export interface Candidate {
     isActive: boolean;
 }
 
-
 export interface IPoliticalParty {
-  id?: string;
-  name: string;
-  sigla: string;
-  description?: string;
-  logoUrl?: string;
-  founded?: string;
+    id?: string;
+    name: string;
+    sigla: string;
+    description?: string;
+    logoUrl?: string;
+    founded?: string;
 }
 
 export interface ICandidacy {
-  _id?: object;
-  party: IPoliticalParty;
-  candidates: Candidate[];
-  status: CandidacyStatus;
-  government_plan: string;
-  election_id: string;
+    _id?: object;
+    party: IPoliticalParty;
+    candidates: Candidate[];
+    status: CandidacyStatus;
+    government_plan: string;
+    election_id: string;
 }

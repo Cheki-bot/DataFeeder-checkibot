@@ -17,6 +17,7 @@ interface InputComponentProps {
     validationProps?: React.InputHTMLAttributes<HTMLInputElement>;
     errors?: FieldError;
     onClear?: () => void;
+    disabled?: boolean;
 }
 
 export const InputComponent: React.FC<InputComponentProps> = (props) => {
@@ -32,6 +33,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         options,
         errors,
         onClear,
+        disabled,
     } = props;
 
     const { onBlur: rhfOnBlur, ...restValidation } =
@@ -49,6 +51,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
     }, [value]);
 
     const currentValue = value !== undefined ? value : internalValue;
+    const hasValue = currentValue !== '' && currentValue !== undefined;
 
     const clearValue = () => {
         setInternalValue('');
@@ -63,17 +66,22 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
 
     return (
         <div className={styles.inputWrapper}>
-            <div className={styles.inputContainer}>
+            <div
+                className={`${styles.inputContainer} ${
+                    errors ? styles.error : ''
+                } ${disabled ? styles.disabled : ''}`}
+            >
                 <div
                     className={`${styles.backgroundLayer} ${
-                        focused || currentValue ? styles.active : ''
+                        focused || hasValue ? styles.active : ''
                     }`}
                 >
                     {type !== 'date' && (
                         <label htmlFor={inputId} className={styles.label}>
                             {label}
+                            {required && <span aria-hidden="true">*</span>}
                         </label>
-                    )}  
+                    )}
                     <input
                         type={type}
                         id={inputId}
@@ -83,7 +91,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                                 ? styles['date-input']
                                 : styles.input
                         }
-                        placeholder={placeholder}
+                        placeholder={type === 'date' ? label : placeholder}
                         value={currentValue}
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
@@ -92,24 +100,34 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                             rhfOnBlur?.(e);
                         }}
                         required={required}
+                        disabled={disabled}
                         {...restValidation}
                     />
                 </div>
 
-                {value !== '' || value == undefined ? (
+                {hasValue && !disabled && onClear && (
                     <span
                         className={styles.clearIcon}
                         onClick={clearValue}
                         role="button"
+                        tabIndex={0}
                         aria-label={`Clear ${label}`}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                clearValue();
+                            }
+                        }}
                     >
                         <StateLayer />
                     </span>
-                ) : (
-                    <></>
                 )}
             </div>
-            {errors && <span className={styles.error}>{errors.message}</span>}
+            {errors && (
+                <span className={styles.error} role="alert">
+                    {errors.message}
+                </span>
+            )}
         </div>
     );
 };

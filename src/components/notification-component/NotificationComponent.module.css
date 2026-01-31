@@ -1,15 +1,15 @@
 .notification {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: var(--white-color);
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: var(--theme-spacing-md);
+    background-color: var(--surface-color);
+    border-radius: var(--theme-border-radius-md);
+    padding: var(--theme-spacing-md);
+    margin-bottom: var(--theme-spacing-md);
+    box-shadow: 0 4px 12px var(--shadow-color);
     min-width: 300px;
     max-width: 500px;
-    animation: slideIn 0.3s ease-out;
+    animation: slideIn var(--theme-transitions-normal);
 }
 
 @keyframes slideIn {
@@ -35,7 +35,7 @@
 }
 
 .notification.exiting {
-    animation: slideOut 0.3s ease-in forwards;
+    animation: slideOut var(--theme-transitions-normal);
 }
 
 .icon {
@@ -50,7 +50,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 500;
-    color: var(--text-color-dark);
+    color: var(--text-color-light);
 }
 
 .closeButton {
@@ -58,9 +58,9 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: var(--text-color-dark);
+    color: var(--text-color-light);
     opacity: 0.6;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--theme-transitions-fast);
     padding: 0;
     width: 24px;
     height: 24px;
@@ -91,11 +91,11 @@
 }
 
 .warning {
-    border-left: 4px solid #ffa500;
+    border-left: 4px solid var(--auxiliary-color);
 }
 
 .warning .icon {
-    color: #ffa500;
+    color: var(--auxiliary-color);
 }
 
 .info {

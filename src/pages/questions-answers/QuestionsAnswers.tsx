@@ -60,7 +60,7 @@ export const QuestionsAnswers = () => {
         if (message) {
             addNotification(message, 'success');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [message]);
 
     const processedData = data.map((row) =>
@@ -130,7 +130,7 @@ export const QuestionsAnswers = () => {
     const handleAddCandidate = async (question: IQuestionsAndAnswers) => {
         await createQuestionAnswer(question.question, question.answer);
         setQuestionsAnswers((prev) => [...prev, question]);
-        addNotification('Pregunta agregada correctamente', 'success'); // ✅ notificación
+        addNotification('Pregunta agregada correctamente', 'success');
         reset();
     };
 
@@ -190,15 +190,15 @@ export const QuestionsAnswers = () => {
                     isOpen={modal}
                     Accept={() => uploadData()}
                     children={
-                        <div>
+                        <div className={style.modalContent}>
                             <h2>Confirmar subida de archivo</h2>
-                            <p>
+                            <p className={style.modalText}>
                                 ¿Estás seguro de que deseas subir el archivo{' '}
                                 <span className={style.fileName}>
                                     {sheet?.file.name}
                                 </span>{' '}
                                 al sistema desde Excel? Se agregarán las
-                                siguientes preguntas y respuestas:{' '}
+                                siguientes preguntas y respuestas:
                             </p>
                             <ol className={style.previewList}>
                                 {processedData.map((row, index) => (
@@ -237,10 +237,9 @@ export const QuestionsAnswers = () => {
                     }}
                 />
             )}
-            {/* 🔔 Contenedor de notificaciones */}
-            <div
-                style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999 }}
-            >
+
+            {/* Contenedor de notificaciones */}
+            <div className={style.notificationsContainer}>
                 {notifications.map((n) => (
                     <NotificationComponent
                         key={n.id}
@@ -289,8 +288,8 @@ export const QuestionsAnswers = () => {
                                 viewBox="0 0 20 20"
                             >
                                 <path
-                                    fill="#ffff"
-                                    fillOpacity=".8"
+                                    fill="currentColor"
+                                    fillOpacity="0.8"
                                     fillRule="evenodd"
                                     d="M6.293 9.657 11.95 4l1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-5.657-5.657a1 1 0 0 1 0-1.414Z"
                                     clipRule="evenodd"
@@ -306,15 +305,7 @@ export const QuestionsAnswers = () => {
 
             <div className={style.content}>
                 <form
-                    className={style.form}
-                    style={{
-                        display:
-                            window.innerWidth <= 768
-                                ? showForm
-                                    ? 'flex'
-                                    : 'none'
-                                : 'flex',
-                    }}
+                    className={`${style.form} ${showForm ? style.formVisible : ''}`}
                 >
                     <h3>Formulario de Preguntas y Respuestas</h3>
                     <div className={style.checkboxField}></div>
