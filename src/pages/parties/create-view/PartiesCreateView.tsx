@@ -99,7 +99,7 @@ export const PartiesCreateView = () => {
                 },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: data.government_plan,
-                election_id: data.election_id,
+                election_id: data.election_id || crypto.randomUUID(),
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
@@ -250,14 +250,7 @@ export const PartiesCreateView = () => {
                     onClear={() => resetField('founded')}
                     errors={errors.founded}
                 />
-                <InputComponent
-                    label="ID Elección"
-                    type="text"
-                    value={watch('election_id') || ''}
-                    validationProps={register('election_id')}
-                    onClear={() => resetField('election_id')}
-                    errors={errors.election_id}
-                />
+
                 <InputComponent
                     label="Plan de Gobierno"
                     type="text"
