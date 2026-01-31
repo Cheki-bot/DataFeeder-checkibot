@@ -38,7 +38,7 @@ const getErrorMessage = (error: unknown): string => {
 };
 
 export const PartiesCreateView = () => {
-    const [showForm, setShowForm] = useState(true);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [modal, setModal] = useState<boolean>(false);
     const [sheet, setSheet] = useState<CustomSheet>({
