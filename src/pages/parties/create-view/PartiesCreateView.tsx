@@ -66,7 +66,9 @@ export const PartiesCreateView = () => {
     const {
         register,
         handleSubmit,
+        watch,
         reset,
+        resetField,
         formState: { errors },
     } = useForm<PartyFormData>({
         resolver: zodResolver(partySchema),
@@ -177,31 +179,41 @@ export const PartiesCreateView = () => {
                 <InputComponent
                     label="Nombre"
                     type="text"
-                    {...register('name')}
+                    value={watch('name') || ''}
+                    validationProps={register('name')}
+                    onClear={() => resetField('name')}
                     errors={errors.name}
                 />
                 <InputComponent
                     label="Sigla"
                     type="text"
-                    {...register('sigla')}
+                    value={watch('sigla') || ''}
+                    validationProps={register('sigla')}
+                    onClear={() => resetField('sigla')}
                     errors={errors.sigla}
                 />
                 <InputComponent
                     label="Descripción"
                     type="text"
-                    {...register('description')}
+                    value={watch('description') || ''}
+                    validationProps={register('description')}
+                    onClear={() => resetField('description')}
                     errors={errors.description}
                 />
                 <InputComponent
                     label="Logo URL"
                     type="text"
-                    {...register('logoUrl')}
+                    value={watch('logoUrl') || ''}
+                    validationProps={register('logoUrl')}
+                    onClear={() => resetField('logoUrl')}
                     errors={errors.logoUrl}
                 />
                 <InputComponent
                     label="Fundación"
                     type="text"
-                    {...register('founded')}
+                    value={watch('founded') || ''}
+                    validationProps={register('founded')}
+                    onClear={() => resetField('founded')}
                     errors={errors.founded}
                 />
 
