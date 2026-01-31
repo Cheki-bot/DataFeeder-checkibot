@@ -133,6 +133,7 @@ export const PartiesCreateView = () => {
         if (!excelData || excelData.length === 0) return;
         try {
 
+            const batchElectionId = crypto.randomUUID();
             const payloads = excelData.map((row) => ({
                 party: {
                     name: row['Nombre'],
@@ -143,7 +144,7 @@ export const PartiesCreateView = () => {
                 },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: row['Plan de Gobierno'] || '',
-                election_id: row['ID Elección'] || '',
+                election_id: row['ID Elección'] || batchElectionId,
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
