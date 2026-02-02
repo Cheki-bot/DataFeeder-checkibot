@@ -15,11 +15,16 @@ import {
 import { CustomCheckbox } from '@/lib/shared/ui/custom-checkbox';
 
 import type { Candidate } from '@/interfaces/Candidacies';
-import { getCandidatesByPartyId } from '@/services/candidates.service';
+import {
+    createCandidate,
+    deleteCandidate,
+    getCandidatesByPartyId,
+} from '@/services/candidates.service';
 import { useNavigate, useParams } from 'react-router';
 import style from './CandidatesView.module.css';
 
 const CandidatesView = () => {
+    const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
     const [candidates, setCandidates] = useState<Candidate[]>([]);
     const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>(
         []
@@ -38,7 +43,7 @@ const CandidatesView = () => {
         defaultValues: {
             full_name: '',
             position: '',
-            isActive: false,
+            is_active: false,
         },
     });
     const { partyId, partyName } = useParams<{
@@ -64,16 +69,49 @@ const CandidatesView = () => {
         setFilteredCandidates(candidates);
     }, [candidates]);
 
-    const handleAddCandidate = (candidate: Candidate) => {
-        console.log(`Adding candidate: ${candidate}`);
-        reset();
+    const loadCandidates = async () => {
+        if (!partyId) return;
+        try {
+            const candidates = await getCandidatesByPartyId(partyId);
+            setCandidates(candidates.data);
+        } catch (error) {
+            console.error('Error loading candidates:', error);
+        }
     };
 
-    const handleRemove = (candidates: Array<Candidate | string>) => {
-        const names = candidates.map((c) =>
-            typeof c === 'string' ? c : c.full_name
-        );
-        console.log(`Removing candidates: ${names.join(', ')}`);
+    const handleAddCandidate = async (candidate: CandidateFormData) => {
+        if (!partyId) return;
+
+        try {
+            await createCandidate({
+                ...candidate,
+                candidacyId: partyId,
+            });
+            await loadCandidates();
+            reset();
+            setShowForm(false);
+        } catch (error) {
+            console.error('Error adding candidate:', error);
+        }
+    };
+
+    const handleRemove = async (
+        candidatesToRemove: Array<Candidate | string>
+    ) => {
+        if (!partyId || candidatesToRemove.length === 0) return;
+
+        try {
+            const promises = candidatesToRemove.map((c) => {
+                const candidateName = typeof c === 'string' ? c : c.full_name;
+                return deleteCandidate(partyId, candidateName);
+            });
+
+            await Promise.all(promises);
+            await loadCandidates();
+            setSelectedCandidates([]);
+        } catch (error) {
+            console.error('Error removing candidates:', error);
+        }
     };
 
     return (
@@ -127,9 +165,9 @@ const CandidatesView = () => {
                     <div className={style.checkboxField}>
                         <p>Esta activo</p>
                         <CustomCheckbox
-                            checked={watch('isActive')}
+                            checked={watch('is_active')}
                             onChange={(checked: boolean) => {
-                                setValue('isActive', checked);
+                                setValue('is_active', checked);
                             }}
                         />
                     </div>
@@ -211,13 +249,18 @@ const CandidatesView = () => {
                                 label: candidate.full_name,
                                 subLabel: candidate.position,
                             }))}
+                            onSelectionChange={(selected) => {
+                                setSelectedCandidates(
+                                    selected.map((s) => s.label)
+                                );
+                            }}
                         />
                         <span className={style.buttonContainer}>
                             <ButtonComponent
                                 label="Eliminar"
                                 type="button"
                                 danger
-                                onClick={() => handleRemove(candidates)}
+                                onClick={() => handleRemove(selectedCandidates)}
                             />
                         </span>
                     </div>

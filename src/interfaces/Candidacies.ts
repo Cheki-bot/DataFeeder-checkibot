@@ -6,10 +6,10 @@ export enum CandidacyStatus {
 }
 
 export interface Candidate {
-    id?: string;
-    full_name: string;
-    position: string;
-    isActive: boolean;
+  id?: string;
+  full_name: string;
+  position: string;
+  is_active: boolean;
 }
 
 
