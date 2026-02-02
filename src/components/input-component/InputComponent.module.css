@@ -1,84 +1,200 @@
-.inputContainer {
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--white-color);
-    padding: 10px 15px;
-    border-radius: 10px;
-    gap: 5px;
-    align-items: center;
-    width: 100%;
-    min-height: 40px;
-    color: var(--black-color);
-}
-
+/* Contenedor principal del input */
 .inputWrapper {
     display: flex;
-    position: relative;
     flex-direction: column;
     width: 100%;
+    position: relative;
 }
 
-.label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1rem;
-    margin: 0;
-    color: var(--gray-color);
-    pointer-events: none;
-    transition: all 0.2s ease;
-}
-
-.backgroundLayer.active .label {
-    top: 0.2rem;
-    font-size: 0.6rem;
-    transform: translateY(-90%);
-}
-
-.input {
-    border: none;
+/* Contenedor del input y label */
+.inputContainer {
+    display: flex;
+    align-items: center;
     width: 100%;
-    border-radius: 4px;
-    transform: translateY(20%);
-    font-size: 1rem;
-    color: var(--black-color);
-    background-color: transparent;
+    position: relative;
+    background-color: var(--gray-color-20);
+    border: 1px solid var(--border-color);
+    border-radius: var(--theme-border-radius-md);
+    transition: all var(--theme-transitions-normal);
+    min-height: 48px;
 }
 
-.date-input {
-    border: none;
-    width: 100%;
-    border-radius: 4px;
-    font-size: 1rem;
-    color: var(--black-color);
-    background-color: transparent;
+/* Estado focus del contenedor */
+.inputContainer:focus-within {
+    border-color: var(--primary-color);
+    background-color: var(--surface-color);
+    box-shadow: 0 0 0 3px var(--gray-color-20);
 }
 
-.input:focus {
-    outline: none;
+/* Estado de error */
+.inputContainer.error {
+    border-color: var(--red-color);
+    background-color: rgba(255, 77, 109, 0.05);
 }
 
+.inputContainer.error:focus-within {
+    box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+/* Estado disabled */
+.inputContainer.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--gray-color-20);
+}
+
+/* Capa de fondo para el label */
 .backgroundLayer {
     display: flex;
     width: 100%;
-    flex-direction: column;
-    justify-content: center;
     position: relative;
+    align-items: center;
 }
 
+/* Label flotante */
+.label {
+    position: absolute;
+    left: var(--theme-spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: all var(--theme-transitions-normal);
+    background-color: transparent;
+    padding: 0 var(--theme-spacing-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - var(--theme-spacing-md));
+}
+
+/* Label activo (cuando hay valor o está enfocado) */
+.backgroundLayer.active .label {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--primary-color);
+    background-color: var(--surface-color);
+    left: var(--theme-spacing-xs);
+}
+
+/* Label activo en estado de error */
+.inputContainer.error .backgroundLayer.active .label {
+    color: var(--red-color);
+}
+
+/* Input principal */
+.input {
+    border: none;
+    width: 100%;
+    border-radius: var(--theme-border-radius-md);
+    font-size: 1rem;
+    color: var(--text-color-light);
+    background-color: transparent;
+    padding: var(--theme-spacing-md) var(--theme-spacing-sm)
+        var(--theme-spacing-sm);
+    transition: all var(--theme-transitions-normal);
+    outline: none;
+    min-height: 48px;
+}
+
+/* Padding ajustado cuando el label está activo */
+.backgroundLayer.active .input {
+    padding-top: calc(var(--theme-spacing-md) + var(--theme-spacing-sm));
+}
+
+/* Placeholder */
+.input::placeholder {
+    color: var(--text-tertiary);
+    opacity: 1;
+}
+
+/* Input de fecha */
+.date-input {
+    border: none;
+    width: 100%;
+    border-radius: var(--theme-border-radius-md);
+    font-size: 1rem;
+    color: var(--text-color-light);
+    background-color: transparent;
+    padding: var(--theme-spacing-sm);
+    transition: all var(--theme-transitions-normal);
+    outline: none;
+    min-height: 48px;
+    cursor: pointer;
+}
+
+/* Placeholder para input de fecha */
+.date-input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Icono de limpiar */
 .clearIcon {
     cursor: pointer;
-    margin-left: 8px;
+    margin-right: var(--theme-spacing-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gray-color);
+    color: var(--text-secondary);
+    transition: all var(--theme-transitions-fast);
+    width: 24px;
+    height: 24px;
+    border-radius: var(--theme-border-radius-sm);
+    flex-shrink: 0;
 }
 
+/* Hover del icono de limpiar */
+.clearIcon:hover {
+    color: var(--text-color-light);
+    background-color: var(--gray-color-20);
+}
+
+/* Active del icono de limpiar */
+.clearIcon:active {
+    transform: scale(0.95);
+}
+
+/* Mensaje de error */
 .error {
-    /* position: absolute; */
     color: var(--red-color);
-    font-size: 0.8rem;
-    /* top: 40px; */
-    margin-left: 10px;
+    font-size: 0.875rem;
+    margin-top: var(--theme-spacing-xs);
+    margin-left: var(--theme-spacing-sm);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-xs);
+}
+
+/* Estado hover del contenedor */
+.inputContainer:not(.disabled):not(.error):hover {
+    border-color: var(--text-secondary);
+}
+
+/* Estado focus con hover */
+.inputContainer:not(.disabled):not(.error):focus-within:hover {
+    border-color: var(--primary-color);
+}
+
+/* Input deshabilitado */
+.input:disabled,
+.date-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Ajustes para modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .inputContainer.error {
+        background-color: rgba(255, 77, 109, 0.1);
+    }
+}
+
+/* Ajustes para modo claro */
+@media (prefers-color-scheme: light) {
+    .inputContainer.error {
+        background-color: rgba(255, 77, 109, 0.05);
+    }
 }
