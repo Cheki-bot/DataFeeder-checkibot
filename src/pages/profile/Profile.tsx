@@ -119,9 +119,9 @@ export const Profile = () => {
 
 			<div className={styles.card}>
 				<div className={styles.infoRow}>
-					<span className={styles.label}>Nombre</span>
+					<span className={styles.label}>Nombre de usuario</span>
 					<span className={styles.value}>
-						{loading ? 'Cargando...' : profile?.name ?? '-'}
+						{loading ? 'Cargando...' : profile?.username ?? '-'}
 					</span>
 				</div>
 				<div className={styles.infoRow}>

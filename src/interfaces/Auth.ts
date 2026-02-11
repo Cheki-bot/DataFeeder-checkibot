@@ -23,7 +23,7 @@ export interface User {
 
 export interface ProfileData {
     email: string;
-    name: string;
+    username: string;
     role: string;
     is_active: boolean;
     failed_attempts: number;
