@@ -10,7 +10,7 @@
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-color, #333);
+    color: var(--black-color);
 }
 
 .dropdownHeader {
@@ -18,38 +18,39 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
-    background-color: var(--bg-input, #fff);
-    border: 1px solid var(--border-color, #eaeaea);
+    background-color: var(--white-color);
+    border: 1px solid var(--gray-color-20);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     min-height: 48px;
+    color: var(--black-color);
 }
 
 .dropdownHeader:hover {
-    border-color: var(--primary-color, #007bff);
+    border-color: var(--primary-color);
 }
 
 .dropdownHeader.active {
-    border-color: var(--primary-color, #007bff);
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
 .dropdownHeader.errorBorder {
-    border-color: #dc3545;
+    border-color: var(--red-color);
 }
 
 .placeholder {
-    color: #999;
+    color: var(--gray-color);
 }
 
 .selected {
-    color: var(--text-color, #333);
+    color: var(--black-color);
 }
 
 .arrow {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--gray-color);
 }
 
 .dropdownList {
@@ -60,8 +61,8 @@
     margin-top: 4px;
     padding: 0;
     list-style: none;
-    background-color: var(--bg-input, #fff);
-    border: 1px solid var(--border-color, #eaeaea);
+    background-color: var(--white-color);
+    border: 1px solid var(--gray-color-20);
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     z-index: 50;
@@ -73,21 +74,22 @@
     padding: 0.75rem 1rem;
     cursor: pointer;
     transition: background-color 0.1s ease;
+    color: var(--black-color);
 }
 
 .option:hover {
-    background-color: var(--bg-hover, #f5f5f5);
+    background-color: var(--gray-color-20);
 }
 
 .selectedOption {
-    background-color: var(--bg-selected, #e6f7ff);
-    color: var(--primary-color, #007bff);
+    background-color: var(--primary-color-hover);
+    color: var(--white-color);
     font-weight: 500;
 }
 
 .noOptions {
     padding: 0.75rem 1rem;
-    color: #999;
+    color: var(--gray-color);
     text-align: center;
 }
 
@@ -95,5 +97,5 @@
     display: block;
     margin-top: 0.25rem;
     font-size: 0.8rem;
-    color: #dc3545;
+    color: var(--red-color);
 }
