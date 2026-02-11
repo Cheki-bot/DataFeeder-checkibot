@@ -42,6 +42,16 @@ const getErrorMessage = (error: unknown): string => {
 
 
 
+const COLUMNS = {
+    name: 'Nombre',
+    sigla: 'Sigla',
+    description: 'Descripción',
+    logoUrl: 'Logo URL',
+    founded: 'Fundación',
+    election_id: 'ID Elección',
+    government_plan: 'Plan de Gobierno',
+};
+
 export const PartiesCreateView = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,10 +71,10 @@ export const PartiesCreateView = () => {
             setIsLoadingCalendars(true);
             try {
                 const response = await getAllCalendars();
-                setCalendars(response); // Assuming response is array based on service
+                setCalendars(response.data);
             } catch (error) {
                 console.error("Error fetching calendars", error);
-                addNotification('Error al cargar elecciones', 'error');
+                addNotification('Error al cargar calendarios', 'error');
             } finally {
                 setIsLoadingCalendars(false);
             }
@@ -77,17 +87,7 @@ export const PartiesCreateView = () => {
         value: cal.election_id
     }));
 
-    const columns = {
-        name: 'Nombre',
-        sigla: 'Sigla',
-        description: 'Descripción',
-        logoUrl: 'Logo URL',
-        founded: 'Fundación',
-        election_id: 'ID Elección',
-        government_plan: 'Plan de Gobierno',
-    };
-
-    const { data: excelData, message } = useExcel(sheet.sheet, columns);
+    const { data: excelData, message } = useExcel(sheet.sheet, COLUMNS);
 
     useEffect(() => {
         if (message) addNotification(message, 'success');
@@ -162,7 +162,7 @@ export const PartiesCreateView = () => {
         if (!excelData || excelData.length === 0) return;
         try {
 
-            const batchElectionId = generateObjectId();
+
             const payloads = excelData.map((row) => ({
                 party: {
                     name: row['Nombre'],
@@ -173,7 +173,7 @@ export const PartiesCreateView = () => {
                 },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: row['Plan de Gobierno'] || '',
-                election_id: row['ID Elección'] || batchElectionId,
+                election_id: row['ID Elección'] || '',
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
@@ -272,19 +272,23 @@ export const PartiesCreateView = () => {
                     onClear={() => resetField('logoUrl')}
                     errors={errors.logoUrl}
                 />
-                onClear={() => resetField('founded')}
-                errors={errors.founded}
+                <InputComponent
+                    label="Fundación"
+                    type="text"
+                    value={watch('founded') || ''}
+                    validationProps={register('founded')}
+                    onClear={() => resetField('founded')}
+                    errors={errors.founded}
                 />
 
                 <DropdownComponent
-                    label="Elección"
                     options={electionOptions}
                     value={watch('election_id') || ''}
                     onChange={(val) => {
                         setValue('election_id', val, { shouldValidate: true });
                     }}
                     error={errors.election_id?.message}
-                    placeholder={isLoadingCalendars ? "Cargando elecciones..." : "Selecciona una elección"}
+                    placeholder={isLoadingCalendars ? "Cargando calendarios..." : "Selecciona un calendario"}
                 />
 
                 <InputComponent
