@@ -19,6 +19,9 @@ import {
 } from '../schemas/partySchema';
 import { createCandidacy, createMultipleCandidacies } from '../service/parties.service';
 import style from './PartiesCreateView.module.css';
+import { getAllCalendars } from '@/services/calendar.service';
+import type { ElectoralCalendar } from '@/interfaces/Calendar';
+import { DropdownComponent } from '@/components/index';
 
 interface CustomSheet {
     sheet: xlsx.WorkSheet;
@@ -37,13 +40,7 @@ const getErrorMessage = (error: unknown): string => {
     return error instanceof Error ? error.message : 'Error inesperado';
 };
 
-const generateObjectId = () => {
-    const timestamp = Math.floor(Date.now() / 1000).toString(16);
-    const random = 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () =>
-        ((Math.random() * 16) | 0).toString(16)
-    );
-    return (timestamp + random).toLowerCase();
-};
+
 
 export const PartiesCreateView = () => {
 
@@ -53,9 +50,32 @@ export const PartiesCreateView = () => {
         sheet: {} as xlsx.WorkSheet,
         file: {} as File,
     });
+    const [calendars, setCalendars] = useState<ElectoralCalendar[]>([]);
+    const [isLoadingCalendars, setIsLoadingCalendars] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const { notifications, addNotification, removeNotification } = useNotification();
+
+    useEffect(() => {
+        const fetchCalendars = async () => {
+            setIsLoadingCalendars(true);
+            try {
+                const response = await getAllCalendars();
+                setCalendars(response); // Assuming response is array based on service
+            } catch (error) {
+                console.error("Error fetching calendars", error);
+                addNotification('Error al cargar elecciones', 'error');
+            } finally {
+                setIsLoadingCalendars(false);
+            }
+        };
+        fetchCalendars();
+    }, [addNotification]);
+
+    const electionOptions = calendars.map(cal => ({
+        label: cal.title,
+        value: cal.election_id
+    }));
 
     const columns = {
         name: 'Nombre',
@@ -79,6 +99,7 @@ export const PartiesCreateView = () => {
         watch,
         reset,
         resetField,
+        setValue,
         formState: { errors },
     } = useForm<PartyFormData>({
         resolver: zodResolver(partySchema),
@@ -107,7 +128,7 @@ export const PartiesCreateView = () => {
                 },
                 status: CandidacyStatus.ACTIVE,
                 government_plan: data.government_plan,
-                election_id: data.election_id || generateObjectId(),
+                election_id: data.election_id,
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
@@ -251,13 +272,19 @@ export const PartiesCreateView = () => {
                     onClear={() => resetField('logoUrl')}
                     errors={errors.logoUrl}
                 />
-                <InputComponent
-                    label="Fundación"
-                    type="text"
-                    value={watch('founded') || ''}
-                    validationProps={register('founded')}
-                    onClear={() => resetField('founded')}
-                    errors={errors.founded}
+                onClear={() => resetField('founded')}
+                errors={errors.founded}
+                />
+
+                <DropdownComponent
+                    label="Elección"
+                    options={electionOptions}
+                    value={watch('election_id') || ''}
+                    onChange={(val) => {
+                        setValue('election_id', val, { shouldValidate: true });
+                    }}
+                    error={errors.election_id?.message}
+                    placeholder={isLoadingCalendars ? "Cargando elecciones..." : "Selecciona una elección"}
                 />
 
                 <InputComponent

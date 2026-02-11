@@ -30,7 +30,7 @@ export const partySchema = z.object({
             }
         ),
     founded: z.string().optional(),
-    election_id: z.string().optional(),
+    election_id: z.string().min(1, 'Debe seleccionar una elección'),
     government_plan: z.string().optional(),
 });
 
