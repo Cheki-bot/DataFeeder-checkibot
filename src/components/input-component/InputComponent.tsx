@@ -83,7 +83,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                                 ? styles['date-input']
                                 : styles.input
                         }
-                        placeholder={placeholder}
+                        placeholder={focused ? placeholder : ''}
                         value={currentValue}
                         onKeyDown={onKeyDown}
                         onFocus={() => setFocused(true)}
