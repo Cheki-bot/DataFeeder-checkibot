@@ -1,0 +1,103 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--text-color-light);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.subtitle {
+    color: var(--light-gray-color);
+    font-size: 0.95rem;
+}
+
+.card {
+    background-color: var(--dark-gray-color);
+    border: 1px solid var(--gray-color-20);
+    border-radius: 16px;
+    padding: 20px;
+    display: grid;
+    gap: 12px;
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-color-20);
+}
+
+.infoRow:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: var(--light-gray-color);
+    font-weight: 600;
+}
+
+.value {
+    color: var(--text-color-light);
+    font-weight: 600;
+    text-align: right;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.error {
+    color: var(--red-color);
+    font-weight: 600;
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modalTitle {
+    font-size: 1.3rem;
+}
+
+.modalText {
+    color: var(--light-gray-color);
+    font-size: 0.95rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.loading {
+    color: var(--light-gray-color);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 0 8px;
+    }
+
+    .infoRow {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .value {
+        text-align: left;
+    }
+}

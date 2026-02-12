@@ -75,6 +75,21 @@
     color: var(--gray-color);
 }
 
+.togglePasswordIcon {
+    cursor: pointer;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-color);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.togglePasswordIcon:hover {
+    color: var(--black-color);
+}
+
 .error {
     /* position: absolute; */
     color: var(--red-color);

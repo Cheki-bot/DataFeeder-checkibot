@@ -72,6 +72,7 @@ export const LoginView = () => {
                     <InputComponent
                         label="Contraseña"
                         type="password"
+                        isPassword
                         value={watch('password') || ''}
                         validationProps={register('password')}
                         errors={errors.password}
