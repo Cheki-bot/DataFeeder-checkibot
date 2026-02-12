@@ -46,6 +46,7 @@ const clearAuthStorage = () => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Cargar y validar token/user al montar el componente
     useEffect(() => {
@@ -71,6 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 }
             }
         }
+        setIsLoading(false);
     }, []);
 
     // isAuthenticated ahora considera validez real del token
@@ -125,6 +127,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             user,
             token,
             isAuthenticated,
+            isLoading,
             login: handleLogin,
             register: handleRegister,
             logout: handleLogout,
@@ -133,6 +136,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             user,
             token,
             isAuthenticated,
+            isLoading,
             handleLogin,
             handleRegister,
             handleLogout,

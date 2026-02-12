@@ -9,6 +9,7 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     isAuthenticated: boolean;
+    isLoading: boolean;
     login: (userData: UserFormData) => Promise<boolean>;
     register: (userData: RegisterFormData) => Promise<void>;
     logout: () => void;
