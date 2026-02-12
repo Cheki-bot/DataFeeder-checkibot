@@ -3,6 +3,7 @@ import {
     CalendarListView,
     LoginView,
     PartiesView,
+    UsersView,
     VerificationCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'calendars/:id',
                                 Component: CalendarDetailView,
+                            },
+                            {
+                                path: 'users',
+                                element: <UsersView />,
                             },
                         ],
                     },

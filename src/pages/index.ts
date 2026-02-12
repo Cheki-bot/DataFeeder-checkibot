@@ -5,3 +5,4 @@ export * from './parties/PartiesView';
 export * from './calendars/list-view/CalendarListView';
 export * from './calendars/detail-view/CalendarDetailView';
 export * from './calendar-events/CalendarEventsView';
+export * from './users/UsersView';

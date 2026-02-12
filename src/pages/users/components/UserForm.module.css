@@ -1,0 +1,77 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.formTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white-color);
+    margin-bottom: 0.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    color: var(--light-gray-color);
+    margin-bottom: 0.25rem;
+}
+
+.select {
+    background-color: var(--gray-color);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: var(--white-color);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c5c5c5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+.select:focus {
+    border-color: var(--primary-color);
+}
+
+.select option {
+    background-color: var(--gray-color);
+    color: var(--white-color);
+}
+
+.checkboxGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.checkboxLabel {
+    font-size: 0.95rem;
+    color: var(--white-color);
+    cursor: pointer;
+}
