@@ -3,6 +3,7 @@ import {
     CalendarListView,
     LoginView,
     PartiesView,
+    UsersView,
     PartiesCreateView,
     VerificationCreateView,
 } from '@pages/index';
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'calendars/:id',
                                 Component: CalendarDetailView,
+                            },
+                            {
+                                path: 'users',
+                                element: <UsersView />,
                             },
                         ],
                     },
