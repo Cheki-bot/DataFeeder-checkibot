@@ -17,7 +17,7 @@ import { UserForm, type UserFormHandle } from './components/UserForm';
 import styles from './UsersView.module.css';
 
 const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString('es-BO', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
