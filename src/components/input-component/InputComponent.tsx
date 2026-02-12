@@ -78,15 +78,12 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         <div className={styles.inputWrapper}>
             <div className={styles.inputContainer}>
                 <div
-                    className={`${styles.backgroundLayer} ${
-                        focused || currentValue ? styles.active : ''
-                    }`}
+                    className={`${styles.backgroundLayer} ${focused || currentValue || !!placeholder || type === 'date' ? styles.active : ''
+                        }`}
                 >
-                    {type !== 'date' && (
-                        <label htmlFor={inputId} className={styles.label}>
-                            {label}
-                        </label>
-                    )}  
+                    <label htmlFor={inputId} className={styles.label}>
+                        {label}
+                    </label>
                     <input
                         type={resolvedType}
                         id={inputId}

@@ -1,9 +1,7 @@
-import { useCalendarForm } from '@/hooks/useCalendarForm';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
 import { deleteCalendar, getAllCalendars } from '@/services/calendar.service';
-import { CalendarForm } from '@components/calendar-form/CalendarForm';
 import { CardComponent } from '@components/card-component/CardComponent';
-import { ModalComponent } from '@components/modal-component/ModalComponent';
+import { CalendarModal } from '@/pages/calendars/modals/CalendarModal';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styles from './CalendarListView.module.css';
@@ -14,6 +12,8 @@ export const CalendarListView = () => {
     const [calendars, setCalendars] = useState<ElectoralCalendar[]>([]);
     const [loading, setLoading] = useState(true);
     const [listError, setListError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCalendar, setSelectedCalendar] = useState<ElectoralCalendar | null>(null);
 
     const fetchCalendars = useCallback(async () => {
         try {
@@ -28,32 +28,21 @@ export const CalendarListView = () => {
         }
     }, []);
 
-    const {
-        data,
-        showCreateModal,
-        showEditModal,
-        error,
-        creating,
-        updating,
-        openCreateModal,
-        closeModal,
-        openEditModal,
-        updateFormField,
-        submitCreate,
-        submitEdit
-    } = useCalendarForm(fetchCalendars);
-
     useEffect(() => {
         fetchCalendars();
     }, [fetchCalendars]);
 
     useEffect(() => {
         const state = location.state as { editCalendarId?: string } | null;
-        if (state?.editCalendarId) {
-            openEditModal(state.editCalendarId);
+        if (state?.editCalendarId && calendars.length > 0) {
+            const calendarToEdit = calendars.find(c => c._id === state.editCalendarId);
+            if (calendarToEdit) {
+                setSelectedCalendar(calendarToEdit);
+                setIsModalOpen(true);
+            }
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [location.state, location.pathname, navigate, openEditModal]);
+    }, [location.state, location.pathname, navigate, calendars]);
 
     const handleDelete = useCallback(async (calendarId: string) => {
         if (!confirm('¿Estás seguro de que deseas eliminar este calendario?')) {
@@ -74,45 +63,21 @@ export const CalendarListView = () => {
     }, [navigate]);
 
     const handleEditCalendar = useCallback((calendarId: string) => {
-        openEditModal(calendarId);
-    }, [openEditModal]);
+        const calendar = calendars.find(c => c._id === calendarId);
+        if (calendar) {
+            setSelectedCalendar(calendar);
+            setIsModalOpen(true);
+        }
+    }, [calendars]);
 
-    const handleDeleteCalendar = useCallback((calendarId: string) => {
-        handleDelete(calendarId);
-    }, [handleDelete]);
+    const handleCreateCalendar = useCallback(() => {
+        setSelectedCalendar(null);
+        setIsModalOpen(true);
+    }, []);
 
-    const handleSubmitCreate = () => {
-        submitCreate();
-    };
-
-    const handleSubmitEdit = () => {
-        submitEdit();
-    };
-
-    const renderModal = (
-        isOpen: boolean,
-        onSubmit: () => void,
-        title: string,
-        acceptLabel: string,
-        isLoading: boolean,
-        idPrefix?: string
-    ) => (
-        <ModalComponent
-            isOpen={isOpen}
-            onClose={closeModal}
-            Accept={onSubmit}
-            acceptLabel={acceptLabel}
-            isLoading={isLoading}
-        >
-            <h2 className={styles.modalTitle}>{title}</h2>
-            <CalendarForm
-                formData={data}
-                onFieldChange={updateFormField}
-                error={error}
-                idPrefix={idPrefix}
-            />
-        </ModalComponent>
-    );
+    const handleModalSuccess = useCallback(() => {
+        fetchCalendars();
+    }, [fetchCalendars]);
 
     const renderEmptyState = (message: string, isError = false) => (
         <div className={styles.container}>
@@ -143,32 +108,22 @@ export const CalendarListView = () => {
                             description={calendar.introduction || 'Sin descripción'}
                             detailsModal={() => handleNavigateToDetail(calendar._id)}
                             onEdit={() => handleEditCalendar(calendar._id)}
-                            onDelete={() => handleDeleteCalendar(calendar._id)}
+                            onDelete={() => handleDelete(calendar._id)}
                         />
                     ))}
                     <CardComponent
                         forAddCard
-                        detailsModal={openCreateModal}
+                        detailsModal={handleCreateCalendar}
                     />
                 </div>
             </div>
 
-            {renderModal(
-                showCreateModal,
-                handleSubmitCreate,
-                'Crear Calendario Electoral',
-                'Guardar y Cerrar',
-                creating
-            )}
-
-            {renderModal(
-                showEditModal,
-                handleSubmitEdit,
-                'Editar Calendario Electoral',
-                'Guardar Cambios',
-                updating,
-                'edit-'
-            )}
+            <CalendarModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={handleModalSuccess}
+                calendarToEdit={selectedCalendar}
+            />
         </div>
     );
 };
