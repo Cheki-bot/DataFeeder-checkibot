@@ -16,13 +16,25 @@ export const getCandidacies = async (): Promise<data> => {
 };
 
 export const createCandidacy = async (
-    candidacy: ICandidacy
+    candidacy: Partial<ICandidacy>
 ): Promise<ICandidacy> => {
     try {
         const response = await api.post<ICandidacy>('/political-parties', candidacy);
         return response.data;
     } catch (error) {
         console.error('Error creating candidacy:', error);
+        throw error;
+    }
+};
+
+export const createMultipleCandidacies = async (
+    parties: Partial<ICandidacy>[]
+): Promise<ICandidacy[]> => {
+    try {
+        const promises = parties.map((party) => createCandidacy(party));
+        return await Promise.all(promises);
+    } catch (error) {
+        console.error('Error creating multiple candidacies:', error);
         throw error;
     }
 };

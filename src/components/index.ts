@@ -12,3 +12,4 @@ export * from './search-component/SearchComponent';
 export * from './select-component/SelectComponent';
 export * from './notification-component/NotificationComponent';
 export * from './notification-container/NotificationContainer';
+export * from './dropdown-component/DropdownComponent';

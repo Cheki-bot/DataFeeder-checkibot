@@ -3,6 +3,7 @@ import {
     CalendarListView,
     LoginView,
     PartiesView,
+    PartiesCreateView,
     VerificationCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
                         children: [
                             { index: true, element: <EmptyComponent /> },
                             { path: 'candidacies', element: <PartiesView /> },
+                            {
+                                path: 'candidacies/create',
+                                element: <PartiesCreateView />,
+                            },
                             {
                                 path: 'candidacies/candidates/:partyName/:partyId',
                                 element: <CandidatesView />,
