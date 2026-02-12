@@ -14,3 +14,4 @@ export * from './notification-component/NotificationComponent';
 export * from './notification-container/NotificationContainer';
 export * from './select-input-component/SelectInputComponent';
 export * from './table-component/TableComponent';
+export * from './dropdown-component/DropdownComponent';

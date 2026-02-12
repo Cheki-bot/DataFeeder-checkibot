@@ -1,5 +1,5 @@
 import { normalizeKey } from '@/pages/verifications/utils/normalize-text';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 
 interface UseExcelResult {
@@ -16,7 +16,7 @@ export const useExcel = (
 
     const result = useMemo(() => {
         if (!sheet || Object.keys(sheet).length === 0) {
-            return { data: [], columns: [] };
+            return { data: [], columns: [], success: false };
         }
 
         const rows = XLSX.utils.sheet_to_json(sheet, {
@@ -63,13 +63,22 @@ export const useExcel = (
             return obj;
         });
 
-        setMessage('Archivo Excel procesado correctamente');
-
         return {
             data,
             columns: headerRow,
+            success: true
         };
     }, [sheet, expectedColumns]);
 
-    return { ...result, message };
+    useEffect(() => {
+        if (result.success) {
+            setMessage('Archivo Excel procesado correctamente');
+        }
+    }, [result.success]);
+
+    return {
+        data: result.data,
+        columns: result.columns,
+        message
+    };
 };

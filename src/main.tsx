@@ -4,6 +4,7 @@ import {
     LoginView,
     PartiesView,
     UsersView,
+    PartiesCreateView,
     VerificationCreateView,
 } from '@pages/index';
 import { StrictMode } from 'react';
@@ -18,6 +19,7 @@ import { QuestionsAnswers } from './pages/questions-answers/QuestionsAnswers.tsx
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { Root } from './Root.tsx';
 import { EmptyComponent } from './components/empty-component/EmptyComponent.tsx';
+import { Profile } from './pages/profile/Profile.tsx';
 
 const router = createBrowserRouter([
     {
@@ -37,6 +39,10 @@ const router = createBrowserRouter([
                             { index: true, element: <EmptyComponent /> },
                             { path: 'candidacies', element: <PartiesView /> },
                             {
+                                path: 'candidacies/create',
+                                element: <PartiesCreateView />,
+                            },
+                            {
                                 path: 'candidacies/candidates/:partyName/:partyId',
                                 element: <CandidatesView />,
                             },
@@ -51,6 +57,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'questions_and_answers',
                                 element: <QuestionsAnswers />,
+                            },
+                            {
+                                path: 'profile',
+                                element: <Profile />,
                             },
                             { path: 'calendars', Component: CalendarListView },
                             // {

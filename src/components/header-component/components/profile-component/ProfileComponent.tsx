@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import style from './ProfileComponent.module.css';
 import { useAuth } from '@/contexts/auth-context/useAuth';
@@ -34,6 +35,7 @@ export const DropdownMenu = ({ options, setIsMenuOpen }: DropdownMenuProps) => {
 
 export const ProfileComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const { logout } = useAuth();
 
@@ -47,6 +49,12 @@ export const ProfileComponent = () => {
             {isMenuOpen && (
                 <DropdownMenu
                     options={[
+                        {
+                            label: 'Mi perfil',
+                            action: () => {
+                                navigate('/profile');
+                            },
+                        },
                         {
                             label: 'Cerrar sesión',
                             action: () => {
