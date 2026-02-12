@@ -9,7 +9,7 @@ export const calendarSchema = z.object({
     electionId: z
         .string()
         .min(1, 'El ID de la elección es obligatorio')
-        .regex(/^[A-Z0-9\-]+$/, 'Solo se permiten mayúsculas, números y guiones'),
+        .regex(/^[A-Z0-9-]+$/, 'Solo se permiten mayúsculas, números y guiones'),
     pdfUrl: z.string().url('Debe ser una URL válida'),
     introduction: z.string().optional(),
 });
