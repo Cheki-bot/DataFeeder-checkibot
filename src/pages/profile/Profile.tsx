@@ -165,6 +165,7 @@ export const Profile = () => {
 						<InputComponent
 							label="Contraseña actual"
 							type="password"
+							isPassword
 							value={watch('currentPassword')}
 							validationProps={register('currentPassword')}
 							errors={errors.currentPassword}
@@ -173,6 +174,7 @@ export const Profile = () => {
 						<InputComponent
 							label="Nueva contraseña"
 							type="password"
+							isPassword
 							value={watch('newPassword')}
 							validationProps={register('newPassword')}
 							errors={errors.newPassword}
@@ -181,6 +183,7 @@ export const Profile = () => {
 						<InputComponent
 							label="Confirmar contraseña"
 							type="password"
+							isPassword
 							value={watch('confirmPassword')}
 							validationProps={register('confirmPassword')}
 							errors={errors.confirmPassword}
