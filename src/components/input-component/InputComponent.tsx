@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StateLayer } from '../../assets/svg/icons/state-layer';
+import { EyeIcon } from '../../assets/svg/icons/eye-icon';
+import { EyeOffIcon } from '../../assets/svg/icons/eye-off-icon';
 import SelectComponent from '../select-component/SelectComponent';
 import styles from './InputComponent.module.css';
 import type { FieldError } from 'react-hook-form';
@@ -17,6 +19,7 @@ interface InputComponentProps {
     validationProps?: React.InputHTMLAttributes<HTMLInputElement>;
     errors?: FieldError;
     onClear?: () => void;
+    isPassword?: boolean;
 }
 
 export const InputComponent: React.FC<InputComponentProps> = (props) => {
@@ -32,6 +35,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
         options,
         errors,
         onClear,
+        isPassword,
     } = props;
 
     const { onBlur: rhfOnBlur, ...restValidation } =
@@ -41,6 +45,15 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
 
     const [focused, setFocused] = useState(false);
     const [internalValue, setInternalValue] = useState<string>(value ?? '');
+    const [showPassword, setShowPassword] = useState(false);
+
+    const resolvedType = isPassword
+        ? (showPassword ? 'text' : 'password')
+        : type;
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
 
     useEffect(() => {
         if (value !== undefined) {
@@ -75,7 +88,7 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         </label>
                     )}  
                     <input
-                        type={type}
+                        type={resolvedType}
                         id={inputId}
                         name={name}
                         className={
@@ -95,6 +108,24 @@ export const InputComponent: React.FC<InputComponentProps> = (props) => {
                         {...restValidation}
                     />
                 </div>
+
+                {isPassword && (
+                    <span
+                        className={styles.togglePasswordIcon}
+                        onClick={togglePasswordVisibility}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                togglePasswordVisibility();
+                            }
+                        }}
+                    >
+                        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                    </span>
+                )}
 
                 {value !== '' || value == undefined ? (
                     <span
