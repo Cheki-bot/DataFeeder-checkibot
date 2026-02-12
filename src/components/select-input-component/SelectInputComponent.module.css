@@ -1,0 +1,78 @@
+.inputWrapper {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inputContainer {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--white-color);
+    padding: 10px 15px;
+    border-radius: 10px;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+    min-height: 40px;
+    color: var(--black-color);
+}
+
+.backgroundLayer {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    margin: 0;
+    color: var(--gray-color);
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.backgroundLayer.active .label {
+    top: 0.2rem;
+    font-size: 0.6rem;
+    transform: translateY(-90%);
+}
+
+.select {
+    border: none;
+    width: 100%;
+    border-radius: 4px;
+    transform: translateY(20%);
+    font-size: 1rem;
+    color: var(--black-color);
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+}
+
+.select:focus {
+    outline: none;
+}
+
+.arrow {
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    color: var(--gray-color);
+    font-size: 0.7rem;
+}
+
+.error {
+    color: var(--red-color);
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
