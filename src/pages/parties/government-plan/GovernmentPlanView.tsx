@@ -65,11 +65,11 @@ export const GovernmentPlanView = () => {
 
                 <div className={styles.metadata}>
                     <p>
-                        <strong>Partido:</strong> {candidacy.party?.name || 'Nombre no disponible'}
+                        <strong>Partido:</strong> {candidacy?.party?.name || (candidacy as any).name || 'Nombre no disponible'}
                     </p>
-                    {candidacy.party?.sigla && (
+                    {(candidacy?.party?.sigla || (candidacy as any).sigla) && (
                         <p>
-                            <strong>Sigla:</strong> {candidacy.party.sigla}
+                            <strong>Sigla:</strong> {candidacy?.party?.sigla || (candidacy as any).sigla}
                         </p>
                     )}
                 </div>
