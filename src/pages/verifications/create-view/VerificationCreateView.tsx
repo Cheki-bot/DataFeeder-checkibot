@@ -12,6 +12,7 @@ import {
     ButtonComponent,
     InputComponent,
     ModalComponent,
+    SheetPreview,
     TagsInputComponent,
 } from '@components/index';
 import type { Tag } from '@components/input-tags-component/TagsInputComponent';
@@ -30,6 +31,7 @@ import {
 import styles from './VerificationCreateView.module.css';
 import { normalizeRow } from '../utils/normalize-text';
 import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 
 interface CustomSheet {
     sheet: xlsx.WorkSheet;
@@ -389,11 +391,34 @@ export const VerificationCreateView = () => {
                 />
                 <ButtonComponent
                     light
-                    label="Subir Excel"
-                    onClick={() => {
-                        fileInputRef.current?.click();
-                    }}
+                    label="Descargar Plantilla"
+                    onClick={() =>
+                        downloadExcelTemplate(
+                            ['Titulo', 'Resumen', 'Cuerpo', 'Clasificación', 'URL de la Sección', 'URL de la Fuente', 'Fecha de Publicación', 'Etiquetas'],
+                            'plantilla-verificaciones'
+                        )
+                    }
                 />
+                <SheetPreview
+                    columns={[
+                        { header: 'Titulo', example: 'Título de ejemplo' },
+                        { header: 'Resumen', example: 'Resumen breve...' },
+                        { header: 'Cuerpo', example: 'Contenido completo...' },
+                        { header: 'Clasificación', example: 'Verdadero' },
+                        { header: 'URL de la Sección', example: 'https://...' },
+                        { header: 'URL de la Fuente', example: 'https://...' },
+                        { header: 'Fecha de Publicación', example: '2026-01-15' },
+                        { header: 'Etiquetas', example: 'tag1|url1, tag2|url2' },
+                    ]}
+                >
+                    <ButtonComponent
+                        light
+                        label="Subir Excel"
+                        onClick={() => {
+                            fileInputRef.current?.click();
+                        }}
+                    />
+                </SheetPreview>
             </div>
             {modal && (
                 <ModalComponent

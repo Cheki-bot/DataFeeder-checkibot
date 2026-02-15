@@ -10,6 +10,7 @@ import {
     ListComponent,
     ModalComponent,
     SearchComponent,
+    SheetPreview,
 } from '@/components';
 
 import style from './QuestionsAnswers.module.css';
@@ -27,6 +28,7 @@ import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
 import xlsx from 'xlsx';
 import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
 import { normalizeRow } from '../verifications/utils/normalize-text';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 
 interface CustomSheet {
     sheet: xlsx.WorkSheet;
@@ -266,11 +268,28 @@ export const QuestionsAnswers = () => {
                 />
                 <ButtonComponent
                     light
-                    label="Subir Excel"
-                    onClick={() => {
-                        fileInputRef.current?.click();
-                    }}
+                    label="Descargar Plantilla"
+                    onClick={() =>
+                        downloadExcelTemplate(
+                            ['preguntas', 'respuestas'],
+                            'plantilla-preguntas-respuestas'
+                        )
+                    }
                 />
+                <SheetPreview
+                    columns={[
+                        { header: 'preguntas', example: '¿Cuál es la capital?' },
+                        { header: 'respuestas', example: 'La capital es...' },
+                    ]}
+                >
+                    <ButtonComponent
+                        light
+                        label="Subir Excel"
+                        onClick={() => {
+                            fileInputRef.current?.click();
+                        }}
+                    />
+                </SheetPreview>
             </div>
 
             {showForm && (

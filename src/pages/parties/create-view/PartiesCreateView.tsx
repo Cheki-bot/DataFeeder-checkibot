@@ -5,6 +5,7 @@ import {
     ButtonComponent,
     InputComponent,
     ModalComponent,
+    SheetPreview,
 } from '@/components/index';
 import { NotificationContainer } from '@/components/notification-container/NotificationContainer';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +20,7 @@ import {
 } from '../schemas/partySchema';
 import { createCandidacy, createMultipleCandidacies } from '../service/parties.service';
 import style from './PartiesCreateView.module.css';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 import { getAllCalendars } from '@/services/calendar.service';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
 import { DropdownComponent } from '@/components/index';
@@ -215,9 +217,31 @@ export const PartiesCreateView = () => {
                     />
                     <ButtonComponent
                         light
-                        label="Subir Excel"
-                        onClick={() => fileInputRef.current?.click()}
+                        label="Descargar Plantilla"
+                        onClick={() =>
+                            downloadExcelTemplate(
+                                ['Nombre', 'Sigla', 'Descripción', 'Logo URL', 'Fundación', 'ID Elección', 'Plan de Gobierno'],
+                                'plantilla-partidos'
+                            )
+                        }
                     />
+                    <SheetPreview
+                        columns={[
+                            { header: 'Nombre', example: 'Partido Ejemplo' },
+                            { header: 'Sigla', example: 'PE' },
+                            { header: 'Descripción', example: 'Descripción del partido' },
+                            { header: 'Logo URL', example: 'https://...' },
+                            { header: 'Fundación', example: '2020' },
+                            { header: 'ID Elección', example: 'abc123' },
+                            { header: 'Plan de Gobierno', example: 'Plan...' },
+                        ]}
+                    >
+                        <ButtonComponent
+                            light
+                            label="Subir Excel"
+                            onClick={() => fileInputRef.current?.click()}
+                        />
+                    </SheetPreview>
                 </div>
             </div>
 
