@@ -12,6 +12,7 @@ import {
     ButtonComponent,
     InputComponent,
     ModalComponent,
+    SheetPreview,
     TagsInputComponent,
 } from '@components/index';
 import type { Tag } from '@components/input-tags-component/TagsInputComponent';
@@ -387,13 +388,26 @@ export const VerificationCreateView = () => {
                         if (file) handleUpload(file);
                     }}
                 />
-                <ButtonComponent
-                    light
-                    label="Subir Excel"
-                    onClick={() => {
-                        fileInputRef.current?.click();
-                    }}
-                />
+                <SheetPreview
+                    columns={[
+                        { header: 'Titulo', example: 'Título de ejemplo' },
+                        { header: 'Resumen', example: 'Resumen breve...' },
+                        { header: 'Cuerpo', example: 'Contenido completo...' },
+                        { header: 'Clasificación', example: 'Verdadero' },
+                        { header: 'URL de la Sección', example: 'https://...' },
+                        { header: 'URL de la Fuente', example: 'https://...' },
+                        { header: 'Fecha de Publicación', example: '2026-01-15' },
+                        { header: 'Etiquetas', example: 'tag1|url1, tag2|url2' },
+                    ]}
+                >
+                    <ButtonComponent
+                        light
+                        label="Subir Excel"
+                        onClick={() => {
+                            fileInputRef.current?.click();
+                        }}
+                    />
+                </SheetPreview>
             </div>
             {modal && (
                 <ModalComponent

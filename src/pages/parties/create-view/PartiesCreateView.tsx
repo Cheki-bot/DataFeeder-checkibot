@@ -5,6 +5,7 @@ import {
     ButtonComponent,
     InputComponent,
     ModalComponent,
+    SheetPreview,
 } from '@/components/index';
 import { NotificationContainer } from '@/components/notification-container/NotificationContainer';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -213,11 +214,23 @@ export const PartiesCreateView = () => {
                             if (file) handleUpload(file);
                         }}
                     />
-                    <ButtonComponent
-                        light
-                        label="Subir Excel"
-                        onClick={() => fileInputRef.current?.click()}
-                    />
+                    <SheetPreview
+                        columns={[
+                            { header: 'Nombre', example: 'Partido Ejemplo' },
+                            { header: 'Sigla', example: 'PE' },
+                            { header: 'Descripción', example: 'Descripción del partido' },
+                            { header: 'Logo URL', example: 'https://...' },
+                            { header: 'Fundación', example: '2020' },
+                            { header: 'ID Elección', example: 'abc123' },
+                            { header: 'Plan de Gobierno', example: 'Plan...' },
+                        ]}
+                    >
+                        <ButtonComponent
+                            light
+                            label="Subir Excel"
+                            onClick={() => fileInputRef.current?.click()}
+                        />
+                    </SheetPreview>
                 </div>
             </div>
 

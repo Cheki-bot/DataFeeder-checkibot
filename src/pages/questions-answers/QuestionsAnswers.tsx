@@ -10,6 +10,7 @@ import {
     ListComponent,
     ModalComponent,
     SearchComponent,
+    SheetPreview,
 } from '@/components';
 
 import style from './QuestionsAnswers.module.css';
@@ -264,13 +265,20 @@ export const QuestionsAnswers = () => {
                         if (file) handleUpload(file);
                     }}
                 />
-                <ButtonComponent
-                    light
-                    label="Subir Excel"
-                    onClick={() => {
-                        fileInputRef.current?.click();
-                    }}
-                />
+                <SheetPreview
+                    columns={[
+                        { header: 'preguntas', example: '¿Cuál es la capital?' },
+                        { header: 'respuestas', example: 'La capital es...' },
+                    ]}
+                >
+                    <ButtonComponent
+                        light
+                        label="Subir Excel"
+                        onClick={() => {
+                            fileInputRef.current?.click();
+                        }}
+                    />
+                </SheetPreview>
             </div>
 
             {showForm && (
