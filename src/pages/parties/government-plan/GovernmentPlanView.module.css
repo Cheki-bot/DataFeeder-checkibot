@@ -1,6 +1,5 @@
 .container {
     color: #ffffff;
-    /* Text mostly white by default */
     justify-self: center;
     align-self: center;
     position: relative;
@@ -24,35 +23,37 @@
     color: #ffffff;
 }
 
-/* Dark Metadata Box (matches CalendarDetailView) */
-.metadata {
-    background-color: #2a2a2a;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.metadata p {
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
-    color: #ffffff;
-}
-
-.metadata strong {
-    color: #00cfaf;
-    /* Green accent */
-}
-
-/* White Content Card (matches Event Cards) */
 .planCard {
-    background-color: #ffffff;
-    color: #1e1e1e;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
     border-radius: 12px;
     padding: 2rem;
     border: 2px solid #00cfaf;
-    box-shadow: 0 2px 8px rgba(0, 207, 175, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     margin-bottom: 2rem;
+
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #00cfaf #1e1e1e;
+}
+
+.planCard::-webkit-scrollbar {
+    width: 8px;
+}
+
+.planCard::-webkit-scrollbar-track {
+    background: #1e1e1e;
+    border-radius: 4px;
+}
+
+.planCard::-webkit-scrollbar-thumb {
+    background: #00cfaf;
+    border-radius: 4px;
+}
+
+.planCard::-webkit-scrollbar-thumb:hover {
+    background: #00b39f;
 }
 
 .planContent {
