@@ -40,3 +40,13 @@
 .backButtonMain:hover {
     text-decoration: underline;
 }
+
+.uploadButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.fileInput {
+    display: none;
+}

@@ -20,6 +20,7 @@ import {
 } from '../schemas/partySchema';
 import { createCandidacy, createMultipleCandidacies } from '../service/parties.service';
 import style from './PartiesCreateView.module.css';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 import { getAllCalendars } from '@/services/calendar.service';
 import type { ElectoralCalendar } from '@/interfaces/Calendar';
 import { DropdownComponent } from '@/components/index';
@@ -213,6 +214,16 @@ export const PartiesCreateView = () => {
                             const file = e.target.files?.[0];
                             if (file) handleUpload(file);
                         }}
+                    />
+                    <ButtonComponent
+                        light
+                        label="Descargar Plantilla"
+                        onClick={() =>
+                            downloadExcelTemplate(
+                                ['Nombre', 'Sigla', 'Descripción', 'Logo URL', 'Fundación', 'ID Elección', 'Plan de Gobierno'],
+                                'plantilla-partidos'
+                            )
+                        }
                     />
                     <SheetPreview
                         columns={[

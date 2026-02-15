@@ -31,6 +31,7 @@ import {
 import styles from './VerificationCreateView.module.css';
 import { normalizeRow } from '../utils/normalize-text';
 import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 
 interface CustomSheet {
     sheet: xlsx.WorkSheet;
@@ -387,6 +388,16 @@ export const VerificationCreateView = () => {
                         const file = e.target.files?.[0];
                         if (file) handleUpload(file);
                     }}
+                />
+                <ButtonComponent
+                    light
+                    label="Descargar Plantilla"
+                    onClick={() =>
+                        downloadExcelTemplate(
+                            ['Titulo', 'Resumen', 'Cuerpo', 'Clasificación', 'URL de la Sección', 'URL de la Fuente', 'Fecha de Publicación', 'Etiquetas'],
+                            'plantilla-verificaciones'
+                        )
+                    }
                 />
                 <SheetPreview
                     columns={[

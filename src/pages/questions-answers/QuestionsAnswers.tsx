@@ -28,6 +28,7 @@ import type { IQuestionsAndAnswers } from '@/interfaces/QA.interface';
 import xlsx from 'xlsx';
 import { ReloadIcon } from '@/assets/svg/icons/reload-icon';
 import { normalizeRow } from '../verifications/utils/normalize-text';
+import { downloadExcelTemplate } from '@/lib/shared/download-template';
 
 interface CustomSheet {
     sheet: xlsx.WorkSheet;
@@ -264,6 +265,16 @@ export const QuestionsAnswers = () => {
                         const file = e.target.files?.[0];
                         if (file) handleUpload(file);
                     }}
+                />
+                <ButtonComponent
+                    light
+                    label="Descargar Plantilla"
+                    onClick={() =>
+                        downloadExcelTemplate(
+                            ['preguntas', 'respuestas'],
+                            'plantilla-preguntas-respuestas'
+                        )
+                    }
                 />
                 <SheetPreview
                     columns={[
