@@ -74,12 +74,14 @@ export const GovernmentPlanView = () => {
                     )}
                 </div>
 
-                <div className={styles.planContent}>
-                    {candidacy.government_plan ? (
-                        candidacy.government_plan
-                    ) : (
-                        <p>No hay un programa de gobierno registrado para este partido.</p>
-                    )}
+                <div className={styles.planCard}>
+                    <div className={styles.planContent}>
+                        {candidacy.government_plan ? (
+                            candidacy.government_plan
+                        ) : (
+                            <p>No hay un programa de gobierno registrado para este partido.</p>
+                        )}
+                    </div>
                 </div>
 
                 <div className={styles.buttonGroup}>
