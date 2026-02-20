@@ -72,7 +72,7 @@ export const PartiesView = () => {
                             navigate(`candidates/${item.name}/${item.id}/`);
                         }}
                         GovernmentProgram={() => {
-                            navigate(`government-program/${item.id}`);
+                            navigate(`/government-program/${item.id}`);
                         }}
                         DeleteParty={() => {
                             handleDelete(item!.id);

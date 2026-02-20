@@ -7,3 +7,4 @@ export * from './calendars/list-view/CalendarListView';
 export * from './calendars/detail-view/CalendarDetailView';
 export * from './calendar-events/CalendarEventsView';
 export * from './users/UsersView';
+export * from './parties/government-plan/GovernmentPlanView';

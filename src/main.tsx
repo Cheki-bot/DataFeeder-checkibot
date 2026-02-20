@@ -6,6 +6,7 @@ import {
     UsersView,
     PartiesCreateView,
     VerificationCreateView,
+    GovernmentPlanView,
 } from '@pages/index';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
                             {
                                 path: 'users',
                                 element: <UsersView />,
+                            },
+                            {
+                                path: 'government-program/:id',
+                                element: <GovernmentPlanView />,
                             },
                         ],
                     },

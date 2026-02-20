@@ -1,0 +1,87 @@
+.container {
+    color: #ffffff;
+    justify-self: center;
+    align-self: center;
+    position: relative;
+    width: 100%;
+}
+
+.content {
+    padding: 2rem 3rem;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    color: #ffffff;
+}
+
+.planCard {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem;
+
+    margin-bottom: 2rem;
+
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #00cfaf #1e1e1e;
+}
+
+.planCard::-webkit-scrollbar {
+    width: 8px;
+}
+
+.planCard::-webkit-scrollbar-track {
+    background: #1e1e1e;
+    border-radius: 4px;
+}
+
+.planCard::-webkit-scrollbar-thumb {
+    background: #00cfaf;
+    border-radius: 4px;
+}
+
+.planCard::-webkit-scrollbar-thumb:hover {
+    background: #00b39f;
+}
+
+.planContent {
+    font-size: 1rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 2rem 1rem;
+    }
+}
