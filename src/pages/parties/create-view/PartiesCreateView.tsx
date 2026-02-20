@@ -134,7 +134,7 @@ export const PartiesCreateView = () => {
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
-                    isActive: true
+                    is_active: true
                 }],
             };
             await createCandidacy(payload);
@@ -179,7 +179,7 @@ export const PartiesCreateView = () => {
                 candidates: [{
                     full_name: 'Representante',
                     position: 'Por definir',
-                    isActive: true
+                    is_active: true
                 }],
             }));
 
