@@ -3,7 +3,7 @@ import styles from './TagsInputComponent.module.css';
 import { InputComponent, TagsComponent } from '@components/index';
 import type { FieldError } from 'react-hook-form';
 
-export type Tag = {
+export type TagItem = {
     name: string;
     url: string;
 };
@@ -11,18 +11,18 @@ export type Tag = {
 interface TagsInputProps {
     nameLabel?: string;
     urlLabel?: string;
-    onAdd?: (tag: Tag) => void;
+    onAdd?: (tag: TagItem) => void;
     label?: string;
     placeholder?: string;
 }
 
 export const TagsInputComponent = (props: TagsInputProps) => {
     const { nameLabel = 'Name', urlLabel = 'URL Tag', onAdd } = props;
-    const [data, setData] = useState<Tag>({
+    const [data, setData] = useState<TagItem>({
         name: '',
         url: '',
     });
-    const [tags, setTags] = useState<Tag[]>([]);
+    const [tags, setTags] = useState<TagItem[]>([]);
     const [nameError, setNameError] = useState<FieldError | undefined>();
     const [urlError, setUrlError] = useState<FieldError | undefined>();
 

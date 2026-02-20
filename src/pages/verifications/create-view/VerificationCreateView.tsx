@@ -15,7 +15,7 @@ import {
     SheetPreview,
     TagsInputComponent,
 } from '@components/index';
-import type { Tag } from '@components/input-tags-component/TagsInputComponent';
+import type { TagItem } from '@components/input-tags-component/TagsInputComponent';
 import { ListComponent } from '@components/list-component/ListComponent';
 import { NotificationContainer } from '@components/notification-container/NotificationContainer';
 import { SearchComponent } from '@components/search-component/SearchComponent';
@@ -233,7 +233,7 @@ export const VerificationCreateView = () => {
         },
     });
 
-    const handleTagAdd = (tag: Tag) => {
+    const handleTagAdd = (tag: TagItem) => {
         const current = watch('tags') || [];
         const next = [...current, tag];
         setValue('tags', next, { shouldValidate: true });
